@@ -13,6 +13,9 @@ Halo of War es un videojuego de acción y aventura en 2D con vista cenital. Est�
 - Herramientas adicionales: Tiled (para mapas), recursos de OpenGameArt e IA para diseño
 - Plataforma objetivo: Escritorio
 
+## Enlace a la Wiki del Proyecto (Propuesta Detallada)
+[Ver la Propuesta Completa del Proyecto aquí](https://github.com/matiasozores/halo-of-war-libgdx/wiki)
+
 ## Cómo Compilar y Ejecutar
 
 1. **Clonar el repositorio:**
@@ -31,5 +34,3 @@ Halo of War es un videojuego de acción y aventura en 2D con vista cenital. Est�
 ## Estado Actual del Proyecto
 Configuración inicial y estructura del proyecto completada.
 
-## Enlace a la Wiki del Proyecto (Propuesta Detallada)
-[Ver la Propuesta Completa del Proyecto aquí](https://github.com/matiasozores/halo-of-war-libgdx/wiki)
