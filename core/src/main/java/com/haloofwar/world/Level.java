@@ -35,8 +35,6 @@ public abstract class Level implements Screen{
 		this.inputManager = Resources.getInputManager();
 	}
 
-	
-	
 	@Override
 	public void show() {
 		this.tiledMap = new TmxMapLoader().load(currentZone.getPath());
