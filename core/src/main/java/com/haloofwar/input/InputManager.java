@@ -143,6 +143,11 @@ public class InputManager implements InputProcessor {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	//ESTO ES NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO
+	public boolean isMoving() {
+	    return this.arrowDown || this.arrowLeft || this.arrowRight || this.arrowUp;
+	}
 
 	// Getters
 	

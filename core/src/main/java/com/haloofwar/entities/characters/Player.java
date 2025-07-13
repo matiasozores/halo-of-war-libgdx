@@ -1,8 +1,10 @@
 package com.haloofwar.entities.characters;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.haloofwar.enumerators.Sprite;
 import com.haloofwar.input.ControlState;
 import com.haloofwar.input.InputManager;
+import com.haloofwar.utilities.MyAnimation;
 
 public abstract class Player {
 	private final int DEFAULT_HEALTH = 100;
@@ -15,10 +17,12 @@ public abstract class Player {
 	private int[] color;
 	
 	private ControlState controlState = new ControlState(32, 32, this.DEFAULT_VELOCITY);
+	private MyAnimation animation;
 	
-	public Player(String name, int[] color) {
+	public Player(String name, int[] color, Sprite sprite) {
 		this.name = name;
 		this.color = color;
+		this.animation = new MyAnimation(sprite);
 	}
 	
 	public void update(InputManager inputManager) {
@@ -27,6 +31,7 @@ public abstract class Player {
 		} 
 		
 		this.controlState.update(inputManager);
+		this.animation.update(inputManager);
 	}
 	
 	public void render(ShapeRenderer shapeRenderer, InputManager inputManager) {
@@ -36,7 +41,7 @@ public abstract class Player {
 		
 		shapeRenderer.setColor(this.color[0], this.color[1], this.color[2], 1);
 		shapeRenderer.rect(this.controlState.getX(), this.controlState.getY(), this.controlState.getWidth(), this.controlState.getHeight());
-		
+		this.animation.render(this.controlState.getX(), this.controlState.getY());
 		
 		/* Dibuja el mouse pero no deberia estar en el jugador
 		 * 
@@ -57,5 +62,6 @@ public abstract class Player {
 	public ControlState getControlState() {
 		return this.controlState;
 	}
-
+	
+	
 }
