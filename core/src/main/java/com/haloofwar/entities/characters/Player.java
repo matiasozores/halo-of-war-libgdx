@@ -1,0 +1,61 @@
+package com.haloofwar.entities.characters;
+
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.haloofwar.input.ControlState;
+import com.haloofwar.input.InputManager;
+
+public abstract class Player {
+	private final int DEFAULT_HEALTH = 100;
+	private final int DEFAULT_VELOCITY = 1;
+	
+	private String name;
+	private int health = this.DEFAULT_HEALTH;
+	private int velocity = this.DEFAULT_VELOCITY;
+	private boolean alive = true;
+	private int[] color;
+	
+	private ControlState controlState = new ControlState(32, 32, this.DEFAULT_VELOCITY);
+	
+	public Player(String name, int[] color) {
+		this.name = name;
+		this.color = color;
+	}
+	
+	public void update(InputManager inputManager) {
+		if(!alive) {
+			return;
+		} 
+		
+		this.controlState.update(inputManager);
+	}
+	
+	public void render(ShapeRenderer shapeRenderer, InputManager inputManager) {
+		if(!alive) {
+			return;
+		}
+		
+		shapeRenderer.setColor(this.color[0], this.color[1], this.color[2], 1);
+		shapeRenderer.rect(this.controlState.getX(), this.controlState.getY(), this.controlState.getWidth(), this.controlState.getHeight());
+		
+		
+		/* Dibuja el mouse pero no deberia estar en el jugador
+		 * 
+		sr.setColor(this.color[0], this.color[1], this.color[2], 1);
+		sr.rect(inputManager.getMouseX(), inputManager.getMouseY(), 10, 10);
+	
+		sr.setColor(1, 1, 1, 1);*/
+	}
+	
+	public float getX() {
+		return this.controlState.getX();
+	}
+	
+	public float getY() {
+		return this.controlState.getY();
+	}
+	
+	public ControlState getControlState() {
+		return this.controlState;
+	}
+
+}

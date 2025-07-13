@@ -1,0 +1,34 @@
+package com.haloofwar.screens.settings;
+
+import com.haloofwar.screens.Menu;
+import com.haloofwar.utilities.Resources;
+import com.haloofwar.utilities.Text;
+
+public class GraphicsScreen extends Menu {
+
+	public GraphicsScreen() {
+		super(new Text[] {
+			new Text("Resolución", 16),
+			new Text("Calidad de gráficos", 16),
+			new Text("Volver al menú principal", 16)
+		}, 100, 400);
+	}
+
+	@Override
+	protected void processOption(int optionIndex) {
+		switch (optionIndex) {
+			case 0: // Resolución
+				System.out.println("Configuración de resolución seleccionada.");
+				break;
+			case 1: // Calidad de gráficos
+				System.out.println("Configuración de calidad de gráficos seleccionada.");
+				break;
+			case 2: // Volver al menú principal
+				Resources.getGame().setScreen(new SettingsScreen());
+				break;
+			default:
+				break;
+		}
+	}
+
+}
