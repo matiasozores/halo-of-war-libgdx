@@ -1,8 +1,5 @@
 package com.haloofwar.input;
 
-import com.badlogic.gdx.Gdx;
-import com.haloofwar.utilities.Resources;
-
 public class ControlState {
 	private int width, height;
 	private float x = 0, y = 0;

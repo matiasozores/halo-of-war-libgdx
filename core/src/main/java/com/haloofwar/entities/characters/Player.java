@@ -38,12 +38,11 @@ public abstract class Player {
 		shapeRenderer.rect(this.controlState.getX(), this.controlState.getY(), this.controlState.getWidth(), this.controlState.getHeight());
 		
 		
-		/* Dibuja el mouse pero no deberia estar en el jugador
-		 * 
-		sr.setColor(this.color[0], this.color[1], this.color[2], 1);
-		sr.rect(inputManager.getMouseX(), inputManager.getMouseY(), 10, 10);
+		
+		shapeRenderer.setColor(this.color[0], this.color[1], this.color[2], 1);
+		shapeRenderer.rect(inputManager.getMouseX(), inputManager.getMouseY(), 10, 10);
 	
-		sr.setColor(1, 1, 1, 1);*/
+		shapeRenderer.setColor(1, 1, 1, 1);
 	}
 	
 	public float getX() {

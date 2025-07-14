@@ -3,6 +3,8 @@ package com.haloofwar.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector3;
+import com.haloofwar.utilities.Resources;
 
 public class InputManager implements InputProcessor {
 
@@ -91,46 +93,31 @@ public class InputManager implements InputProcessor {
 	
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-	    
 		final int MARGING = 50;
-		
-		// Para X
-		if (lastMouseX == -1) {
-	    	lastMouseX = screenX;
-	    }
-	    
-		final int DELTA_X = screenX - lastMouseX;
-	    lastMouseX = screenX;
-	    this.mouseX += DELTA_X;
-	    
-	    if (this.mouseX < MARGING) {	
-	    	this.mouseX = MARGING;
-	    }
-	    else if (this.mouseX > Gdx.graphics.getWidth() - MARGING) {
-	    	this.mouseX = Gdx.graphics.getWidth() - MARGING;
-	    }
-	    
-	    // Para Y
-	    int invertedScreenY = Gdx.graphics.getHeight() - screenY;
 
-	    if (lastMouseY == -1) {
-	    	lastMouseY = invertedScreenY;
-	    }
-	    
-	    final int DELTA_Y = invertedScreenY - lastMouseY;
-	    lastMouseY = invertedScreenY;
-	    this.mouseY += DELTA_Y;
+		// Invertir Y (porque LibGDX lo toma desde arriba)
+		int invertedScreenY = Gdx.graphics.getHeight() - screenY;
 
-	    if (this.mouseY < MARGING) {
-	    	this.mouseY = MARGING;
-	    }
-	    
-	    else if (this.mouseY > Gdx.graphics.getHeight() - MARGING) {
-	    	this.mouseY = Gdx.graphics.getHeight() - MARGING;
-	    }
+		// Convertir a coordenadas del mundo
+		Vector3 mouseWorldPos = new Vector3(screenX, invertedScreenY, 0);
+		Resources.getCamera().unproject(mouseWorldPos);  // <<<<<<
 
-	    return true;
+		// Actualizar tus variables del mouse con las coordenadas transformadas
+		this.mouseX = (int) mouseWorldPos.x;
+		this.mouseY = (int) mouseWorldPos.y;
+
+		// Aplicar márgenes si querés limitar movimiento en el mundo, no en la pantalla
+		if (this.mouseX < MARGING) this.mouseX = MARGING;
+		else if (this.mouseX > Gdx.graphics.getWidth() - MARGING)
+			this.mouseX = Gdx.graphics.getWidth() - MARGING;
+
+		if (this.mouseY < MARGING) this.mouseY = MARGING;
+		else if (this.mouseY > Gdx.graphics.getHeight() - MARGING)
+			this.mouseY = Gdx.graphics.getHeight() - MARGING;
+
+		return true;
 	}
+
 	
 	@Override
 	public boolean scrolled(float amountX, float amountY) {
@@ -202,5 +189,4 @@ public class InputManager implements InputProcessor {
 		return this.mouseDeltaY;
 	}
 
-	
 }

@@ -2,6 +2,7 @@ package com.haloofwar.utilities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.haloofwar.core.HaloOfWarPrincipal;
@@ -18,7 +19,7 @@ public final class Resources {
 	private static SpriteBatch batch = new SpriteBatch();
 	private static InputManager inputManager = new InputManager();
 	private static ShapeRenderer shapeRenderer = new ShapeRenderer();
-
+	private static OrthographicCamera camera = new OrthographicCamera(WINDOW_WIDTH, WINDOW_HEIGHT);
 	
 	public static void setGame(HaloOfWarPrincipal game) {
 		if (Resources.game == null) {
@@ -62,6 +63,10 @@ public final class Resources {
 	
 	public static InputManager getInputManager() {
 		return inputManager;
+	}
+	
+	public static OrthographicCamera getCamera() {
+		return camera;
 	}
 
 }
