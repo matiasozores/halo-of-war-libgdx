@@ -3,6 +3,7 @@ package com.haloofwar.utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -10,7 +11,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 public class Text {
     private String text;
     private BitmapFont font;
-
+    private GlyphLayout layout = new GlyphLayout(); // en tu clase
+    
     public Text(String text, int size) {
         this.text = text;
 
@@ -26,7 +28,19 @@ public class Text {
 		font.draw(batch, this.text, x, y);
 	}
 
+    public void setText(String text) {
+		this.text = text;
+	}
+    
+
+    public float getWidth() {
+        layout.setText(font, text);
+        return layout.width;
+    }
+
+    
     public void dispose() {
         font.dispose();
     }
+    
 }

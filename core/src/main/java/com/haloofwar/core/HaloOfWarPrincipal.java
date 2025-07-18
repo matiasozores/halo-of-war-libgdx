@@ -2,23 +2,20 @@ package com.haloofwar.core;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.input.InputManager;
 import com.haloofwar.screens.MainMenuScreen;
 import com.haloofwar.utilities.Resources;
 
 public class HaloOfWarPrincipal extends Game {
-	private SpriteBatch batch;
     private InputManager inputManager;
 
     @Override
     public void create() {
     	Resources.setGame(this);
-    	this.batch = Resources.getBatch();
     	this.inputManager = Resources.getInputManager();
     	Gdx.input.setInputProcessor(this.inputManager);
+    	Gdx.input.setCursorCatched(true);
         this.setScreen(new MainMenuScreen());
-        System.out.println("" + this.getClass().getSimpleName() + " created successfully.");
     }
 
     @Override
@@ -33,6 +30,12 @@ public class HaloOfWarPrincipal extends Game {
 
     @Override
     public void dispose() {
-    	this.batch.dispose(); //
+   
     }
+    
+    public void setResolution(int width, int height) {
+		Gdx.graphics.setWindowedMode(width, height);
+		Gdx.graphics.setResizable(false);
+		Gdx.graphics.setTitle("Halo Of War - " + width + "x" + height);
+	}
 }

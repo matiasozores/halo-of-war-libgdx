@@ -1,29 +1,20 @@
 package com.haloofwar.screens;
 
-import java.util.Scanner;
-
 import com.badlogic.gdx.Screen;
 import com.haloofwar.entities.characters.Kratos;
 import com.haloofwar.entities.characters.MasterChief;
 import com.haloofwar.entities.characters.Player;
-import com.haloofwar.world.Level;
-import com.haloofwar.world.Lobby;
+import com.haloofwar.world.levels.Level;
+import com.haloofwar.world.levels.Lobby;
 
 public class GameScreen implements Screen {
 	
-	// Debugging purposes
-	private Scanner scanner = new Scanner(System.in);
-
 	private Player player1;
 	private Level level;
 	
 	@Override
 	public void show() {
-		/*
-		System.out.println("Elija con quien jugar: ");
-		System.out.println("1. Kratos");
-		System.out.println("2. Master Chief");
-		*/
+
 		int opc = 1;
 		
 		switch (opc) {

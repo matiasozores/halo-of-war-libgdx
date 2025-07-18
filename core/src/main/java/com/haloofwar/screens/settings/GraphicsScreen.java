@@ -9,7 +9,6 @@ public class GraphicsScreen extends Menu {
 	public GraphicsScreen() {
 		super(new Text[] {
 			new Text("Resolución", 16),
-			new Text("Calidad de gráficos", 16),
 			new Text("Volver al menú principal", 16)
 		}, 100, 400);
 	}
@@ -18,7 +17,7 @@ public class GraphicsScreen extends Menu {
 	protected void processOption(int optionIndex) {
 		switch (optionIndex) {
 			case 0: // Resolución
-				System.out.println("Configuración de resolución seleccionada.");
+				Resources.getGame().setScreen(new ResolutionScreen());
 				break;
 			case 1: // Calidad de gráficos
 				System.out.println("Configuración de calidad de gráficos seleccionada.");

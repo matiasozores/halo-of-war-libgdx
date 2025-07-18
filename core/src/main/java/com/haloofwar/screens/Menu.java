@@ -32,7 +32,7 @@ public abstract class Menu implements Screen{
 	
 	@Override
 	public void show() {
-		this.batch = Resources.getBatch();
+		this.batch = Resources.getBatchUI();
 		this.inputManager = Resources.getInputManager();
 		this.shapeRenderer = Resources.getShapeRenderer();
 	}
@@ -98,7 +98,7 @@ public abstract class Menu implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-	
+		System.out.println("" + this.getClass().getSimpleName() + " resized to " + width + "x" + height);
 	}
 
 	@Override

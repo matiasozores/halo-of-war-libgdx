@@ -46,6 +46,13 @@ public class MapMetaData {
 		return this.mapPixelHeight;
 	}
 	
+	public int getxSpawnPoint() {
+		return xSpawnPoint;
+	}
+	
+	public int getySpawnPoint() {
+		return ySpawnPoint;
+	}
 	
 	
 }

@@ -1,10 +1,7 @@
 package com.haloofwar.input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector3;
-import com.haloofwar.utilities.Resources;
 
 public class InputManager implements InputProcessor {
 
@@ -12,10 +9,7 @@ public class InputManager implements InputProcessor {
 	private boolean arrowUp, arrowDown, arrowLeft, arrowRight;
 	private boolean enter, escape;
 	
-	
-	private int mouseX, mouseY, mouseDeltaX, mouseDeltaY;
-	private int lastMouseX = -1, lastMouseY = -1;
-	
+	private int mouseX, mouseY;
     private boolean attack, interact, openInventory;
 	
 	@Override
@@ -33,7 +27,6 @@ public class InputManager implements InputProcessor {
 	        case Input.Keys.LEFT: this.arrowLeft = true; break;
 	        case Input.Keys.RIGHT: this.arrowRight = true; break;
 	        case Input.Keys.ENTER: this.enter = true; break;
-	        
 		}
 		
 		return true;
@@ -93,32 +86,10 @@ public class InputManager implements InputProcessor {
 	
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		final int MARGING = 50;
-
-		// Invertir Y (porque LibGDX lo toma desde arriba)
-		int invertedScreenY = Gdx.graphics.getHeight() - screenY;
-
-		// Convertir a coordenadas del mundo
-		Vector3 mouseWorldPos = new Vector3(screenX, invertedScreenY, 0);
-		Resources.getCamera().unproject(mouseWorldPos);  // <<<<<<
-
-		// Actualizar tus variables del mouse con las coordenadas transformadas
-		this.mouseX = (int) mouseWorldPos.x;
-		this.mouseY = (int) mouseWorldPos.y;
-
-		// Aplicar márgenes si querés limitar movimiento en el mundo, no en la pantalla
-		if (this.mouseX < MARGING) this.mouseX = MARGING;
-		else if (this.mouseX > Gdx.graphics.getWidth() - MARGING)
-			this.mouseX = Gdx.graphics.getWidth() - MARGING;
-
-		if (this.mouseY < MARGING) this.mouseY = MARGING;
-		else if (this.mouseY > Gdx.graphics.getHeight() - MARGING)
-			this.mouseY = Gdx.graphics.getHeight() - MARGING;
-
-		return true;
+	    return true;
 	}
 
-	
+
 	@Override
 	public boolean scrolled(float amountX, float amountY) {
 		// TODO Auto-generated method stub
@@ -130,13 +101,12 @@ public class InputManager implements InputProcessor {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	//ESTO ES NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO NUEVO
-	public boolean isMoving() {
-	    return this.arrowDown || this.arrowLeft || this.arrowRight || this.arrowUp;
-	}
 
 	// Getters
+	
+	public boolean isMoving() {
+	    return (this.moveDown || this.moveUp || this.moveLeft || this.moveRight);
+	}
 	
 	public boolean isMoveUp() {
 		return this.moveUp;
@@ -178,6 +148,18 @@ public class InputManager implements InputProcessor {
 		return this.escape;
 	}
 	
+	public boolean isAttack() {
+		return this.attack;
+	}
+	
+	public boolean isInteract() {
+		return this.interact;
+	}
+	
+	public boolean isOpenInventory() {
+		return this.openInventory;
+	}
+	
 	public int getMouseX() {
 		return this.mouseX;
 	}
@@ -186,12 +168,6 @@ public class InputManager implements InputProcessor {
 		return this.mouseY;
 	}
 	
-	public int getMouseDeltaX() {
-		return this.mouseDeltaX;
-	}
 
-	public int getMouseDeltaY() {
-		return this.mouseDeltaY;
-	}
 
 }

@@ -1,10 +1,11 @@
 package com.haloofwar.entities.characters;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.haloofwar.enumerators.Sprite;
-import com.haloofwar.input.ControlState;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.haloofwar.components.AnimationComponent;
+import com.haloofwar.components.MovementComponent;
+import com.haloofwar.enumerators.EntityType;
 import com.haloofwar.input.InputManager;
-import com.haloofwar.utilities.MyAnimation;
+import com.haloofwar.ui.Crosshair;
 
 public abstract class Player {
 	private final int DEFAULT_HEALTH = 100;
@@ -12,17 +13,20 @@ public abstract class Player {
 	
 	private String name;
 	private int health = this.DEFAULT_HEALTH;
-	private int velocity = this.DEFAULT_VELOCITY;
+	private float velocity = this.DEFAULT_VELOCITY;
 	private boolean alive = true;
-	private int[] color;
 	
-	private ControlState controlState = new ControlState(32, 32, this.DEFAULT_VELOCITY);
-	private MyAnimation animation;
+	private int width = 32, height = 32; 
 	
-	public Player(String name, int[] color, Sprite sprite) {
+	private MovementComponent movement;
+	private AnimationComponent animation;
+	private Crosshair crosshair = new Crosshair();
+	
+	
+	public Player(String name, EntityType sprite) {
 		this.name = name;
-		this.color = color;
-		this.animation = new MyAnimation(sprite);
+		this.animation = new AnimationComponent(sprite);
+		this.movement = new MovementComponent();
 	}
 	
 	public void update(InputManager inputManager) {
@@ -30,37 +34,41 @@ public abstract class Player {
 			return;
 		} 
 		
-		this.controlState.update(inputManager);
+		this.movement.update(inputManager, this.width, this.height, this.velocity);
 		this.animation.update(inputManager);
+		this.crosshair.update();
 	}
 	
-	public void render(ShapeRenderer shapeRenderer, InputManager inputManager) {
+	public void render(OrthographicCamera camera) {
 		if(!alive) {
 			return;
 		}
 		
-		shapeRenderer.setColor(this.color[0], this.color[1], this.color[2], 1);
-		shapeRenderer.rect(this.controlState.getX(), this.controlState.getY(), this.controlState.getWidth(), this.controlState.getHeight());
-		this.animation.render(this.controlState.getX(), this.controlState.getY());
-		
-		
-		shapeRenderer.setColor(this.color[0], this.color[1], this.color[2], 1);
-		shapeRenderer.rect(inputManager.getMouseX(), inputManager.getMouseY(), 10, 10);
-	
-		shapeRenderer.setColor(1, 1, 1, 1);
+		this.animation.render(this.movement.getX(), this.movement.getY(), this.width, this.height, camera);
+		this.crosshair.render(camera);
 	}
 	
 	public float getX() {
-		return this.controlState.getX();
+		return this.movement.getX();
 	}
 	
 	public float getY() {
-		return this.controlState.getY();
+		return this.movement.getY();
 	}
 	
-	public ControlState getControlState() {
-		return this.controlState;
+	public String getName() {
+		return name;
 	}
 	
+	public int getHealth() {
+		return health;
+	}
 	
+	public int getDEFAULT_HEALTH() {
+		return DEFAULT_HEALTH;
+	}
+	
+	public MovementComponent getMovement() {
+		return this.movement;
+	}	
 }

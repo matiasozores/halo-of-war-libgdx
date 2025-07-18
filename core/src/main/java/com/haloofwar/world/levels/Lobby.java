@@ -1,10 +1,11 @@
-package com.haloofwar.world;
+package com.haloofwar.world.levels;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.haloofwar.entities.characters.Player;
 import com.haloofwar.enumerators.Zone;
+import com.haloofwar.world.MapMetaData;
 
 public class Lobby extends Level {
 

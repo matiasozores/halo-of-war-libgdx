@@ -1,6 +1,6 @@
 package com.haloofwar.enumerators;
 
-public enum Sprite {
+public enum EntityType {
 	
 	MASTER_CHIEF("masterchief"),
 	KRATOS("kratos");
@@ -8,7 +8,7 @@ public enum Sprite {
 
 	private String folder;
 	
-	private Sprite(String folder) {
+	private EntityType(String folder) {
 		this.folder = folder;
 	}
 	
