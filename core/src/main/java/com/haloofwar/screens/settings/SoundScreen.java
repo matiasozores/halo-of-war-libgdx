@@ -8,10 +8,10 @@ public class SoundScreen extends Menu {
 
 	public SoundScreen() {
 		super(new Text[] {
-			new Text("Volumen de música", 16),
-			new Text("Volumen de efectos", 16),
-			new Text("Volver al menú de configuración", 16)
-		}, 100, 400);
+			new Text("Volumen de música"),
+			new Text("Volumen de efectos"),
+			new Text("Volver al menú de configuración")
+		});
 	}
 
 	@Override

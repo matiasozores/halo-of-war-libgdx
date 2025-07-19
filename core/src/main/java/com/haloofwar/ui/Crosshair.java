@@ -9,7 +9,6 @@ import com.haloofwar.utilities.Resources;
 public class Crosshair {
     private ShapeRenderer shapeRenderer;
     private int mouseX, mouseY;
-    private final int RANGO = 100;
     
     public Crosshair() {
         this.shapeRenderer = new ShapeRenderer();

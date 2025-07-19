@@ -9,11 +9,11 @@ public class SettingsScreen extends Menu{
 
 	public SettingsScreen() {
 		super(new Text[] {
-			new Text("Gráficos", 16),
-			new Text("Sonido", 16),
-			new Text("Controles", 16),
-			new Text("Volver al menú principal", 16)
-		}, 100, 400);
+			new Text("Gráficos"),
+			new Text("Sonido"),
+			new Text("Controles"),
+			new Text("Volver al menú principal")
+		});
 		// TODO Auto-generated constructor stub
 	}
 

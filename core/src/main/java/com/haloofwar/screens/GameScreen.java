@@ -15,7 +15,8 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() {
 
-		int opc = 1;
+		// Para probar, esto deberia ser una seleccion de personaje
+		int opc = 2;
 		
 		switch (opc) {
 			case 1:
@@ -28,9 +29,11 @@ public class GameScreen implements Screen {
 				this.player1 = new Kratos();
 				break;
 		}
-		System.out.println("" + player1.getClass().getSimpleName() + " seleccionado como jugador 1.");
+		
+		
 		this.level = new Lobby(player1);
 		this.level.show();
+	
 	}
 
 	@Override

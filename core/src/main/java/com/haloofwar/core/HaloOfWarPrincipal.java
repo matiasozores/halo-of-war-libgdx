@@ -12,9 +12,8 @@ public class HaloOfWarPrincipal extends Game {
     @Override
     public void create() {
     	Resources.setGame(this);
-    	this.inputManager = Resources.getInputManager();
-    	Gdx.input.setInputProcessor(this.inputManager);
-    	Gdx.input.setCursorCatched(true);
+    	this.inputManager = new InputManager();
+    	Resources.setInputManager(this.inputManager);
         this.setScreen(new MainMenuScreen());
     }
 
@@ -36,6 +35,5 @@ public class HaloOfWarPrincipal extends Game {
     public void setResolution(int width, int height) {
 		Gdx.graphics.setWindowedMode(width, height);
 		Gdx.graphics.setResizable(false);
-		Gdx.graphics.setTitle("Halo Of War - " + width + "x" + height);
 	}
 }

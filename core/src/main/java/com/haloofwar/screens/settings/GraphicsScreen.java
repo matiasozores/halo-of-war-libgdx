@@ -8,9 +8,9 @@ public class GraphicsScreen extends Menu {
 
 	public GraphicsScreen() {
 		super(new Text[] {
-			new Text("Resolución", 16),
-			new Text("Volver al menú principal", 16)
-		}, 100, 400);
+			new Text("Resolución"),
+			new Text("Volver al menú principal")
+		});
 	}
 
 	@Override

@@ -17,7 +17,7 @@ public final class Resources {
 	private static SpriteBatch batchUI = new SpriteBatch();
 	private static SpriteBatch batch = new SpriteBatch();
 	private static SpriteBatch batchHUD = new SpriteBatch();
-	private static InputManager inputManager = new InputManager();
+	private static InputManager inputManager;
 	private static ShapeRenderer shapeRenderer = new ShapeRenderer();
 	private static CameraGame cameraGame = new CameraGame();
 	private static int mouseX, mouseY;
@@ -58,6 +58,14 @@ public final class Resources {
 	
 	public static InputManager getInputManager() {
 		return inputManager;
+	}
+	
+	public static void setInputManager(InputManager inputManager) {
+		if (Resources.inputManager == null) {
+			Resources.inputManager = inputManager;
+			Gdx.input.setInputProcessor(inputManager);
+			Gdx.input.setCursorCatched(true);
+		}
 	}
 	
 	public static CameraGame getCameraGame() {

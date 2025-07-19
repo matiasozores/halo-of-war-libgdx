@@ -22,7 +22,6 @@ public abstract class Player {
 	private AnimationComponent animation;
 	private Crosshair crosshair = new Crosshair();
 	
-	
 	public Player(String name, EntityType sprite) {
 		this.name = name;
 		this.animation = new AnimationComponent(sprite);
@@ -57,15 +56,15 @@ public abstract class Player {
 	}
 	
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	public int getHealth() {
-		return health;
+		return this.health;
 	}
 	
 	public int getDEFAULT_HEALTH() {
-		return DEFAULT_HEALTH;
+		return this.DEFAULT_HEALTH;
 	}
 	
 	public MovementComponent getMovement() {

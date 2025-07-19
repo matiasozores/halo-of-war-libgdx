@@ -167,7 +167,4 @@ public class InputManager implements InputProcessor {
 	public int getMouseY() {
 		return this.mouseY;
 	}
-	
-
-
 }

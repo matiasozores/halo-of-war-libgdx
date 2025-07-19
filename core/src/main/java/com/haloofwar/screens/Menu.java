@@ -10,7 +10,8 @@ import com.haloofwar.utilities.Text;
 
 public abstract class Menu implements Screen{
 	private final int COULDOWN_TIME = 30; 
-	private final int DISTANCE_BETWEEN_OPTIONS = 50; 
+	private final int DISTANCE_BETWEEN_OPTIONS = 100;
+	private final int DISTANCE_OPTION_SELECTION = 50;
 	
 	private InputManager inputManager;
 	private SpriteBatch batch;
@@ -22,12 +23,10 @@ public abstract class Menu implements Screen{
 	private final Figure CURRENT_OPTION = new Figure(10, 10);
 	private final Text[] TEXTS;
 	
-	private float posX, posY;
+	private float posX = 100, posY = 600;
 	
-	public Menu(Text[] texts, float posX, float posY) {
+	public Menu(Text[] texts) {
 		this.TEXTS = texts;
-		this.posX = posX;
-		this.posY = posY;
 	}
 	
 	@Override
@@ -42,7 +41,7 @@ public abstract class Menu implements Screen{
 		this.update();
 		
 	    this.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-	    this.CURRENT_OPTION.draw(shapeRenderer, this.posX - this.DISTANCE_BETWEEN_OPTIONS, this.posY - this.optionIndex * this.DISTANCE_BETWEEN_OPTIONS);
+	    this.CURRENT_OPTION.draw(shapeRenderer, this.posX - this.DISTANCE_OPTION_SELECTION, this.posY - this.optionIndex * this.DISTANCE_BETWEEN_OPTIONS);
 	    this.shapeRenderer.end();
 	    
 	    this.batch.begin();
@@ -55,7 +54,6 @@ public abstract class Menu implements Screen{
 	}
 	
 	public void update() {
-		// Opciones del menu y desplazamiento de seleccion
 		if ((this.inputManager.isArrowDown() || this.inputManager.isArrowUp()) && this.couldown == 0) {
 			this.couldown = this.COULDOWN_TIME;
 			
@@ -78,16 +76,18 @@ public abstract class Menu implements Screen{
 			this.CURRENT_OPTION.setPosition(this.posX - this.DISTANCE_BETWEEN_OPTIONS, this.posY - this.optionIndex * this.DISTANCE_BETWEEN_OPTIONS);
 		}
 		
-		// Acciones de las opciones del menu
-		if(this.couldown == 0 && this.inputManager.isEnter()) {
-			this.couldown = this.COULDOWN_TIME;
-			this.processOption(this.optionIndex);
+		if(this.couldown == 0) {
+			if(this.inputManager.isEnter()) {
+				this.couldown = this.COULDOWN_TIME;
+				this.processOption(this.optionIndex);
+			}
+			
+			if(this.inputManager.isEscape() ) {
+				this.couldown = this.COULDOWN_TIME;
+				Resources.getGame().setScreen(new MainMenuScreen());
+			}
 		}
-		
-		if(this.couldown == 0 && this.inputManager.isEscape() ) {
-			this.couldown = this.COULDOWN_TIME;
-			Resources.getGame().setScreen(new MainMenuScreen());
-		}
+	
 		
 		if(this.couldown > 0) {
 			this.couldown--;

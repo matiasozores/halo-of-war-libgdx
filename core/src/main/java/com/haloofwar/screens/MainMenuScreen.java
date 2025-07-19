@@ -8,10 +8,10 @@ public class MainMenuScreen extends Menu{
 
 	public MainMenuScreen() {
 		super(new Text[] {
-			new Text("Jugar", 16),
-			new Text("Configuracion", 16),
-			new Text("Salir", 16)
-		}, 100, 400);
+			new Text("Jugar"),
+			new Text("Configuracion"),
+			new Text("Salir")
+		});
 		// TODO Auto-generated constructor stub
 	}
 

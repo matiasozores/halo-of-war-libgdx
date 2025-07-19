@@ -12,13 +12,14 @@ public class Text {
     private String text;
     private BitmapFont font;
     private GlyphLayout layout = new GlyphLayout(); // en tu clase
+    private final int DEFAULT_SIZE = 24;
     
-    public Text(String text, int size) {
+    public Text(String text) {
         this.text = text;
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/LEMONMILK-Regular.otf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        parameter.size = size;
+        parameter.size = this.DEFAULT_SIZE;
         parameter.color = Color.WHITE;
         this.font = generator.generateFont(parameter);
         generator.dispose();

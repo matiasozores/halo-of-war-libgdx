@@ -47,11 +47,11 @@ public class MapMetaData {
 	}
 	
 	public int getxSpawnPoint() {
-		return xSpawnPoint;
+		return this.xSpawnPoint;
 	}
 	
 	public int getySpawnPoint() {
-		return ySpawnPoint;
+		return this.ySpawnPoint;
 	}
 	
 	

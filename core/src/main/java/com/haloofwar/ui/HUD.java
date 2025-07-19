@@ -16,16 +16,14 @@ public class HUD {
     private Text nameText;
 
     private static final int PADDING = 20;
-    private static final int FONT_SIZE = 24;
-    private static final Color FONT_COLOR = Color.WHITE;
 
     public HUD() {
         this.batch = Resources.getBatchHUD();
         this.hudCam = new OrthographicCamera();
         this.hudCam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        this.hpText = new Text("HP: ", FONT_SIZE);
-        this.nameText = new Text("Player", FONT_SIZE);
+        this.hpText = new Text("HP: ");
+        this.nameText = new Text("Player");
     }
 
     public void render(Player player) {

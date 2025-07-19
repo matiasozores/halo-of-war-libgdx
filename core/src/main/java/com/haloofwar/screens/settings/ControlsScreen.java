@@ -8,13 +8,13 @@ public class ControlsScreen extends Menu {
 
 	public ControlsScreen() {
 		super(new Text[] {
-			new Text("Moverse hacia arriba", 16),
-			new Text("Moverse hacia abajo", 16),
-			new Text("Moverse hacia la izquierda", 16),
-			new Text("Moverse hacia la derecha", 16),
-			new Text("Atacar", 16),
-			new Text("Volver al menú de configuración", 16)
-		}, 100, 400);
+			new Text("Moverse hacia arriba"),
+			new Text("Moverse hacia abajo"),
+			new Text("Moverse hacia la izquierda"),
+			new Text("Moverse hacia la derecha"),
+			new Text("Atacar"),
+			new Text("Volver al menú de configuración")
+		});
 	}
 
 	@Override

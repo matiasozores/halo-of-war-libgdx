@@ -23,11 +23,13 @@ public class AnimationComponent {
 
     private Texture spritesheet;
 
+    private boolean facingLeft = false;
+
     public AnimationComponent(EntityType sprite) {
         this.spritesheet = new Texture(Gdx.files.internal("sprites/" + sprite.getFolder() + ".png"));
 
-        this.idleAnimation = loadAnimationFromSheet(0, 4, 32, 32, 0.5f); 
-        this.walkAnimation = loadAnimationFromSheet(1, 4, 32, 32, 0.5f);  
+        this.idleAnimation = loadAnimationFromSheet(0, sprite.getIdleLength(), 32, 32, 0.5f); 
+        this.walkAnimation = loadAnimationFromSheet(1, sprite.getWalkLength(), 32, 32, 0.5f);  
     }
 
     private Animation<TextureRegion> loadAnimationFromSheet(int row, int frameCount, int frameWidth,
@@ -45,9 +47,24 @@ public class AnimationComponent {
     public void update(InputManager inputManager) {
         this.stateTime += Gdx.graphics.getDeltaTime();
 
-        if (inputManager.isMoving()) {
+        boolean left = inputManager.isMoveLeft();
+        boolean right = inputManager.isMoveRight();
+        boolean verticalMovement = (inputManager.isMoveUp() || inputManager.isMoveDown()) ? true : false;
+        if (left && right && !verticalMovement) {
+            this.currentFrame = this.idleAnimation.getKeyFrame(this.stateTime);
+        } 
+        else if (left) {
             this.currentFrame = this.walkAnimation.getKeyFrame(this.stateTime);
-        } else {
+            this.facingLeft = true;
+        } 
+        else if (right) {
+            this.currentFrame = this.walkAnimation.getKeyFrame(this.stateTime);
+            this.facingLeft = false;
+        }
+        else if (verticalMovement) {
+            this.currentFrame = this.walkAnimation.getKeyFrame(this.stateTime);
+        }
+        else {
             this.currentFrame = this.idleAnimation.getKeyFrame(this.stateTime);
         }
     }
@@ -56,7 +73,13 @@ public class AnimationComponent {
         if (this.currentFrame != null) {
         	this.batch.setProjectionMatrix(camera.combined);
             this.batch.begin();
-            this.batch.draw(this.currentFrame, x, y, width, height);
+            
+            if (this.facingLeft) {
+                this.batch.draw(this.currentFrame, x + width, y, -width, height);
+            } else {
+                this.batch.draw(this.currentFrame, x, y, width, height);
+            }
+
             this.batch.end();
         }
     }
