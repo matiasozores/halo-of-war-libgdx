@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.haloofwar.input.InputManager;
 import com.haloofwar.utilities.Figure;
-import com.haloofwar.utilities.Resources;
+import com.haloofwar.utilities.GameContext;
 import com.haloofwar.utilities.Text;
 
 public abstract class Menu implements Screen{
@@ -13,6 +13,7 @@ public abstract class Menu implements Screen{
 	private final int DISTANCE_BETWEEN_OPTIONS = 100;
 	private final int DISTANCE_OPTION_SELECTION = 50;
 	
+	protected GameContext gameContext;
 	private InputManager inputManager;
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
@@ -25,15 +26,19 @@ public abstract class Menu implements Screen{
 	
 	private float posX = 100, posY = 600;
 	
-	public Menu(Text[] texts) {
+	public Menu(GameContext gameContext, Text[] texts) {
+		this.gameContext = gameContext;
+		this.inputManager = gameContext.getInputManager();
+		this.batch = gameContext.getBatch();
+		this.shapeRenderer = gameContext.getShapeRenderer();
 		this.TEXTS = texts;
 	}
 	
+
 	@Override
 	public void show() {
-		this.batch = Resources.getBatchUI();
-		this.inputManager = Resources.getInputManager();
-		this.shapeRenderer = Resources.getShapeRenderer();
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -46,6 +51,7 @@ public abstract class Menu implements Screen{
 	    
 	    this.batch.begin();
 		int distance = 0;
+		
 		for (Text text : this.TEXTS) {
 			text.draw(batch, this.posX, this.posY - distance * this.DISTANCE_BETWEEN_OPTIONS);
 			distance++;
@@ -84,7 +90,7 @@ public abstract class Menu implements Screen{
 			
 			if(this.inputManager.isEscape() ) {
 				this.couldown = this.COULDOWN_TIME;
-				Resources.getGame().setScreen(new MainMenuScreen());
+				this.gameContext.getGame().setScreen(new MainMenuScreen(this.gameContext));
 			}
 		}
 	
@@ -98,7 +104,6 @@ public abstract class Menu implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		System.out.println("" + this.getClass().getSimpleName() + " resized to " + width + "x" + height);
 	}
 
 	@Override

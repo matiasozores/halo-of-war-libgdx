@@ -1,45 +1,45 @@
 package com.haloofwar.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.haloofwar.cameras.GameHudCamera;
+import com.haloofwar.cameras.GameWorldCamera;
 import com.haloofwar.entities.characters.Player;
-import com.haloofwar.utilities.Resources;
+import com.haloofwar.utilities.GameContext;
 import com.haloofwar.utilities.Text;
 
 public class HUD {
-    private SpriteBatch batch;
-    private OrthographicCamera hudCam;
-
+    private GameHudCamera hudCamera;
+    private Player player;
+    
     private Text hpText;
     private Text nameText;
 
     private static final int PADDING = 20;
 
-    public HUD() {
-        this.batch = Resources.getBatchHUD();
-        this.hudCam = new OrthographicCamera();
-        this.hudCam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+    public HUD(GameContext gameContext, Player player) {
+        this.hudCamera = new GameHudCamera();
+        this.player = player;
         this.hpText = new Text("HP: ");
         this.nameText = new Text("Player");
     }
 
-    public void render(Player player) {
-        this.hudCam.update();
-        this.batch.setProjectionMatrix(this.hudCam.combined);
-        this.batch.begin();
+    public void render(SpriteBatch batch) {
+        this.hudCamera.update();
+        batch.setProjectionMatrix(this.hudCamera.getCamera().combined);
+        batch.begin();
 
-        hpText.setText("HP: " + player.getHealth() + " / " + player.getDEFAULT_HEALTH());
-        nameText.setText(player.getName());
+        hpText.setText("HP: " + this.player.getHealth() + " / " + this.player.getDEFAULT_HEALTH());
+        nameText.setText(this.player.getName());
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
 
         hpText.draw(batch, PADDING, screenHeight - PADDING);
         nameText.draw(batch, screenWidth - nameText.getWidth() - PADDING, screenHeight - PADDING);
-
-        this.batch.end();
+        batch.end();
     }
+    
+    public void update() {
+	}
 }

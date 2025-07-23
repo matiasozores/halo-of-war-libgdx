@@ -1,9 +1,10 @@
 package com.haloofwar.entities.characters;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.haloofwar.cameras.GameWorldCamera;
 import com.haloofwar.components.AnimationComponent;
 import com.haloofwar.components.MovementComponent;
-import com.haloofwar.enumerators.EntityType;
+import com.haloofwar.enumerators.CharacterType;
 import com.haloofwar.input.InputManager;
 import com.haloofwar.ui.Crosshair;
 
@@ -17,34 +18,39 @@ public abstract class Player {
 	private boolean alive = true;
 	
 	private int width = 32, height = 32; 
-	
 	private MovementComponent movement;
 	private AnimationComponent animation;
-	private Crosshair crosshair = new Crosshair();
 	
-	public Player(String name, EntityType sprite) {
+	private Crosshair crosshair;
+	
+	public Player(String name, CharacterType sprite) {
 		this.name = name;
 		this.animation = new AnimationComponent(sprite);
 		this.movement = new MovementComponent();
+		this.crosshair = new Crosshair(sprite.getCrosshairPath());
 	}
 	
-	public void update(InputManager inputManager) {
+	public void update(GameWorldCamera camera, InputManager inputManager) {
 		if(!alive) {
 			return;
 		} 
 		
 		this.movement.update(inputManager, this.width, this.height, this.velocity);
 		this.animation.update(inputManager);
-		this.crosshair.update();
+		this.crosshair.update(camera);
 	}
 	
-	public void render(OrthographicCamera camera) {
-		if(!alive) {
+	public void render(SpriteBatch batch) {
+		if(!alive) {	
 			return;
 		}
-		
-		this.animation.render(this.movement.getX(), this.movement.getY(), this.width, this.height, camera);
-		this.crosshair.render(camera);
+
+		this.animation.render(this.movement.getX(), this.movement.getY(), this.width, this.height, batch);
+		this.crosshair.render(batch);
+	}
+	
+	public void setMapBounds(int mapWidth, int mapHeight) {
+		this.movement.setMapBounds(mapWidth, mapHeight);
 	}
 	
 	public float getX() {

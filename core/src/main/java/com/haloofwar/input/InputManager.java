@@ -70,8 +70,6 @@ public class InputManager implements InputProcessor {
 		return true;
 	}
 	
-	// No se necesita implementar estos métodos para el manejo de teclado y ratón, pero se pueden dejar vacíos o lanzar UnsupportedOperationException si no se usan.
-
 	@Override
 	public boolean keyTyped(char character) {
 		// TODO Auto-generated method stub

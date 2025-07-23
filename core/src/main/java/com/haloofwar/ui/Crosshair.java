@@ -1,52 +1,38 @@
 package com.haloofwar.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.haloofwar.utilities.Resources;
+import com.haloofwar.cameras.GameWorldCamera;
+import com.haloofwar.utilities.Image;
 
 public class Crosshair {
-    private ShapeRenderer shapeRenderer;
     private int mouseX, mouseY;
+    private Image crosshairImage;
     
-    public Crosshair() {
-        this.shapeRenderer = new ShapeRenderer();
+    public Crosshair(String path) {
+        this.crosshairImage = new Image(path, 10, 10);
     }
 
-    public void update() {
+    public void update(GameWorldCamera camera) {
     	Vector3 mouseWorldPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-		Resources.getCameraGame().getCamera().unproject(mouseWorldPos);
+		camera.getCamera().unproject(mouseWorldPos);
 		
 		
-		if (mouseWorldPos.x < 0 || mouseWorldPos.x > Gdx.graphics.getWidth() ||
-			mouseWorldPos.y < 0 || mouseWorldPos.y > Gdx.graphics.getHeight()) {
-			return; // Evita que el cursor esté fuera de los límites de la pantalla
+		if (mouseWorldPos.x < 0 || mouseWorldPos.x > camera.getViewportWidth() ||
+			mouseWorldPos.y < 0 || mouseWorldPos.y > camera.getViewportHeight()) {
+			return;
 		}
 		
 		this.mouseX = (int) mouseWorldPos.x;
 		this.mouseY = (int) mouseWorldPos.y;
-		Resources.setMousePosition(this.mouseX, this.mouseY);
 	}
     
-    public void render(Camera camera) {
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(1, 0, 0, 1); // Rojo
-
-        // Línea horizontal
-        shapeRenderer.line(this.mouseX - 3, this.mouseY, this.mouseX + 3, this.mouseY);
-
-        // Línea vertical
-        shapeRenderer.line(this.mouseX, this.mouseY - 3, this.mouseX, this.mouseY + 3);
-
-        shapeRenderer.end();
+    public void render(SpriteBatch batch) {
+    	this.crosshairImage.render(batch, this.mouseX, this.mouseY);
     }
 
-    
-
-    
     public void dispose() {
-        shapeRenderer.dispose();
+    	this.crosshairImage.dispose();
     }
 }

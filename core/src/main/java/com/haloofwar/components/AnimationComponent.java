@@ -1,35 +1,31 @@
 package com.haloofwar.components;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.haloofwar.enumerators.EntityType;
 import com.haloofwar.input.InputManager;
-import com.haloofwar.utilities.Resources;
+import com.haloofwar.interfaces.EntityDescriptor;
 
 public class AnimationComponent {
 
     private Animation<TextureRegion> walkAnimation;
     private Animation<TextureRegion> idleAnimation;
     private float stateTime = 0f;
-
-    private SpriteBatch batch = Resources.getBatch();
     private TextureRegion currentFrame;
 
     private Texture spritesheet;
 
     private boolean facingLeft = false;
 
-    public AnimationComponent(EntityType sprite) {
-        this.spritesheet = new Texture(Gdx.files.internal("sprites/" + sprite.getFolder() + ".png"));
+    public AnimationComponent(EntityDescriptor sprite) {
+        this.spritesheet = new Texture(Gdx.files.internal("sprites/" + sprite.getPath() + ".png"));
 
-        this.idleAnimation = loadAnimationFromSheet(0, sprite.getIdleLength(), 32, 32, 0.5f); 
-        this.walkAnimation = loadAnimationFromSheet(1, sprite.getWalkLength(), 32, 32, 0.5f);  
+        this.idleAnimation = loadAnimationFromSheet(0, sprite.getIdleLength(), 32, 32, 0.4f); 
+        this.walkAnimation = loadAnimationFromSheet(1, sprite.getWalkLength(), 32, 32, 0.2f);  
     }
 
     private Animation<TextureRegion> loadAnimationFromSheet(int row, int frameCount, int frameWidth,
@@ -69,20 +65,16 @@ public class AnimationComponent {
         }
     }
 
-    public void render(float x, float y, float width, float height, OrthographicCamera camera) {
+    public void render(float x, float y, float width, float height, SpriteBatch batch) {
         if (this.currentFrame != null) {
-        	this.batch.setProjectionMatrix(camera.combined);
-            this.batch.begin();
-            
             if (this.facingLeft) {
-                this.batch.draw(this.currentFrame, x + width, y, -width, height);
+                batch.draw(this.currentFrame, x + width, y, -width, height);
             } else {
-                this.batch.draw(this.currentFrame, x, y, width, height);
+                batch.draw(this.currentFrame, x, y, width, height);
             }
-
-            this.batch.end();
         }
     }
+
 
     public void dispose() {
         if (spritesheet != null) {

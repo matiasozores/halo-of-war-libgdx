@@ -1,11 +1,6 @@
 package com.haloofwar.weapons;
 
-import com.haloofwar.input.InputManager;
-import com.haloofwar.utilities.Resources;
-
-public abstract class Weapon {
-	protected InputManager inputManager = Resources.getInputManager();
-	
+public abstract class Weapon {	
 	private String name;
 	protected int damage;
 	private int cooldown;

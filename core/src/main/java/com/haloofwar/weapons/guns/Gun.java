@@ -17,14 +17,14 @@ public abstract class Gun extends Weapon{
 
 	@Override
 	public void use(int playerX, int playerY) {
-		if (this.isReady) {
+		/*if (this.isReady) {
 			if(this.inputManager.isAttack()) {
 				this.resetCooldown();
 				Bullet bullet = new Bullet(playerX, playerY, Resources.getMouseX(), Resources.getMouseY(), this.damage, this.bulletSpeed);
 				this.bullets.add(bullet);
 			}
 			
-		} 
+		} */
 	}
 	
 	@Override 

@@ -1,11 +1,11 @@
-package com.haloofwar.world;
+package com.haloofwar.game;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.haloofwar.enumerators.Zone;
+import com.haloofwar.enumerators.SceneType;
 
 public class MapMetaData {
-	private Zone zone;
+	private SceneType zone;
 	private TiledMap tiledMap;
 	
 	private int tileWidth;
@@ -19,10 +19,8 @@ public class MapMetaData {
 	private int ySpawnPoint;
 	
 	
-	public MapMetaData(Zone zone, int xSpawnPoint, int ySpawnPoint) {
+	public MapMetaData(SceneType zone) {
 		this.zone = zone;
-		this.xSpawnPoint = xSpawnPoint;
-		this.ySpawnPoint = ySpawnPoint;
 		this.tiledMap = new TmxMapLoader().load(this.zone.getPath()); 
 		
 		this.tileWidth = this.tiledMap.getProperties().get("tilewidth", Integer.class);

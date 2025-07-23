@@ -2,19 +2,18 @@ package com.haloofwar.core;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.haloofwar.input.InputManager;
 import com.haloofwar.screens.MainMenuScreen;
+import com.haloofwar.utilities.GameContext;
 import com.haloofwar.utilities.Resources;
 
 public class HaloOfWarPrincipal extends Game {
-    private InputManager inputManager;
-
+    private GameContext gameContext;
+    
     @Override
     public void create() {
-    	Resources.setGame(this);
-    	this.inputManager = new InputManager();
-    	Resources.setInputManager(this.inputManager);
-        this.setScreen(new MainMenuScreen());
+      	this.gameContext = new GameContext(this);
+    	this.setInputManager();
+        this.setScreen(new MainMenuScreen(this.gameContext));
     }
 
     @Override
@@ -29,7 +28,12 @@ public class HaloOfWarPrincipal extends Game {
 
     @Override
     public void dispose() {
-   
+    	this.gameContext.dispose();
+    }
+    
+    private void setInputManager() {
+    	Gdx.input.setInputProcessor(this.gameContext.getInputManager());
+		Gdx.input.setCursorCatched(true);
     }
     
     public void setResolution(int width, int height) {
