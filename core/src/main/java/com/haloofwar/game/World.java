@@ -1,64 +1,63 @@
 package com.haloofwar.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.haloofwar.cameras.GameWorldCamera;
+import com.haloofwar.collision.CollisionManager;
+import com.haloofwar.dependences.BulletManager;
+import com.haloofwar.dependences.TextureManager;
 import com.haloofwar.entities.characters.Player;
 import com.haloofwar.enumerators.SceneType;
-import com.haloofwar.input.InputManager;
-import com.haloofwar.utilities.GameContext;
+import com.haloofwar.game.components.EntityManager;
+import com.haloofwar.game.components.MapRenderer;
+import com.haloofwar.game.components.WorldCollisionInitializer;
 
 public class World {
-    private Player player;
-	private MapMetaData metaData;
-    private OrthogonalTiledMapRenderer mapRenderer;
-    
-    private InputManager inputManager;
-    private GameWorldCamera camera;
-    
-    public World(GameContext gameContext, SceneType scene, Player player) {
-		this.metaData = new MapMetaData(scene);
-		this.player = player;
-		this.mapRenderer = new OrthogonalTiledMapRenderer(this.metaData.getTiledMap());
-		this.inputManager = gameContext.getInputManager();
-		this.camera = new GameWorldCamera(player, this.metaData);
-		gameContext.setCameraGame(this.camera);
+	private MapRenderer map;
+	private EntityManager entities = new EntityManager();
+	private GameWorldCamera camera;
+	private BulletManager bulletManager;
+	
+	// Dependencias
+	private SpriteBatch batch;
+	private CollisionManager collisionManager;
+	
+
+	public World(SceneType scene, Player player, GameWorldCamera camera, SpriteBatch batch, BulletManager bulletManager,
+			TextureManager textureManager, CollisionManager collisionManager) {
+		this.batch = batch;
+		this.bulletManager = bulletManager;
+		this.collisionManager = collisionManager;
 		
-		// La idea es que nunca llegue a tocar los bordes pero se hace la validación por si acaso
-		this.player.setMapBounds(this.metaData.getMapPixelWidth(), this.metaData.getMapPixelHeight());
+		this.entities.addEntity(player);
+		this.map = new MapRenderer(scene);
+		WorldCollisionInitializer.initializeMapColliders(this.map, this.collisionManager);
+		this.camera = camera;
+		this.camera.configure(player, this.map.getMetaData());
 	}
 
-	public void update() {
-		this.player.update(this.camera, this.inputManager);
+	public void update(float delta) {
+		this.entities.update(delta);
 		this.camera.update();
+		this.bulletManager.update(delta);
+		this.collisionManager.checkCollisions();
 	}
 
-	public void render(SpriteBatch batch) {
-	    this.mapRenderer.setView(this.camera.getCamera());
-	    this.mapRenderer.render(); 
+	public void render() {
+		this.map.render(this.camera);
 
-		batch.setProjectionMatrix(this.camera.getCamera().combined);
-		batch.begin(); 
-	    this.player.render(batch);
-	    batch.end(); 
+		this.batch.setProjectionMatrix(this.camera.getCamera().combined);
+		this.batch.begin();
+
+		this.entities.render(this.batch);
+		this.bulletManager.render(this.batch);
+
+		this.batch.end();
 	}
-
-
 
 	public void dispose() {
-		this.mapRenderer.dispose();
-		this.metaData.getTiledMap().dispose();
 	}
-    
-	public MapMetaData getMetaData() {
-		return this.metaData;
-	}
-	
+
 	public GameWorldCamera getCamera() {
 		return this.camera;
-	}
-	
-	public Player getPlayer() {
-		return this.player;
 	}
 }

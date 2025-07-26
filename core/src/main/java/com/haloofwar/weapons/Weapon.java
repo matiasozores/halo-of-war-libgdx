@@ -1,36 +1,49 @@
 package com.haloofwar.weapons;
 
+import com.haloofwar.dependences.InputManager;
+
 public abstract class Weapon {	
+	private final int COOLDOWN = 60;
+	
 	private String name;
 	protected int damage;
-	private int cooldown;
-	private int cooldownCounter = 0;
+	protected int cooldown = this.COOLDOWN;
 	protected boolean isReady = true;
+	protected int speed;
 	
-	public Weapon(String name, int damage, int cooldown) {
+	// Dependencias
+	private InputManager inputManager;
+	
+	public Weapon(String name, int damage, int speed, int cooldown, InputManager inputManager) {
 		this.name = name;
 		this.damage = damage;
 		this.cooldown = cooldown;
+		this.inputManager = inputManager;
+		this.speed = speed;
 	}
 	
-	public abstract void use(int playerX, int playerY);
-
-	public void update() {
+	public void update(float delta, float playerX, float playerY, float mouseX, float mouseY) {
 		if(!this.isReady) {
-			this.cooldownCounter --;
-			if(this.cooldownCounter <= 0) {
+			this.cooldown --;
+			if(this.cooldown <= 0) {
 				this.isReady = true;
-				this.cooldownCounter = 0;
+				this.cooldown = 0;
 			}
 		}
+		
+		if(inputManager.isAttack() && this.isReady) {
+			this.use(playerX, playerY, mouseX, mouseY);
+	    }
 	}
 	
-	public void render() {
-		
-	}
+	protected abstract void use(float playerX, float playerY, float mouseX, float mouseY);
 	
 	protected void resetCooldown() {
 		this.isReady = false;
-		this.cooldownCounter = this.cooldown;
+		this.cooldown = this.COOLDOWN;
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 }

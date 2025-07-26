@@ -1,25 +1,32 @@
 package com.haloofwar.screens;
 
-import com.haloofwar.utilities.GameContext;
-import com.haloofwar.utilities.Text;
+import com.haloofwar.dependences.GameContext;
+import com.haloofwar.enumerators.GameState;
 
 public class PauseMenuScreen extends Menu{
 
-	public PauseMenuScreen(GameContext gameContext) {
-		super(gameContext, new Text[] {
-				new Text("Reanudar"),
-				new Text("Guardar y salir")
-		});
+	private GameManager gameManager;
+	
+	public PauseMenuScreen(GameContext gameContext, GameManager gameManager) {
+		super(gameContext, new String[] {
+				"Reanudar",
+				"Guardar y salir",
+			});
+		
+		this.gameManager = gameManager;
 	}
 
 	@Override
 	protected void processOption(int optionIndex) {
 		switch (optionIndex) {
 			case 0: 
-				this.gameContext.getGame().setScreen(new GameManager(this.gameContext));
+				this.gameManager.setGameState(GameState.PLAYING);
+	        	this.gameContext.getMusicManager().resumeMusic();
+				this.gameContext.getGame().setScreen(this.gameManager);
 				break;
 			case 1: 
-				System.out.println("Guardando y saliendo...");
+				this.gameContext.getGame().dispose();
+				System.exit(0);
 				break;
 			default:
 				break;

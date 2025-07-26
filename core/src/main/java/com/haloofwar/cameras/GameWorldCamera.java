@@ -1,15 +1,18 @@
 package com.haloofwar.cameras;
 
-import com.badlogic.gdx.Gdx;
 import com.haloofwar.entities.characters.Player;
 import com.haloofwar.game.MapMetaData;
+import com.haloofwar.utilities.GameConfig;
 
 public class GameWorldCamera extends GameCamera {
     private Player player;
     private MapMetaData map;
 
-    public GameWorldCamera(Player player, MapMetaData map) {
-        super(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    public GameWorldCamera() {
+        super(GameConfig.WINDOW_WIDTH, GameConfig.WINDOW_HEIGHT); 
+    }
+    
+    public void configure(Player player, MapMetaData map) {
         this.player = player;
         this.map = map;
     }

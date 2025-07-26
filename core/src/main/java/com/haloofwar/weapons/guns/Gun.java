@@ -1,51 +1,51 @@
 package com.haloofwar.weapons.guns;
 
-import java.util.ArrayList;
-
-import com.haloofwar.utilities.Resources;
+import com.haloofwar.collision.CollisionManager;
+import com.haloofwar.dependences.BulletManager;
+import com.haloofwar.dependences.InputManager;
+import com.haloofwar.dependences.TextureManager;
 import com.haloofwar.weapons.Weapon;
 
-public abstract class Gun extends Weapon{
-
-	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-	private int bulletSpeed;
+public abstract class Gun extends Weapon {
+	private final BulletManager bulletManager;
+	private final TextureManager textureManager;
+	private final CollisionManager collisionManager;
 	
-	public Gun(int bulletSpeed) {
-		super("Rifle de Asalto", 10, 60);
-		this.bulletSpeed = bulletSpeed;
+	public Gun(String name, int damage, int speed, int cooldown, InputManager inputManager, BulletManager bulletManager,
+			TextureManager textureManager, CollisionManager collisionManager) {
+		super(name, damage, speed, cooldown, inputManager);
+		this.bulletManager = bulletManager;
+		this.textureManager = textureManager;
+		this.collisionManager = collisionManager;
 	}
 
 	@Override
-	public void use(int playerX, int playerY) {
-		/*if (this.isReady) {
-			if(this.inputManager.isAttack()) {
-				this.resetCooldown();
-				Bullet bullet = new Bullet(playerX, playerY, Resources.getMouseX(), Resources.getMouseY(), this.damage, this.bulletSpeed);
-				this.bullets.add(bullet);
-			}
-			
-		} */
-	}
-	
-	@Override 
-	public void update() {
-		super.update();
-		
-		for (int i = 0; i < this.bullets.size(); i++) {
-			this.bullets.get(i).update();
-			
-			if(!this.bullets.get(i).isActive()) {
-				this.bullets.remove(i);
-			}
+	protected void use(float playerX, float playerY, float mouseX, float mouseY) {
+		if (!this.isReady) {
+			return;
 		}
-	}
-	
-	@Override
-	public void render() {
 
-		for (Bullet bullet : this.bullets) {
-			bullet.render();
+		// Calculo sacado con CHATGPT
+		float dx = mouseX - playerX;
+		float dy = mouseY - playerY;
+
+		float length = (float) Math.sqrt(dx * dx + dy * dy);
+		if (length == 0) {
+			return;
 		}
+
+		float dirX = dx / length;
+		float dirY = dy / length;
+		// ----------------------------
+
+		Bullet bullet = new Bullet(playerX, playerY, dirX, dirY, this.damage, this.speed, this.textureManager, this.collisionManager);
+
+		this.bulletManager.add(bullet);
+		this.resetCooldown();
 	}
-	
+
+	@Override
+	public void update(float delta, float playerX, float playerY, float mouseX, float mouseY) {
+		super.update(delta, playerX, playerY, mouseX, mouseY);
+	}
 }

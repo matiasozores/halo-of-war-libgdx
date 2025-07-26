@@ -2,33 +2,41 @@ package com.haloofwar.core;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.haloofwar.dependences.GameContext;
+import com.haloofwar.enumerators.MusicTrack;
 import com.haloofwar.screens.MainMenuScreen;
-import com.haloofwar.utilities.GameContext;
-import com.haloofwar.utilities.Resources;
+import com.haloofwar.utilities.GraphicsUtils;
 
 public class HaloOfWarPrincipal extends Game {
     private GameContext gameContext;
     
     @Override
     public void create() {
-      	this.gameContext = new GameContext(this);
-    	this.setInputManager();
-        this.setScreen(new MainMenuScreen(this.gameContext));
+    	this.initializeGame();
     }
 
     @Override
     public void render() {
-    	Resources.cleanWindow();
+    	GraphicsUtils.cleanWindow();
     	super.render();
     }
-
+    
     @Override
     public void resize(int width, int height) {
+    	super.resize(width, height);
     }
 
     @Override
     public void dispose() {
     	this.gameContext.dispose();
+    	super.dispose();
+    }
+    
+    private void initializeGame() {
+        this.gameContext = new GameContext(this);
+        this.gameContext.getMusicManager().playMusic(MusicTrack.MAIN_THEME);
+        this.setInputManager();
+        this.setScreen(new MainMenuScreen(this.gameContext));
     }
     
     private void setInputManager() {
@@ -40,4 +48,9 @@ public class HaloOfWarPrincipal extends Game {
 		Gdx.graphics.setWindowedMode(width, height);
 		Gdx.graphics.setResizable(false);
 	}
+    
+    public void setFullscreen() {
+        Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+    }
+
 }

@@ -1,24 +1,30 @@
 package com.haloofwar.components;
 
-import com.haloofwar.input.InputManager;
+import com.haloofwar.dependences.InputManager;
 
 public class MovementComponent {
 	private float x = 0, y = 0;
-	private int mapWidthLimit = 999999;  
-	private int mapHeightLimit = 999999;
 	
-	public void update(InputManager inputManager, int width, int height, float movement) {
-		if (inputManager.isMoveUp()) {
-			this.y += movement;
+	// Dependencias
+	private InputManager inputManager;
+	
+	public MovementComponent(InputManager inputManager) {
+
+		this.inputManager = inputManager;
+	}
+	
+	public void update(float delta, float movementSpeed) {
+		if (this.inputManager.isMoveUp()) {
+			this.y += movementSpeed * delta;
 		}
-		if (inputManager.isMoveDown()) {
-			this.y -= movement;
+		if (this.inputManager.isMoveDown()) {
+			this.y -= movementSpeed * delta;
 		}
-		if (inputManager.isMoveLeft()) {
-			this.x -= movement;
+		if (this.inputManager.isMoveLeft()) {
+			this.x -= movementSpeed * delta;
 		}
-		if (inputManager.isMoveRight()) {
-			this.x += movement;
+		if (this.inputManager.isMoveRight()) {
+			this.x += movementSpeed * delta;
 		}
 		
 		if (this.x < 0) {
@@ -28,20 +34,6 @@ public class MovementComponent {
 		if (this.y < 0) {
 			this.y = 0;
 		}
-		
-		if (this.x + width > this.mapWidthLimit) {
-			this.x = this.mapWidthLimit - width;
-		}
-
-		if (this.y + height > this.mapHeightLimit) {
-			this.y = this.mapHeightLimit - height;
-		}
-
-	}
-	
-	public void setMapBounds(int mapWidth, int mapHeight) {
-		this.mapWidthLimit = mapWidth;
-		this.mapHeightLimit = mapHeight;
 	}
 
 	
@@ -54,6 +46,4 @@ public class MovementComponent {
 	public float getY() {
 		return this.y;
 	}
-	
-	
 }

@@ -14,6 +14,12 @@ public class Image {
 		this.height = height;
 	}
 	
+	public Image(String path) {
+		this(path, 32, 32);
+	}
+	
+	
+	
 	public void render(SpriteBatch batch) {
 		batch.draw(this.texture, this.x, this.y, this.width, this.height);
 	}

@@ -1,7 +1,6 @@
 package com.haloofwar.interfaces;
 
-public interface EntityDescriptor {
+public interface EntityDescriptor extends TextureDescriptor{
 	int getIdleLength();
 	int getWalkLength();
-	String getPath();
 }

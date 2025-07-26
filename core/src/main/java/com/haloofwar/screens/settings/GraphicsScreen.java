@@ -1,16 +1,15 @@
 package com.haloofwar.screens.settings;
 
+import com.haloofwar.dependences.GameContext;
 import com.haloofwar.screens.Menu;
-import com.haloofwar.utilities.GameContext;
-import com.haloofwar.utilities.Text;
 
 public class GraphicsScreen extends Menu {
 
 	public GraphicsScreen(GameContext gameContext) {
-		super(gameContext, new Text[] {
-			new Text("Resolución"),
-			new Text("Volver al menú principal")
-		});
+		super(gameContext, new String[] {
+				"Resolución",
+				"Volver",
+			});
 	}
 
 	@Override

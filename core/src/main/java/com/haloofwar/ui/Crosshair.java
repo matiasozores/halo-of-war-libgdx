@@ -9,20 +9,25 @@ import com.haloofwar.utilities.Image;
 public class Crosshair {
     private int mouseX, mouseY;
     private Image crosshairImage;
+    private GameWorldCamera camera;
     
-    public Crosshair(String path) {
+    public Crosshair(String path, GameWorldCamera camera) {
         this.crosshairImage = new Image(path, 10, 10);
+        this.camera = camera;
+        if(this.camera == null) {
+        	System.out.println("Se ha ingresado una camara nula");
+        }
     }
 
-    public void update(GameWorldCamera camera) {
+    public void update() {
     	Vector3 mouseWorldPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-		camera.getCamera().unproject(mouseWorldPos);
+    	this.camera.getCamera().unproject(mouseWorldPos);
 		
-		
+		/* Por ahora no voy a limitar el crosshair
 		if (mouseWorldPos.x < 0 || mouseWorldPos.x > camera.getViewportWidth() ||
 			mouseWorldPos.y < 0 || mouseWorldPos.y > camera.getViewportHeight()) {
 			return;
-		}
+		}*/
 		
 		this.mouseX = (int) mouseWorldPos.x;
 		this.mouseY = (int) mouseWorldPos.y;
@@ -35,4 +40,12 @@ public class Crosshair {
     public void dispose() {
     	this.crosshairImage.dispose();
     }
+    
+    public int getMouseX() {
+		return this.mouseX;
+	}
+    
+    public int getMouseY() {
+		return this.mouseY;
+	}
 }

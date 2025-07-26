@@ -1,13 +1,13 @@
 package com.haloofwar.components;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.haloofwar.input.InputManager;
+import com.haloofwar.dependences.InputManager;
+import com.haloofwar.dependences.TextureManager;
 import com.haloofwar.interfaces.EntityDescriptor;
 
 public class AnimationComponent {
@@ -16,16 +16,16 @@ public class AnimationComponent {
     private Animation<TextureRegion> idleAnimation;
     private float stateTime = 0f;
     private TextureRegion currentFrame;
-
     private Texture spritesheet;
-
     private boolean facingLeft = false;
+    
+    private InputManager inputManager;
 
-    public AnimationComponent(EntityDescriptor sprite) {
-        this.spritesheet = new Texture(Gdx.files.internal("sprites/" + sprite.getPath() + ".png"));
-
-        this.idleAnimation = loadAnimationFromSheet(0, sprite.getIdleLength(), 32, 32, 0.4f); 
-        this.walkAnimation = loadAnimationFromSheet(1, sprite.getWalkLength(), 32, 32, 0.2f);  
+    public AnimationComponent(EntityDescriptor sprite, InputManager inputManager, TextureManager textureManager) {
+        this.spritesheet = textureManager.get(sprite);
+        this.idleAnimation = loadAnimationFromSheet(0, sprite.getIdleLength(), 32, 32, 0.3f); 
+        this.walkAnimation = loadAnimationFromSheet(1, sprite.getWalkLength(), 32, 32, 0.1f); 
+        this.inputManager = inputManager;
     }
 
     private Animation<TextureRegion> loadAnimationFromSheet(int row, int frameCount, int frameWidth,
@@ -40,12 +40,12 @@ public class AnimationComponent {
         return new Animation<>(frameDuration, frames, PlayMode.LOOP);
     }
 
-    public void update(InputManager inputManager) {
-        this.stateTime += Gdx.graphics.getDeltaTime();
+    public void update(float delta) {
+        this.stateTime += delta;
 
-        boolean left = inputManager.isMoveLeft();
-        boolean right = inputManager.isMoveRight();
-        boolean verticalMovement = (inputManager.isMoveUp() || inputManager.isMoveDown()) ? true : false;
+        boolean left = this.inputManager.isMoveLeft();
+        boolean right = this.inputManager.isMoveRight();
+        boolean verticalMovement = (this.inputManager.isMoveUp() || this.inputManager.isMoveDown()) ? true : false;
         if (left && right && !verticalMovement) {
             this.currentFrame = this.idleAnimation.getKeyFrame(this.stateTime);
         } 
@@ -77,8 +77,8 @@ public class AnimationComponent {
 
 
     public void dispose() {
-        if (spritesheet != null) {
-            spritesheet.dispose();
+        if (this.spritesheet != null) {
+            this.spritesheet.dispose();
         }
     }
 }

@@ -1,20 +1,15 @@
 package com.haloofwar.screens.settings;
 
+import com.haloofwar.dependences.GameContext;
 import com.haloofwar.screens.Menu;
-import com.haloofwar.utilities.GameContext;
-import com.haloofwar.utilities.Text;
 
 public class ControlsScreen extends Menu {
 
 	public ControlsScreen(GameContext gameContext) {
-		super(gameContext, new Text[] {
-			new Text("Moverse hacia arriba"),
-			new Text("Moverse hacia abajo"),
-			new Text("Moverse hacia la izquierda"),
-			new Text("Moverse hacia la derecha"),
-			new Text("Atacar"),
-			new Text("Volver al menú de configuración")
-		});
+		super(gameContext, new String[] {
+				"Nada",
+				"Volver",
+			});
 	}
 
 	@Override

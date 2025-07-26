@@ -1,0 +1,16 @@
+package com.haloofwar.collision.types;
+
+import com.haloofwar.collision.Collidable;
+import com.haloofwar.collision.CollisionHandler;
+import com.haloofwar.weapons.guns.Bullet;
+
+public class BulletWallCollisionHandler implements CollisionHandler{
+
+	@Override
+	public void handle(Collidable a, Collidable b) {
+		System.out.println("Bala colisionando pared");
+		Bullet bullet = (Bullet) b;
+		bullet.destroy();
+	}
+
+}

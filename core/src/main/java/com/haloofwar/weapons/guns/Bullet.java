@@ -1,49 +1,78 @@
 package com.haloofwar.weapons.guns;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.haloofwar.collision.Collidable;
+import com.haloofwar.collision.CollisionManager;
+import com.haloofwar.dependences.TextureManager;
+import com.haloofwar.enumerators.CollisionType;
+import com.haloofwar.enumerators.ProjectileType;
 
-public class Bullet {
-	private float x, y;
-	private float dirX, dirY;
-	private int damage;
-	private float speed;
-	private boolean isActive = true;
+public class Bullet implements Collidable{
+	private final int SPEED_MULTIPLIER = 10;
 	
-	private int width = 5, height = 5; 
-	
-	public Bullet(float startX, float startY, float targetX, float targetY, int damage, float speed) {
-		this.x = startX;
-		this.y = startY;
-		this.damage = damage;
-		this.speed = speed;
+    private float positionX, positionY;
+    private float dirX, dirY;
+    private float speed = 500;
+    private boolean active = true;
+    private int damage;
+    
+    private Texture texture;
+    private CollisionManager collisionManager;
 
-		float dx = targetX - startX;
-		float dy = targetY - startY;
-		float length = (float) Math.sqrt(dx * dx + dy * dy);
-		
-		// Normalizar dirección
-		this.dirX = dx / length;
-		this.dirY = dy / length;
-	}
-	
-	public void update() {
-		if (!this.isActive) return;
+    public Bullet(float x, float y, float dirX, float dirY, int damage, int speed, TextureManager textureManager, CollisionManager collisionManager) {
+        this.positionX = x;
+        this.positionY = y;
+        this.dirX = dirX;
+        this.dirY = dirY;
+        this.damage = damage;
+        this.speed = speed;
+        this.texture = textureManager.get(ProjectileType.BULLET);
+        collisionManager.addCollidable(this);
+        this.collisionManager = collisionManager;
+    }
 
-		this.x += dirX * speed;
-		this.y += dirY * speed;
-		
-		if (x < 0 || y < 0 || x > Gdx.graphics.getWidth() || y > Gdx.graphics.getHeight()) {
-			this.isActive = false;
-		}
+    public void update(float delta, int mapWidth, int mapHeight) {
+        if (!this.active) {
+        	return;
+        }
+
+        this.positionX += (this.dirX * this.speed * delta) * this.SPEED_MULTIPLIER;
+        this.positionY += (this.dirY * this.speed * delta) * this.SPEED_MULTIPLIER;
+        
+        // En caso de que se pase de los limites se destruye
+        if(this.positionX <= 0 || this.positionX >= (float) mapWidth) {
+        	this.destroy();
+        } else if(this.positionY <= 0 || this.positionY >= (float) mapHeight) {
+        	this.destroy();
+        }
+    }
+
+    public void render(SpriteBatch batch) {
+        if (!this.active) {
+        	return;
+        }
+        
+        batch.draw(this.texture, this.positionX, this.positionY);
+    }
+
+    public boolean isActive() {
+        return this.active;
+    }
+    
+    public void destroy() {
+    	this.active = false;
+    	this.collisionManager.removeCollidable(this);
+    }
+
+	@Override
+	public Rectangle getBounds() {
+		return new Rectangle(this.positionX, this.positionY, 8, 8);
 	}
-	
-	public void render() {
-		if (!this.isActive) return;
-		
-		
-	}
-	
-	public boolean isActive() {
-		return this.isActive;
+
+	@Override
+	public CollisionType getCollisionType() {
+		return CollisionType.BULLET;
 	}
 }

@@ -52,5 +52,8 @@ public class MapMetaData {
 		return this.ySpawnPoint;
 	}
 	
+	public void dispose() {
+		this.tiledMap.dispose();
+	}
 	
 }

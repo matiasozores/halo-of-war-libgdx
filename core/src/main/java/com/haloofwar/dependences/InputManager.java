@@ -1,4 +1,4 @@
-package com.haloofwar.input;
+package com.haloofwar.dependences;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;

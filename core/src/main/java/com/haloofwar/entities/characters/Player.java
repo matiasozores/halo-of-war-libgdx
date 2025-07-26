@@ -2,78 +2,44 @@ package com.haloofwar.entities.characters;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.cameras.GameWorldCamera;
-import com.haloofwar.components.AnimationComponent;
-import com.haloofwar.components.MovementComponent;
+import com.haloofwar.collision.CollisionManager;
+import com.haloofwar.dependences.InputManager;
+import com.haloofwar.dependences.TextureManager;
+import com.haloofwar.entities.Entity;
 import com.haloofwar.enumerators.CharacterType;
-import com.haloofwar.input.InputManager;
 import com.haloofwar.ui.Crosshair;
+import com.haloofwar.weapons.Weapon;
 
-public abstract class Player {
-	private final int DEFAULT_HEALTH = 100;
-	private final int DEFAULT_VELOCITY = 1;
-	
-	private String name;
-	private int health = this.DEFAULT_HEALTH;
-	private float velocity = this.DEFAULT_VELOCITY;
-	private boolean alive = true;
-	
-	private int width = 32, height = 32; 
-	private MovementComponent movement;
-	private AnimationComponent animation;
-	
+public abstract class Player extends Entity{
 	private Crosshair crosshair;
-	
-	public Player(String name, CharacterType sprite) {
-		this.name = name;
-		this.animation = new AnimationComponent(sprite);
-		this.movement = new MovementComponent();
-		this.crosshair = new Crosshair(sprite.getCrosshairPath());
+	private Weapon weapon;
+
+	public Player(String name, Weapon weapon, CharacterType sprite, InputManager inputManager, GameWorldCamera camera, TextureManager textureManager, CollisionManager collisionManager) {
+		super(name, sprite, inputManager, camera, textureManager, collisionManager);
+		this.crosshair = new Crosshair(sprite.getCrosshairPath(), camera);
+		this.weapon = weapon;
 	}
 	
-	public void update(GameWorldCamera camera, InputManager inputManager) {
-		if(!alive) {
-			return;
-		} 
-		
-		this.movement.update(inputManager, this.width, this.height, this.velocity);
-		this.animation.update(inputManager);
-		this.crosshair.update(camera);
+	public void update(float delta) {
+		super.update(delta);
+		this.crosshair.update();
+		this.weapon.update(delta, this.getX(), this.getY(), this.getMouseX(), this.getMouseY());
 	}
 	
 	public void render(SpriteBatch batch) {
-		if(!alive) {	
-			return;
-		}
-
-		this.animation.render(this.movement.getX(), this.movement.getY(), this.width, this.height, batch);
+		super.render(batch);
 		this.crosshair.render(batch);
 	}
 	
-	public void setMapBounds(int mapWidth, int mapHeight) {
-		this.movement.setMapBounds(mapWidth, mapHeight);
+	public float getMouseX() {
+		return this.crosshair.getMouseX();
 	}
 	
-	public float getX() {
-		return this.movement.getX();
+	public float getMouseY() {
+		return this.crosshair.getMouseY();
 	}
 	
-	public float getY() {
-		return this.movement.getY();
-	}
+	// Colisiones
 	
-	public String getName() {
-		return this.name;
-	}
-	
-	public int getHealth() {
-		return this.health;
-	}
-	
-	public int getDEFAULT_HEALTH() {
-		return this.DEFAULT_HEALTH;
-	}
-	
-	public MovementComponent getMovement() {
-		return this.movement;
-	}	
+
 }

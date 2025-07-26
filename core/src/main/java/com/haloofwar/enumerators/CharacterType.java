@@ -4,8 +4,8 @@ import com.haloofwar.interfaces.EntityDescriptor;
 
 public enum CharacterType implements EntityDescriptor {
 	
-	MASTER_CHIEF("masterchief", 6, 8, "ui/crosshairs/crosshair_masterchief.png"),
-	KRATOS("kratos", 4, 4, "ui/crosshairs/crosshair_kratos.png");
+	MASTER_CHIEF("sprites/masterchief.png", 6, 8, "ui/crosshairs/crosshair_masterchief.png"),
+	KRATOS("sprites/kratos.png", 4, 4, "ui/crosshairs/crosshair_kratos.png");
 	
 	private int idleLength, walkLength;
 	private String path, crosshairPath;

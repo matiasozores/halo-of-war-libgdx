@@ -1,45 +1,59 @@
 package com.haloofwar.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.cameras.GameHudCamera;
-import com.haloofwar.cameras.GameWorldCamera;
+import com.haloofwar.cameras.GameStaticCamera;
+import com.haloofwar.dependences.FontManager;
 import com.haloofwar.entities.characters.Player;
-import com.haloofwar.utilities.GameContext;
-import com.haloofwar.utilities.Text;
+import com.haloofwar.utilities.text.Text;
 
 public class HUD {
-    private GameHudCamera hudCamera;
-    private Player player;
-    
+	private Player player;
     private Text hpText;
     private Text nameText;
-
-    private static final int PADDING = 20;
-
-    public HUD(GameContext gameContext, Player player) {
-        this.hudCamera = new GameHudCamera();
-        this.player = player;
-        this.hpText = new Text("HP: ");
-        this.nameText = new Text("Player");
-    }
-
-    public void render(SpriteBatch batch) {
-        this.hudCamera.update();
-        batch.setProjectionMatrix(this.hudCamera.getCamera().combined);
-        batch.begin();
-
-        hpText.setText("HP: " + this.player.getHealth() + " / " + this.player.getDEFAULT_HEALTH());
-        nameText.setText(this.player.getName());
-
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-
-        hpText.draw(batch, PADDING, screenHeight - PADDING);
-        nameText.draw(batch, screenWidth - nameText.getWidth() - PADDING, screenHeight - PADDING);
-        batch.end();
-    }
     
+    // Dependencias
+    private GameStaticCamera camera;
+    private SpriteBatch batch;
+    
+    public HUD(SpriteBatch batch, FontManager font, Player player) {
+        this.player = player;
+        this.hpText = new Text("HP: ", font.getTitleFont());
+        this.nameText = new Text("Player", font.getTitleFont());
+        
+        this.camera = new GameStaticCamera();
+        this.batch = batch;
+    }
+
+    public void render() {
+        
+        this.batch.setProjectionMatrix(this.camera.getCamera().combined);
+        this.batch.begin();
+
+        
+        this.hpText.setText("HP: " + this.player.getHealth() + " / " + this.player.getDEFAULT_HEALTH());
+        this.nameText.setText(this.player.getName());
+
+        float viewportWidth = this.camera.getViewport().getWorldWidth();
+        float viewportHeight = this.camera.getViewport().getWorldHeight();
+
+        float padding = viewportHeight * 0.02f;
+
+        this.hpText.draw(this.batch, padding, viewportHeight - padding);
+        this.nameText.draw(this.batch, viewportWidth - nameText.getWidth() - padding, viewportHeight - padding);
+
+        this.batch.end();
+    }
+
+
     public void update() {
-	}
+    	this.camera.update();
+    }
+
+    public GameStaticCamera getCamera() {
+        return this.camera;
+    }
+
+    public void resize(int width, int height) {
+        this.camera.resize(width, height);
+    }
 }
