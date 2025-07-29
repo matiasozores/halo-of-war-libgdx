@@ -1,7 +1,7 @@
 package com.haloofwar.enumerators;
 
 public enum CollisionType {
-    PLAYER,
+    ENTITY,
     ENEMY,
     WALL,
     BULLET,

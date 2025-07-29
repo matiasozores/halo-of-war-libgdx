@@ -75,4 +75,9 @@ public class Bullet implements Collidable{
 	public CollisionType getCollisionType() {
 		return CollisionType.BULLET;
 	}
+	
+	public int getDamage() {
+	    return this.damage;
+	}
+
 }

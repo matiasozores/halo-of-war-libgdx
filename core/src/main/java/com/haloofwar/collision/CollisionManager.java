@@ -15,12 +15,10 @@ public class CollisionManager {
 
     public void removeCollidable(Collidable entity) {
         this.collidables.remove(entity);
-        System.out.println("Removido");
     }
 
     public void checkCollisions() {
-    	System.out.println(this.collidables.size());
-        List<Collidable> snapshot = new ArrayList<>(collidables);
+        List<Collidable> snapshot = new ArrayList<>(this.collidables);
         int size = snapshot.size();
         for (int i = 0; i < size - 1; i++) {
             Collidable a = snapshot.get(i);
@@ -28,7 +26,7 @@ public class CollisionManager {
                 Collidable b = snapshot.get(j);
 
                 if (a.getBounds().overlaps(b.getBounds())) {
-                    collisionSystem.resolveCollision(a, b);
+                    this.collisionSystem.resolveCollision(a, b);
                 }
             }
         }

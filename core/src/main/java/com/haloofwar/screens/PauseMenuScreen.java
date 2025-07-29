@@ -1,5 +1,6 @@
 package com.haloofwar.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.enumerators.GameState;
 
@@ -26,7 +27,7 @@ public class PauseMenuScreen extends Menu{
 				break;
 			case 1: 
 				this.gameContext.getGame().dispose();
-				System.exit(0);
+				Gdx.app.exit();
 				break;
 			default:
 				break;

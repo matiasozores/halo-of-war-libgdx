@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.haloofwar.collision.types.BulletWallCollisionHandler;
-import com.haloofwar.collision.types.PlayerBulletCollisionHandler;
-import com.haloofwar.collision.types.PlayerObjectCollisionHandler;
-import com.haloofwar.collision.types.PlayerWallCollisionHandler;
+import com.haloofwar.collision.types.EntityBulletCollisionHandler;
+import com.haloofwar.collision.types.EntityObjectCollisionHandler;
+import com.haloofwar.collision.types.EntityWallCollisionHandler;
 import com.haloofwar.enumerators.CollisionType;
 
 public class CollisionSystem {
@@ -18,10 +18,11 @@ public class CollisionSystem {
     }
 
     private void registerHandlers() {
-        this.handlers.put(this.key(CollisionType.PLAYER, CollisionType.BULLET), new PlayerBulletCollisionHandler());
-        this.handlers.put(this.key(CollisionType.PLAYER, CollisionType.WALL), new PlayerWallCollisionHandler());
-        this.handlers.put(this.key(CollisionType.PLAYER, CollisionType.OBJECT), new PlayerObjectCollisionHandler());
+        this.handlers.put(this.key(CollisionType.ENTITY, CollisionType.BULLET), new EntityBulletCollisionHandler());
+        this.handlers.put(this.key(CollisionType.ENTITY, CollisionType.WALL), new EntityWallCollisionHandler());
+        this.handlers.put(this.key(CollisionType.ENTITY, CollisionType.OBJECT), new EntityObjectCollisionHandler());
         this.handlers.put(this.key(CollisionType.BULLET, CollisionType.WALL), new BulletWallCollisionHandler());
+        this.handlers.put(this.key(CollisionType.ENTITY, CollisionType.ENTITY), new EntityWallCollisionHandler());
     }
 
     public void resolveCollision(Collidable a, Collidable b) {

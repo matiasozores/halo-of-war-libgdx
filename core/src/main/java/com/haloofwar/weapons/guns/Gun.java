@@ -23,7 +23,7 @@ public abstract class Gun extends Weapon {
 	protected void use(float playerX, float playerY, float mouseX, float mouseY) {
 		if (!this.isReady) {
 			return;
-		}
+		}		
 
 		// Calculo sacado con CHATGPT
 		float dx = mouseX - playerX;
@@ -37,8 +37,14 @@ public abstract class Gun extends Weapon {
 		float dirX = dx / length;
 		float dirY = dy / length;
 		// ----------------------------
+		
+		float offset = 45f; // Esto representa una distancia razonable fuera del jugador
 
-		Bullet bullet = new Bullet(playerX, playerY, dirX, dirY, this.damage, this.speed, this.textureManager, this.collisionManager);
+		float bulletX = playerX + dirX * offset;
+		float bulletY = playerY + dirY * offset;
+
+
+		Bullet bullet = new Bullet(bulletX, bulletY, dirX, dirY, this.damage, this.speed, this.textureManager, this.collisionManager);
 
 		this.bulletManager.add(bullet);
 		this.resetCooldown();

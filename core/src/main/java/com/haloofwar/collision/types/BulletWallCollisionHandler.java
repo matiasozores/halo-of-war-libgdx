@@ -8,7 +8,6 @@ public class BulletWallCollisionHandler implements CollisionHandler{
 
 	@Override
 	public void handle(Collidable a, Collidable b) {
-		System.out.println("Bala colisionando pared");
 		Bullet bullet = (Bullet) b;
 		bullet.destroy();
 	}

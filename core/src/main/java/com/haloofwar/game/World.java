@@ -4,16 +4,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.cameras.GameWorldCamera;
 import com.haloofwar.collision.CollisionManager;
 import com.haloofwar.dependences.BulletManager;
-import com.haloofwar.dependences.TextureManager;
+import com.haloofwar.dependences.GameContext;
+import com.haloofwar.entities.EntityManager;
 import com.haloofwar.entities.characters.Player;
+import com.haloofwar.entities.enemies.Enemy;
+import com.haloofwar.enumerators.CharacterType;
 import com.haloofwar.enumerators.SceneType;
-import com.haloofwar.game.components.EntityManager;
 import com.haloofwar.game.components.MapRenderer;
 import com.haloofwar.game.components.WorldCollisionInitializer;
 
 public class World {
 	private MapRenderer map;
-	private EntityManager entities = new EntityManager();
+	private EntityManager entities;
 	private GameWorldCamera camera;
 	private BulletManager bulletManager;
 	
@@ -22,17 +24,19 @@ public class World {
 	private CollisionManager collisionManager;
 	
 
-	public World(SceneType scene, Player player, GameWorldCamera camera, SpriteBatch batch, BulletManager bulletManager,
-			TextureManager textureManager, CollisionManager collisionManager) {
-		this.batch = batch;
-		this.bulletManager = bulletManager;
-		this.collisionManager = collisionManager;
+	public World(SceneType scene, Player player, GameContext context) {
+		this.batch = context.getBatch();
+		this.bulletManager = context.getBulletManager();
+		this.collisionManager = context.getCollisionManager();
+		this.entities = new EntityManager(context.getCollisionManager());
 		
 		this.entities.addEntity(player);
+		this.entities.addEntity(new Enemy(CharacterType.KRATOS, context.getInputManager(), context.getCameraGame(), context.getTextureManager(), context.getCollisionManager()));
 		this.map = new MapRenderer(scene);
 		WorldCollisionInitializer.initializeMapColliders(this.map, this.collisionManager);
-		this.camera = camera;
+		this.camera = context.getCameraGame();
 		this.camera.configure(player, this.map.getMetaData());
+		
 	}
 
 	public void update(float delta) {

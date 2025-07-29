@@ -7,6 +7,7 @@ import com.haloofwar.utilities.GameConfig;
 public class GameWorldCamera extends GameCamera {
     private Player player;
     private MapMetaData map;
+    private float zoom = 0.4f;
 
     public GameWorldCamera() {
         super(GameConfig.WINDOW_WIDTH, GameConfig.WINDOW_HEIGHT); 
@@ -19,7 +20,7 @@ public class GameWorldCamera extends GameCamera {
 
     @Override
     public void update() {
-        this.camera.zoom = 0.4f;
+        this.camera.zoom = this.zoom;
 
         float halfW = this.camera.viewportWidth * this.camera.zoom / 2f;
         float halfH = this.camera.viewportHeight * this.camera.zoom / 2f;

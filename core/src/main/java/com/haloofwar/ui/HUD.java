@@ -2,7 +2,7 @@ package com.haloofwar.ui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.cameras.GameStaticCamera;
-import com.haloofwar.dependences.FontManager;
+import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.characters.Player;
 import com.haloofwar.utilities.text.Text;
 
@@ -15,13 +15,13 @@ public class HUD {
     private GameStaticCamera camera;
     private SpriteBatch batch;
     
-    public HUD(SpriteBatch batch, FontManager font, Player player) {
+    public HUD(GameContext context, Player player) {
         this.player = player;
-        this.hpText = new Text("HP: ", font.getTitleFont());
-        this.nameText = new Text("Player", font.getTitleFont());
+        this.hpText = new Text("HP: ", context.getFontManager().getTitleFont());
+        this.nameText = new Text("Player", context.getFontManager().getTitleFont());
         
         this.camera = new GameStaticCamera();
-        this.batch = batch;
+        this.batch = context.getBatch();
     }
 
     public void render() {

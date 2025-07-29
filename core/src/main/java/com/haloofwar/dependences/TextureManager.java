@@ -22,11 +22,10 @@ public class TextureManager {
 
     public Texture get(TextureDescriptor descriptor) {
         if (!textureMap.containsKey(descriptor)) {
-            load(descriptor); 
+            this.load(descriptor); 
         }
         return textureMap.get(descriptor);
     }
-
 
     public void unload(TextureDescriptor descriptor) {
         Texture texture = this.textureMap.remove(descriptor);
@@ -36,7 +35,7 @@ public class TextureManager {
     }
     
     public void dispose() {
-        for (Texture texture : textureMap.values()) {
+        for (Texture texture : this.textureMap.values()) {
         	texture.dispose();
         }
         

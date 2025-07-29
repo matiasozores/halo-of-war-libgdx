@@ -3,6 +3,7 @@ package com.haloofwar.entities.characters;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.cameras.GameWorldCamera;
 import com.haloofwar.collision.CollisionManager;
+import com.haloofwar.components.movement.PlayerMovementController;
 import com.haloofwar.dependences.InputManager;
 import com.haloofwar.dependences.TextureManager;
 import com.haloofwar.entities.Entity;
@@ -14,8 +15,8 @@ public abstract class Player extends Entity{
 	private Crosshair crosshair;
 	private Weapon weapon;
 
-	public Player(String name, Weapon weapon, CharacterType sprite, InputManager inputManager, GameWorldCamera camera, TextureManager textureManager, CollisionManager collisionManager) {
-		super(name, sprite, inputManager, camera, textureManager, collisionManager);
+	public Player(String name, Weapon weapon, CharacterType sprite, InputManager input, GameWorldCamera camera, TextureManager textureManager, CollisionManager collisionManager) {
+		super(name, sprite, new PlayerMovementController(input), camera, textureManager, collisionManager);
 		this.crosshair = new Crosshair(sprite.getCrosshairPath(), camera);
 		this.weapon = weapon;
 	}

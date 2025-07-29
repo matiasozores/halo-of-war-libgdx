@@ -6,30 +6,25 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.haloofwar.dependences.InputManager;
-import com.haloofwar.dependences.TextureManager;
 import com.haloofwar.interfaces.EntityDescriptor;
+import com.haloofwar.dependences.TextureManager;
 
 public class AnimationComponent {
-
     private Animation<TextureRegion> walkAnimation;
     private Animation<TextureRegion> idleAnimation;
     private float stateTime = 0f;
     private TextureRegion currentFrame;
     private Texture spritesheet;
     private boolean facingLeft = false;
-    
-    private InputManager inputManager;
 
-    public AnimationComponent(EntityDescriptor sprite, InputManager inputManager, TextureManager textureManager) {
+    public AnimationComponent(EntityDescriptor sprite, TextureManager textureManager) {
         this.spritesheet = textureManager.get(sprite);
         this.idleAnimation = loadAnimationFromSheet(0, sprite.getIdleLength(), 32, 32, 0.3f); 
         this.walkAnimation = loadAnimationFromSheet(1, sprite.getWalkLength(), 32, 32, 0.1f); 
-        this.inputManager = inputManager;
     }
 
     private Animation<TextureRegion> loadAnimationFromSheet(int row, int frameCount, int frameWidth,
-    		int frameHeight, float frameDuration) {
+                                                            int frameHeight, float frameDuration) {
         TextureRegion[][] tmp = TextureRegion.split(this.spritesheet, frameWidth, frameHeight);
 
         Array<TextureRegion> frames = new Array<>();
@@ -40,27 +35,20 @@ public class AnimationComponent {
         return new Animation<>(frameDuration, frames, PlayMode.LOOP);
     }
 
-    public void update(float delta) {
+    public void update(float delta, float dirX, float dirY) {
         this.stateTime += delta;
 
-        boolean left = this.inputManager.isMoveLeft();
-        boolean right = this.inputManager.isMoveRight();
-        boolean verticalMovement = (this.inputManager.isMoveUp() || this.inputManager.isMoveDown()) ? true : false;
-        if (left && right && !verticalMovement) {
-            this.currentFrame = this.idleAnimation.getKeyFrame(this.stateTime);
-        } 
-        else if (left) {
-            this.currentFrame = this.walkAnimation.getKeyFrame(this.stateTime);
+        boolean moving = dirX != 0 || dirY != 0;
+
+        if (dirX < 0) {
             this.facingLeft = true;
-        } 
-        else if (right) {
-            this.currentFrame = this.walkAnimation.getKeyFrame(this.stateTime);
+        } else if (dirX > 0) {
             this.facingLeft = false;
         }
-        else if (verticalMovement) {
+
+        if (moving) {
             this.currentFrame = this.walkAnimation.getKeyFrame(this.stateTime);
-        }
-        else {
+        } else {
             this.currentFrame = this.idleAnimation.getKeyFrame(this.stateTime);
         }
     }
@@ -74,7 +62,6 @@ public class AnimationComponent {
             }
         }
     }
-
 
     public void dispose() {
         if (this.spritesheet != null) {
