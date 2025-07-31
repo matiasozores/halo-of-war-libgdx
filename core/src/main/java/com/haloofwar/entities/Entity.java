@@ -2,106 +2,97 @@ package com.haloofwar.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.haloofwar.cameras.GameWorldCamera;
-import com.haloofwar.collision.Collidable;
-import com.haloofwar.collision.CollisionManager;
 import com.haloofwar.components.AnimationComponent;
 import com.haloofwar.components.movement.MovementComponent;
-import com.haloofwar.components.movement.MovementController;
-import com.haloofwar.dependences.GameContext;
-import com.haloofwar.dependences.TextureManager;
-import com.haloofwar.enumerators.CharacterType;
+import com.haloofwar.dependences.collision.Collidable;
 import com.haloofwar.enumerators.CollisionType;
+import com.haloofwar.interfaces.Renderable;
 
-public abstract class Entity implements Collidable{
-	private final int DEFAULT_HEALTH = 100;
-	private final int DEFAULT_VELOCITY = 150;
-	
-	private String name;
-	private int health = this.DEFAULT_HEALTH;
-	private float velocity = this.DEFAULT_VELOCITY;
-	private boolean alive = true;
-	private int width = 32, height = 32; 
-	
-	private MovementComponent movement;
-	private AnimationComponent animation;
-	private CollisionType type = CollisionType.ENTITY;
-	
-	public Entity(String name, CharacterType sprite, MovementController controller, GameWorldCamera camera, TextureManager textureManager, CollisionManager collisionManager) {
-		this.name = name;
-		this.movement = new MovementComponent(controller);
-		this.animation = new AnimationComponent(sprite, textureManager);
-		collisionManager.addCollidable(this);
-	}
-	
-	public void update(float delta) {
-		if(!this.alive) {
-			return;
-		} 
-		
-		this.movement.update(delta, this.velocity);
-		// En Enemy
-		this.animation.update(delta, movement.getController().getDirectionX(), movement.getController().getDirectionY());
+public abstract class Entity implements Collidable, Renderable {
+    private final int DEFAULT_HEALTH = 100;
+    private final int DEFAULT_VELOCITY = 150;
 
-	}
-	
-	public void render(SpriteBatch batch) {
-		if(!this.alive) {	
-			return;
-		}
-		
-		this.animation.render(this.movement.getX(), this.movement.getY(), this.width, this.height, batch);
-	}
-	
-	public void takeDamage(final int AMOUNT) {
-	    this.health -= AMOUNT;
-	    if (this.health <= 0) {
-	        this.health = 0;
-	        this.alive = false;
-	    }
-	}
-	
+    protected String name;
+    protected int health;
+    protected float velocity;
+    protected boolean alive;
+    protected int width = 32, height = 32;
 
-	
-	public float getX() {
-		return this.movement.getX();
-	}
-	
-	public float getY() {
-		return this.movement.getY();
-	}
-	
-	public String getName() {
-		return this.name;
-	}
-	
-	public int getHealth() {
-		return this.health;
-	}
-	
-	public int getDEFAULT_HEALTH() {
-		return this.DEFAULT_HEALTH;
-	}
-	
-	public MovementComponent getMovement() {
-		return this.movement;
-	}
-	
-	@Override
-	public Rectangle getBounds() {
-		return new Rectangle(this.getX(), this.getY(), this.width, this.height);
-	}
-	
-	@Override
-	public CollisionType getCollisionType() {
-		return this.type;
-	}
-	
-	public boolean isAlive() {
-		return this.alive;
-	}
-	
-	public void dispose(CollisionManager manager) {
-		manager.removeCollidable(this);
-	}
+    protected final MovementComponent movement;
+    protected final AnimationComponent animation;
+    protected final CollisionType type = CollisionType.ENTITY;
+
+    public Entity(String name, MovementComponent movement, AnimationComponent animation) {
+        this.name = name;
+        this.health = DEFAULT_HEALTH;
+        this.velocity = DEFAULT_VELOCITY;
+        this.alive = true;
+        this.movement = movement;
+        this.animation = animation;
+    }
+
+    public void update(float delta) {
+        if (!this.alive) {
+        	return;
+        }
+        
+        this.movement.update(delta, this.velocity);
+        this.animation.update(delta, this.movement.getDirectionX(), this.movement.getDirectionY());
+    }
+
+    @Override
+    public void render(SpriteBatch batch) {
+        if (!alive) {
+        	return;
+        }
+        
+        this.animation.render(this.movement.getX(), this.movement.getY(), this.width, this.height, batch);
+    }
+
+    public void takeDamage(int amount) {
+        this.health -= amount;
+        if (this.health <= 0) {
+            this.health = 0;
+            this.alive = false;
+        }
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getHealth() {
+        return this.health;
+    }
+
+    public boolean isAlive() {
+        return this.alive;
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(this.movement.getX(), this.movement.getY(), this.width, this.height);
+    }
+
+    @Override
+    public CollisionType getCollisionType() {
+        return this.type;
+    }
+    
+    public int getDEFAULT_HEALTH() {
+  		return this.DEFAULT_HEALTH;
+  	}
+      
+      public int getDEFAULT_VELOCITY() {
+  		return this.DEFAULT_VELOCITY;
+  	}
+      
+      public MovementComponent getMovement() {
+  		return this.movement;
+  	}
+
+    public void dispose() {
+    }
+    
+  
 }

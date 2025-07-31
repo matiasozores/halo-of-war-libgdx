@@ -1,6 +1,6 @@
 package com.haloofwar.components.movement;
 
-import com.haloofwar.dependences.InputManager;
+import com.haloofwar.dependences.input.InputManager;
 
 public class PlayerMovementController implements MovementController{
     private final InputManager input;

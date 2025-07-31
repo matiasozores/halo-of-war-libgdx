@@ -3,9 +3,9 @@ package com.haloofwar.weapons.guns;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.haloofwar.collision.Collidable;
-import com.haloofwar.collision.CollisionManager;
-import com.haloofwar.dependences.TextureManager;
+import com.haloofwar.dependences.assets.TextureManager;
+import com.haloofwar.dependences.collision.Collidable;
+import com.haloofwar.dependences.collision.CollisionManager;
 import com.haloofwar.enumerators.CollisionType;
 import com.haloofwar.enumerators.ProjectileType;
 

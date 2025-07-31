@@ -4,17 +4,28 @@ import com.badlogic.gdx.Screen;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.characters.Player;
 import com.haloofwar.enumerators.MusicTrack;
+import com.haloofwar.enumerators.PlayerType;
 import com.haloofwar.enumerators.SceneType;
+import com.haloofwar.game.components.SceneBuilder;
 import com.haloofwar.ui.HUD;
 
 public abstract class GameScene implements Screen {
-    private HUD hud;
-	private World world;
+    protected final GameContext context;
+    protected final SceneType sceneType;
+    protected final Player player;
+
+    protected final World world;
+    protected final HUD hud;
 	
     public GameScene(GameContext context, SceneType scene, Player player) {
-    	this.world = new World(scene, player, context);
-		this.hud = new HUD(context, player);
-		context.getMusicManager().playMusic(MusicTrack.COSTA_PERDIDA);
+        this.context = context;
+        this.sceneType = scene;
+        this.player = player;
+
+        this.world = SceneBuilder.build(this.sceneType, context, player);
+        this.hud = new HUD(context, player, player.getType());
+        
+        this.context.getAudio().getMusic().play(MusicTrack.COSTA_PERDIDA);
 	}
 
 	@Override
@@ -34,7 +45,6 @@ public abstract class GameScene implements Screen {
 		this.hud.getCamera().resize(width, height);
 	}
 	
-    
     @Override
     public void show() {}
 	@Override

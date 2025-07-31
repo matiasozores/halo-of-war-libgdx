@@ -29,18 +29,17 @@ public class HaloOfWarPrincipal extends Game {
     @Override
     public void dispose() {
     	this.gameContext.dispose();
-    	super.dispose();
     }
     
     private void initializeGame() {
         this.gameContext = new GameContext(this);
-        this.gameContext.getMusicManager().playMusic(MusicTrack.MAIN_THEME);
+        this.gameContext.getAudio().getMusic().play(MusicTrack.MAIN_THEME);
         this.setInputManager();
         this.setScreen(new MainMenuScreen(this.gameContext));
     }
     
     private void setInputManager() {
-    	Gdx.input.setInputProcessor(this.gameContext.getInputManager());
+    	Gdx.input.setInputProcessor(this.gameContext.getInput());
 		Gdx.input.setCursorCatched(true);
     }
     

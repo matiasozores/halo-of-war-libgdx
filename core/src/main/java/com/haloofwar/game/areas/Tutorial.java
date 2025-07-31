@@ -8,6 +8,6 @@ import com.haloofwar.game.Area;
 public class Tutorial extends Area{
 
 	public Tutorial(GameContext gameContext, Player player) {
-		super(gameContext, SceneType.ZONA_TUTORIAL, player);
+		super(gameContext, SceneType.TUTORIAL, player);
 	}
 }

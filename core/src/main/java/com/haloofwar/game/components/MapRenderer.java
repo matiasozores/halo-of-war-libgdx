@@ -15,7 +15,7 @@ public class MapRenderer {
 	}
 	
 	public void render(GameWorldCamera camera) {
-	    this.mapRenderer.setView(camera.getCamera());
+	    this.mapRenderer.setView(camera.getOrthographic());
 	    this.mapRenderer.render(); 
 	}
 

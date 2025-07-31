@@ -1,7 +1,7 @@
 package com.haloofwar.components.movement;
 
 public class MovementComponent {
-	private float x, y;
+	private float x = 100, y= 100;
 	private final MovementController controller;
 
 	public MovementComponent(MovementController controller) {
@@ -27,6 +27,14 @@ public class MovementComponent {
 
 	public float getY() {
 		return this.y;
+	}
+	
+	public float getDirectionX() {
+		return this.controller.getDirectionX();
+	}
+	
+	public float getDirectionY() {
+		return this.controller.getDirectionY();
 	}
 
 	public void setX(float x) {

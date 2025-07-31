@@ -1,9 +1,9 @@
 package com.haloofwar.weapons.guns;
 
-import com.haloofwar.collision.CollisionManager;
-import com.haloofwar.dependences.BulletManager;
-import com.haloofwar.dependences.InputManager;
-import com.haloofwar.dependences.TextureManager;
+import com.haloofwar.dependences.assets.TextureManager;
+import com.haloofwar.dependences.collision.CollisionManager;
+import com.haloofwar.dependences.gameplay.BulletManager;
+import com.haloofwar.dependences.input.InputManager;
 import com.haloofwar.weapons.Weapon;
 
 public abstract class Gun extends Weapon {
@@ -38,11 +38,9 @@ public abstract class Gun extends Weapon {
 		float dirY = dy / length;
 		// ----------------------------
 		
-		float offset = 45f; // Esto representa una distancia razonable fuera del jugador
-
+		float offset = 45f; 
 		float bulletX = playerX + dirX * offset;
 		float bulletY = playerY + dirY * offset;
-
 
 		Bullet bullet = new Bullet(bulletX, bulletY, dirX, dirY, this.damage, this.speed, this.textureManager, this.collisionManager);
 

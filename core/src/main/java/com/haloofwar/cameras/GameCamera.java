@@ -16,7 +16,7 @@ public abstract class GameCamera {
         this.camera.update();
     }
 
-    public OrthographicCamera getCamera() {
+    public OrthographicCamera getOrthographic() {
         return this.camera;
     }
     

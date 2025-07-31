@@ -1,7 +1,7 @@
 package com.haloofwar.objects;
 
-import com.haloofwar.collision.CollisionManager;
-import com.haloofwar.dependences.TextureManager;
+import com.haloofwar.dependences.assets.TextureManager;
+import com.haloofwar.dependences.collision.CollisionManager;
 import com.haloofwar.enumerators.ObjectType;
 
 public class Chest extends ObjectBase {

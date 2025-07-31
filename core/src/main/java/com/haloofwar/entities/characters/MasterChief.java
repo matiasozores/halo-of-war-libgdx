@@ -1,17 +1,15 @@
 package com.haloofwar.entities.characters;
 
-import com.haloofwar.cameras.GameWorldCamera;
-import com.haloofwar.collision.CollisionManager;
-import com.haloofwar.dependences.BulletManager;
-import com.haloofwar.dependences.InputManager;
-import com.haloofwar.dependences.TextureManager;
-import com.haloofwar.enumerators.CharacterType;
-import com.haloofwar.weapons.guns.AssaultRifle;
+import com.haloofwar.components.AnimationComponent;
+import com.haloofwar.components.movement.MovementComponent;
+import com.haloofwar.enumerators.PlayerType;
+import com.haloofwar.ui.Crosshair;
+import com.haloofwar.weapons.Weapon;
 
 public class MasterChief extends Player {
 
-	public MasterChief(InputManager inputManager, BulletManager bulletManager, GameWorldCamera camera, TextureManager textureManager, CollisionManager collisionManager) {
-		super("Master Chief", new AssaultRifle(inputManager, bulletManager, textureManager, collisionManager), CharacterType.MASTER_CHIEF, inputManager, camera, textureManager, collisionManager); 
+	public MasterChief(MovementComponent movement, AnimationComponent animation, Crosshair crosshair, Weapon weapon) {
+		super("Master Chief", movement, animation, crosshair, weapon, PlayerType.MASTER_CHIEF);
 	}
 
 }

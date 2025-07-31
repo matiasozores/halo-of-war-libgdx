@@ -2,125 +2,96 @@ package com.haloofwar.screens;
 
 import com.badlogic.gdx.Screen;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.characters.Kratos;
-import com.haloofwar.entities.characters.MasterChief;
 import com.haloofwar.entities.characters.Player;
 import com.haloofwar.enumerators.GameState;
-import com.haloofwar.game.GameScene;
-import com.haloofwar.game.areas.Tutorial;
+import com.haloofwar.enumerators.SceneType;
+import com.haloofwar.factories.GameFlowManager;
 
 public class GameManager implements Screen {
-	private Player player;
-	private GameScene currentScene;
-	private boolean initialized = false;
-	private GameState gameState = GameState.PLAYING;
+	private final GameContext context;
+	private final GameFlowManager flowManager;
+	private final Player player;
+	private final PauseMenuScreen pauseMenu;
 
-	// Dependencias
-	private GameContext gameContext;
-
-	public GameManager(GameContext gameContext) {
-		this.gameContext = gameContext;
+	public GameManager(GameContext context, Player player) {
+		this.context = context;
+		this.player = player;
+		
+		this.pauseMenu = new PauseMenuScreen(context, this);
+		
+		this.flowManager = new GameFlowManager(context);
+		this.flowManager.startGame(this.player, SceneType.TUTORIAL);
 	}
 
 	@Override
 	public void show() {
-		if (this.initialized) {
-			return;
-		}
-
-		int opc = 2;
-		switch (opc) {
-		case 1:
-			this.player = new Kratos(this.gameContext.getInputManager(), this.gameContext.getBulletManager(),
-					this.gameContext.getCameraGame(), this.gameContext.getTextureManager(), this.gameContext.getCollisionManager());
-			break;
-		case 2:
-			this.player = new MasterChief(this.gameContext.getInputManager(), this.gameContext.getBulletManager(),
-					this.gameContext.getCameraGame(), this.gameContext.getTextureManager(), this.gameContext.getCollisionManager());
-			break;
-		default:
-			this.player = new Kratos(this.gameContext.getInputManager(), this.gameContext.getBulletManager(),
-					this.gameContext.getCameraGame(), this.gameContext.getTextureManager(), this.gameContext.getCollisionManager());
-			break;
-		}
-
-		this.currentScene = new Tutorial(this.gameContext, this.player);
-		this.startScene();
-		this.initialized = true;
+		this.flowManager.getCurrentScene().show();
 	}
 
 	@Override
 	public void render(float delta) {
-		switch (this.gameState) {
-		case PLAYING:
-			this.update(delta);
-			this.currentScene.render(delta);
-			break;
-		case PAUSED:
-			this.gameContext.getGame().setScreen(new PauseMenuScreen(this.gameContext, this));
-			break;
+		this.handleInput();
 
-		case GAME_OVER:
-			this.gameContext.getGame().setScreen(new GameOverScreen(this.gameContext));
-			break;
+		if (this.flowManager.getGameState() == GameState.PAUSED) {
+			this.context.getGame().setScreen(this.pauseMenu);
+			return;
 		}
+
+		if (this.flowManager.getGameState() == GameState.GAME_OVER) {
+			this.context.getGame().setScreen(new GameOverScreen(this.context));
+			return;
+		}
+
+		this.flowManager.update(delta);
+		this.flowManager.render(delta);
 	}
 
-	public void update(float delta) {
-		if (this.gameContext.getInputManager().isEscape()) {
-			if (this.gameState.equals(GameState.PLAYING)) {
-				this.gameContext.getMusicManager().pauseMusic();
-				this.gameState = GameState.PAUSED;
-			} else if (this.gameState.equals(GameState.PAUSED)) {
-				this.gameState = GameState.PLAYING;
+	private void handleInput() {
+		if (this.context.getInput().isEscape()) {
+			if (this.flowManager.getGameState() == GameState.PLAYING) {
+				this.context.getAudio().getMusic().pause();
+				this.flowManager.setGameState(GameState.PAUSED);
 			}
 		}
 
-		if (this.gameContext.getInputManager().isOpenInventory()) {
-			this.gameState = GameState.GAME_OVER;
-		}
-
-		if (this.gameState == GameState.PLAYING) {
-			this.currentScene.update(delta);
+		if (this.context.getInput().isOpenInventory()) {
+			this.flowManager.setGameState(GameState.GAME_OVER);
 		}
 	}
-
-	public void startScene() {
-		this.currentScene.show();
-	}
-
-	public void setGameState(GameState gameState) {
-		this.gameState = gameState;
+	
+	public void reset() {
+		this.context.getGameplay().dispose();
+		this.context.getCollision().clear();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		this.currentScene.resize(width, height);
+		flowManager.getCurrentScene().resize(width, height);
+		pauseMenu.resize(width, height);
 	}
 
 	@Override
 	public void pause() {
-		this.currentScene.pause();
+		flowManager.getCurrentScene().pause();
 	}
 
 	@Override
 	public void resume() {
-		this.currentScene.resume();
+		flowManager.getCurrentScene().resume();
 	}
 
 	@Override
 	public void hide() {
-		this.currentScene.hide();
+		flowManager.getCurrentScene().hide();
 	}
 
 	@Override
 	public void dispose() {
-		if (this.currentScene != null) {
-			this.currentScene.dispose();
-		}
+		flowManager.getCurrentScene().dispose();
 	}
 
-	public GameScene getCurrentScene() {
-		return this.currentScene;
+	// Getters para otras clases
+	public GameFlowManager getFlowManager() {
+		return flowManager;
 	}
 }

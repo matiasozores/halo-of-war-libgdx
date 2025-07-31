@@ -27,7 +27,7 @@ public enum SceneType {
     DIOS_SUPREMO("Dios Supremo", "maps/dios_supremo.tmx"),
 
     // Extras (si necesitás una zona general)
-    ZONA_TUTORIAL("Zona de Tutorial", "maps/mario.tmx", MusicTrack.COSTA_PERDIDA),
+    TUTORIAL("Zona de Tutorial", "maps/mario.tmx", MusicTrack.COSTA_PERDIDA),
     ZONA_MENU("Menu Principal", "maps/menu_principal.tmx"),
     ZONA_TIENE_SHOP("Zona de Tienda", "maps/tienda.tmx"),
     ZONA_MULTIJUGADOR_LOBBY("Lobby Multijugador", "maps/lobby_multijugador.tmx");

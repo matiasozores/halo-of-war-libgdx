@@ -4,8 +4,8 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
-import com.haloofwar.collision.CollisionManager;
-import com.haloofwar.collision.MapCollider;
+import com.haloofwar.dependences.collision.CollisionManager;
+import com.haloofwar.dependences.collision.MapCollider;
 
 public class WorldCollisionInitializer {
 

@@ -1,6 +1,6 @@
 package com.haloofwar.components;
 
-import com.haloofwar.audio.SoundManager;
+import com.haloofwar.dependences.audio.SoundManager;
 import com.haloofwar.enumerators.SoundType;
 
 public class AudioComponent {

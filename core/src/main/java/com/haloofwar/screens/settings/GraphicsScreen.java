@@ -5,26 +5,28 @@ import com.haloofwar.screens.Menu;
 
 public class GraphicsScreen extends Menu {
 
-	public GraphicsScreen(GameContext gameContext) {
-		super(gameContext, new String[] {
-				"Resolución",
-				"Volver",
-			});
-	}
+    public GraphicsScreen(GameContext gameContext, Menu previousMenu) {
+        super(gameContext, "Graficos", new String[] {
+            "Resolucion",
+            "Volver"
+        }, previousMenu);
+    }
+    
+    public GraphicsScreen(GameContext gameContext) {
+        this(gameContext, null);
+    }
 
-	@Override
-	protected void processOption(int optionIndex) {
-		switch (optionIndex) {
-			case 0:
-				this.gameContext.getGame().setScreen(new ResolutionScreen(this.gameContext));
-				break;
-				
-			case 1: 
-				this.gameContext.getGame().setScreen(new SettingsScreen(this.gameContext));
-				break;
-			default:
-				break;
-		}
-	}
-
+    @Override
+    protected void processOption(int optionIndex) {
+        switch (optionIndex) {
+            case 0:
+                this.context.getGame().setScreen(new ResolutionScreen(this.context, this));
+                break;
+            case 1:
+                this.goBack();
+                break;
+            default:
+                break;
+        }
+    }
 }

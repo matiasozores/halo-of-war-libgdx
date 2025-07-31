@@ -1,6 +1,6 @@
 package com.haloofwar.weapons;
 
-import com.haloofwar.dependences.InputManager;
+import com.haloofwar.dependences.input.InputManager;
 
 public abstract class Weapon {	
 	private final int COOLDOWN = 60;

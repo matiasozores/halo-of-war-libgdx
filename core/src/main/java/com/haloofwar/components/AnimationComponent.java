@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.haloofwar.dependences.assets.TextureManager;
 import com.haloofwar.interfaces.EntityDescriptor;
-import com.haloofwar.dependences.TextureManager;
 
 public class AnimationComponent {
     private Animation<TextureRegion> walkAnimation;

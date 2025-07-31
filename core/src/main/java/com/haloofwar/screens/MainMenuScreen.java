@@ -1,7 +1,6 @@
 package com.haloofwar.screens;
 
-import com.haloofwar.audio.MusicManager;
-import com.haloofwar.audio.SoundManager;
+import com.badlogic.gdx.Gdx;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.enumerators.SoundType;
 import com.haloofwar.screens.settings.SettingsScreen;
@@ -9,11 +8,11 @@ import com.haloofwar.screens.settings.SettingsScreen;
 public class MainMenuScreen extends Menu{
 
 	public MainMenuScreen(GameContext gameContext) {
-		super(gameContext, new String[] {
+		super(gameContext, "Menu Principal",new String[] {
 				"Jugar",
-				"Configuración",
+				"Configuracion",
 				"Salir"
-			});
+			}, null);
 	}
 
 	@Override
@@ -23,23 +22,22 @@ public class MainMenuScreen extends Menu{
 				this.startGame();
 				break;
 			case 1: 
-				this.gameContext.getGame().setScreen(new SettingsScreen(this.gameContext));
+				this.context.getGame().setScreen(new SettingsScreen(this.context, this));
 				break;
 			case 2: 
-				this.gameContext.getGame().dispose();
-				System.exit(0);
+				this.context.getGame().dispose();
+				Gdx.app.exit();
 				break;
 			default:
 				break;
 		}
+		
+
 	}
 	
 	private void startGame() {
-		final SoundManager SOUND = this.gameContext.getSoundManager();
-		final MusicManager MUSIC = this.gameContext.getMusicManager();
-		
-		SOUND.play(SoundType.LOAD_GAME);
-		MUSIC.stopMusic();
-		this.gameContext.getGame().setScreen(new GameManager(this.gameContext));
+		this.context.getAudio().getSound().play(SoundType.LOAD_GAME);
+		this.context.getAudio().getMusic().stop();
+		this.context.getGame().setScreen(new PlayerSelectionScreen(this.context, this));
 	}
 }

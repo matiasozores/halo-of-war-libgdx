@@ -1,17 +1,15 @@
 package com.haloofwar.entities.characters;
 
-import com.haloofwar.cameras.GameWorldCamera;
-import com.haloofwar.collision.CollisionManager;
-import com.haloofwar.dependences.BulletManager;
-import com.haloofwar.dependences.InputManager;
-import com.haloofwar.dependences.TextureManager;
-import com.haloofwar.enumerators.CharacterType;
-import com.haloofwar.weapons.guns.AssaultRifle;
+import com.haloofwar.components.AnimationComponent;
+import com.haloofwar.components.movement.MovementComponent;
+import com.haloofwar.enumerators.PlayerType;
+import com.haloofwar.ui.Crosshair;
+import com.haloofwar.weapons.Weapon;
 
 public class Kratos extends Player {
 
-	public Kratos(InputManager inputManager, BulletManager bulletManager, GameWorldCamera camera, TextureManager textureManager, CollisionManager collisionManager) {
-		super("Kratos", new AssaultRifle(inputManager, bulletManager, textureManager, collisionManager), CharacterType.KRATOS, inputManager, camera, textureManager, collisionManager);
+	public Kratos(MovementComponent movement, AnimationComponent animation, Crosshair crosshair, Weapon weapon) {
+		super("Kratos", movement, animation, crosshair, weapon, PlayerType.KRATOS);
 	}
 
 }
