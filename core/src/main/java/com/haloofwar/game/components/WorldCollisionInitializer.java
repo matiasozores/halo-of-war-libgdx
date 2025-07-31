@@ -12,7 +12,9 @@ public class WorldCollisionInitializer {
     public static void initializeMapColliders(MapRenderer map, CollisionManager collisionManager) {
         MapLayer collisionLayer = map.getMetaData().getTiledMap().getLayers().get("collision");
 
-        if (collisionLayer == null) return;
+        if (collisionLayer == null) {
+        	return;
+        }
 
         for (MapObject object : collisionLayer.getObjects()) {
             if (object instanceof RectangleMapObject) {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Screen;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.characters.Player;
 import com.haloofwar.enumerators.PlayerType;
+import com.haloofwar.enumerators.SoundType;
 import com.haloofwar.factories.PlayerFactory;
 
 public class PlayerSelectionScreen extends Menu{
@@ -41,13 +42,15 @@ public class PlayerSelectionScreen extends Menu{
 				break;
 		}
 		
-		if(optionIndex == BACK_OPTION) {
+		if(optionIndex == this.BACK_OPTION) {
 			return;
 		}
 		
-		PlayerFactory playerFactory = new PlayerFactory(context);
+		PlayerFactory playerFactory = new PlayerFactory(this.context);
 		Player player = playerFactory.create(typeChoice);
 		
+		this.context.getAudio().getSound().play(SoundType.LOAD_GAME);
+		this.context.getAudio().getMusic().stop();
 		this.context.getGame().setScreen(new GameManager(this.context, player));
 	}
 }

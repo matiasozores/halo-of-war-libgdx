@@ -3,7 +3,7 @@ package com.haloofwar.enumerators;
 import com.haloofwar.interfaces.TextureDescriptor;
 
 public enum CrosshairType implements TextureDescriptor{
-	GREEN("ui/crosshairs/crosshair_masterchief.png"),
+	GREEN("ui/crosshairs/crosshair_kratos.png"),
 	RED("ui/crosshairs/crosshair_kratos.png");
 	
 	private String path;

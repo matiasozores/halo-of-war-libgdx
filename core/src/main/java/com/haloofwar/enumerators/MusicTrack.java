@@ -1,8 +1,8 @@
 package com.haloofwar.enumerators;
 
 public enum MusicTrack {
-	MAIN_THEME("audio/music/main_theme.ogg"),
-	COSTA_PERDIDA("audio/music/costa_perdida.ogg");
+	MAIN("audio/music/main_theme.ogg"),
+	TUTORIAL("audio/music/tutorial_theme.ogg");
 
 	private String path;
 	

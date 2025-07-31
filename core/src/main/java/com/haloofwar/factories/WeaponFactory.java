@@ -16,9 +16,9 @@ public class WeaponFactory {
 		switch (type) {
 		case RIFLE_ASALTO:
 			
-			return new AssaultRifle(this.context.getInput(), this.context.getGameplay().getBullets(), this.context.getTexture(), this.context.getCollision());
+			return new AssaultRifle(this.context.getInput(), this.context.getGameplay().getBullets(), this.context.getTexture(), this.context.getCollision(), this.context.getAudio().getSound());
 		default:
-			return new AssaultRifle(this.context.getInput(), this.context.getGameplay().getBullets(), this.context.getTexture(), this.context.getCollision());
+			return new AssaultRifle(this.context.getInput(), this.context.getGameplay().getBullets(), this.context.getTexture(), this.context.getCollision(), this.context.getAudio().getSound());
 		}
 	}
 	

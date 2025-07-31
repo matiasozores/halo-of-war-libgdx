@@ -30,7 +30,7 @@ public abstract class Entity implements Collidable, Renderable {
         this.movement = movement;
         this.animation = animation;
     }
-
+    
     public void update(float delta) {
         if (!this.alive) {
         	return;

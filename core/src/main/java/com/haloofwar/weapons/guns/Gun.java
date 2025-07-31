@@ -1,22 +1,26 @@
 package com.haloofwar.weapons.guns;
 
 import com.haloofwar.dependences.assets.TextureManager;
+import com.haloofwar.dependences.audio.SoundManager;
 import com.haloofwar.dependences.collision.CollisionManager;
 import com.haloofwar.dependences.gameplay.BulletManager;
 import com.haloofwar.dependences.input.InputManager;
+import com.haloofwar.enumerators.SoundType;
 import com.haloofwar.weapons.Weapon;
 
 public abstract class Gun extends Weapon {
 	private final BulletManager bulletManager;
 	private final TextureManager textureManager;
 	private final CollisionManager collisionManager;
+	private final SoundManager sound;
 	
 	public Gun(String name, int damage, int speed, int cooldown, InputManager inputManager, BulletManager bulletManager,
-			TextureManager textureManager, CollisionManager collisionManager) {
+			TextureManager textureManager, CollisionManager collisionManager, SoundManager sound) {
 		super(name, damage, speed, cooldown, inputManager);
 		this.bulletManager = bulletManager;
 		this.textureManager = textureManager;
 		this.collisionManager = collisionManager;
+		this.sound = sound;
 	}
 
 	@Override
@@ -25,6 +29,8 @@ public abstract class Gun extends Weapon {
 			return;
 		}		
 
+		this.sound.play(SoundType.SHOOT_ASSAULT_RIFLE);
+		
 		// Calculo sacado con CHATGPT
 		float dx = mouseX - playerX;
 		float dy = mouseY - playerY;

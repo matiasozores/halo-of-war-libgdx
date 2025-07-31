@@ -2,7 +2,7 @@ package com.haloofwar.enumerators;
 
 public enum SceneType {
     // Nivel 1 
-    COSTA_PERDIDA("Costa Perdida", "maps/mario.tmx", MusicTrack.COSTA_PERDIDA),
+    COSTA_PERDIDA("Costa Perdida", "maps/mario.tmx"),
     TEMPLE_SUMERGIDO("Templo Sumergido", "maps/temple_sumergido.tmx"),
     TRONO_ABISAL("Trono Abisal", "maps/trono_abisal.tmx"),
 
@@ -27,7 +27,7 @@ public enum SceneType {
     DIOS_SUPREMO("Dios Supremo", "maps/dios_supremo.tmx"),
 
     // Extras (si necesitás una zona general)
-    TUTORIAL("Zona de Tutorial", "maps/mario.tmx", MusicTrack.COSTA_PERDIDA),
+    TUTORIAL("Zona de Tutorial", "maps/tutorial.tmx", MusicTrack.TUTORIAL),
     ZONA_MENU("Menu Principal", "maps/menu_principal.tmx"),
     ZONA_TIENE_SHOP("Zona de Tienda", "maps/tienda.tmx"),
     ZONA_MULTIJUGADOR_LOBBY("Lobby Multijugador", "maps/lobby_multijugador.tmx");

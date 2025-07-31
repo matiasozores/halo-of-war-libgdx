@@ -29,6 +29,9 @@ public class SoundManager {
             Sound sound = this.soundMap.get(soundType);
             if (sound != null) {
                 sound.play(this.volume);
+            } else {
+            	this.load(soundType);
+            	this.play(soundType);
             }
         }
     }

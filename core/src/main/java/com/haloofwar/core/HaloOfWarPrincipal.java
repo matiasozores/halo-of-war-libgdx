@@ -33,7 +33,7 @@ public class HaloOfWarPrincipal extends Game {
     
     private void initializeGame() {
         this.gameContext = new GameContext(this);
-        this.gameContext.getAudio().getMusic().play(MusicTrack.MAIN_THEME);
+        this.gameContext.getAudio().getMusic().play(MusicTrack.MAIN);
         this.setInputManager();
         this.setScreen(new MainMenuScreen(this.gameContext));
     }

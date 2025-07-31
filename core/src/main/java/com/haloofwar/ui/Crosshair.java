@@ -12,6 +12,7 @@ public class Crosshair {
     private int mouseX, mouseY;
     private Texture crosshairImage;
     private GameWorldCamera camera;
+    private int width = 16, height = 16; 
     
     public Crosshair(CrosshairType type, GameWorldCamera camera, TextureManager texture) {
         this.crosshairImage = texture.get(type);
@@ -36,7 +37,7 @@ public class Crosshair {
 	}
     
     public void render(SpriteBatch batch) {
-    	batch.draw(this.crosshairImage, this.mouseX, this.mouseY, 8, 8);
+    	batch.draw(this.crosshairImage, this.mouseX, this.mouseY, this.width, this.height);
     }
 
     public void dispose() {

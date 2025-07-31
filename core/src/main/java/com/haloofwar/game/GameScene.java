@@ -3,8 +3,6 @@ package com.haloofwar.game;
 import com.badlogic.gdx.Screen;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.characters.Player;
-import com.haloofwar.enumerators.MusicTrack;
-import com.haloofwar.enumerators.PlayerType;
 import com.haloofwar.enumerators.SceneType;
 import com.haloofwar.game.components.SceneBuilder;
 import com.haloofwar.ui.HUD;
@@ -25,7 +23,9 @@ public abstract class GameScene implements Screen {
         this.world = SceneBuilder.build(this.sceneType, context, player);
         this.hud = new HUD(context, player, player.getType());
         
-        this.context.getAudio().getMusic().play(MusicTrack.COSTA_PERDIDA);
+        if(scene.getMusic() != null) {
+        	this.context.getAudio().getMusic().play(scene.getMusic());
+        }
 	}
 
 	@Override
