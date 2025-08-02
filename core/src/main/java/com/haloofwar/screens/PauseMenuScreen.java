@@ -1,7 +1,7 @@
 package com.haloofwar.screens;
 
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.enumerators.GameState;
+import com.haloofwar.enumerators.game.GameState;
 import com.haloofwar.screens.settings.SettingsScreen;
 
 public class PauseMenuScreen extends Menu {

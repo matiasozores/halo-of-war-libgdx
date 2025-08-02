@@ -2,7 +2,7 @@ package com.haloofwar.dependences.audio;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.haloofwar.enumerators.MusicTrack;
+import com.haloofwar.enumerators.game.MusicTrack;
 
 public class MusicManager {
 	private Music currentMusic;

@@ -8,14 +8,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.haloofwar.cameras.GameStaticCamera;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.characters.Player;
-import com.haloofwar.enumerators.PlayerType;
+import com.haloofwar.enumerators.entities.PlayerType;
 
 public class HUD {
     private Player player;
 
     private GameStaticCamera camera;
     private SpriteBatch batch;
-    private ShapeRenderer shapeRenderer;
+    private ShapeRenderer shape;
 
     private BitmapFont smallFont;
     private BitmapFont titleFont;
@@ -28,7 +28,7 @@ public class HUD {
 
         this.camera = new GameStaticCamera();
         this.batch = context.getRender().getBatch();
-        this.shapeRenderer = new ShapeRenderer();
+        this.shape = new ShapeRenderer();
 
         this.smallFont = context.getRender().getFont().getSmallFont();
         this.titleFont = context.getRender().getFont().getTitleFont();
@@ -51,14 +51,14 @@ public class HUD {
         camera.update();
 
         // Dibujar barra de vida
-        shapeRenderer.setProjectionMatrix(camera.getOrthographic().combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.DARK_GRAY);
-        shapeRenderer.rect(x + 80, y, barWidth, barHeight);
+        shape.setProjectionMatrix(camera.getOrthographic().combined);
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+        shape.setColor(Color.DARK_GRAY);
+        shape.rect(x + 80, y, barWidth, barHeight);
 
-        shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.rect(x + 80, y, barWidth * hpPercentage, barHeight);
-        shapeRenderer.end();
+        shape.setColor(Color.GREEN);
+        shape.rect(x + 80, y, barWidth * hpPercentage, barHeight);
+        shape.end();
 
         batch.setProjectionMatrix(camera.getOrthographic().combined);
         batch.begin();
@@ -72,6 +72,12 @@ public class HUD {
         
         //arma del personaje
         batch.draw(this.weapon, 20, 575, 80, 65);
+        
+        //inventario del personaje
+        if (player.getInventory() != null) {
+			String inventoryText = "Inventario: " + player.getInventory().getItemsCount();
+			smallFont.draw(batch, inventoryText, x + 300, y + barHeight);
+        }
         
         //imagen del personaje
         if (portrait != null) {
@@ -94,6 +100,6 @@ public class HUD {
         if (portrait != null) {
             portrait.dispose();
         }
-        shapeRenderer.dispose();
+        shape.dispose();
     }
 }

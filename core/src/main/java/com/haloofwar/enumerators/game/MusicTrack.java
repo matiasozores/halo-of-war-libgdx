@@ -1,4 +1,4 @@
-package com.haloofwar.enumerators;
+package com.haloofwar.enumerators.game;
 
 public enum MusicTrack {
 	MAIN("audio/music/main_theme.ogg"),

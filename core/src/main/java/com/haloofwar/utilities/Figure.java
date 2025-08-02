@@ -16,12 +16,12 @@ public class Figure {
 		this(0, 0, width, height);
 	}
 	
-	public void draw(ShapeRenderer shapeRenderer) {
-		shapeRenderer.rect(this.x, this.y, this.width, this.height); 
+	public void draw(ShapeRenderer shape) {
+		shape.rect(this.x, this.y, this.width, this.height); 
 	}
 	
-	public void draw(ShapeRenderer shapeRenderer, float x, float y) {
-		shapeRenderer.rect(x, y, this.width, this.height); 
+	public void draw(ShapeRenderer shape, float x, float y) {
+		shape.rect(x, y, this.width, this.height); 
 	}
 	
 	public void setPosition(float x, float y) {

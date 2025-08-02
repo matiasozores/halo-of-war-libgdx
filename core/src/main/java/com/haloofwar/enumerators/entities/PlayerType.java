@@ -1,5 +1,7 @@
-package com.haloofwar.enumerators;
+package com.haloofwar.enumerators.entities;
 
+import com.haloofwar.enumerators.animation.HeadType;
+import com.haloofwar.enumerators.entities.behavior.CrosshairType;
 import com.haloofwar.interfaces.EntityDescriptor;
 
 public enum PlayerType implements EntityDescriptor {

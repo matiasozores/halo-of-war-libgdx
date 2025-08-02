@@ -1,11 +1,11 @@
 package com.haloofwar.cameras;
 
-import com.haloofwar.entities.characters.Player;
 import com.haloofwar.game.MapMetaData;
+import com.haloofwar.interfaces.Positionable;
 import com.haloofwar.utilities.GameConfig;
 
 public class GameWorldCamera extends GameCamera {
-    private Player player;
+    private Positionable target;
     private MapMetaData map;
     private float zoom = 0.4f;
 
@@ -13,22 +13,27 @@ public class GameWorldCamera extends GameCamera {
         super(GameConfig.WINDOW_WIDTH, GameConfig.WINDOW_HEIGHT); 
     }
     
-    public void configure(Player player, MapMetaData map) {
-        this.player = player;
+    public void configure(Positionable player, MapMetaData map) {
+        this.target = player;
         this.map = map;
     }
 
     @Override
     public void update() {
-        this.camera.zoom = this.zoom;
+    	if(this.target != null && this.map != null) {
+            this.camera.zoom = this.zoom;
 
-        float halfW = this.camera.viewportWidth * this.camera.zoom / 2f;
-        float halfH = this.camera.viewportHeight * this.camera.zoom / 2f;
+            float halfW = this.camera.viewportWidth * this.camera.zoom / 2f;
+            float halfH = this.camera.viewportHeight * this.camera.zoom / 2f;
 
-        float camX = Math.max(halfW, Math.min(this.player.getX(), this.map.getMapPixelWidth() - halfW));
-        float camY = Math.max(halfH, Math.min(this.player.getY(), this.map.getMapPixelHeight() - halfH));
+            float camX = Math.max(halfW, Math.min(this.target.getX(), this.map.getMapPixelWidth() - halfW));
+            float camY = Math.max(halfH, Math.min(this.target.getY(), this.map.getMapPixelHeight() - halfH));
 
-        this.camera.position.set(camX, camY, 0);
-        this.camera.update();
+            this.camera.position.set(camX, camY, 0);
+            this.camera.update();
+    	} else {
+    		System.out.println("Para usar la camera de mundo, primero debes configurar el jugador y el mapa.");
+    		return;
+    	}
     }
 }

@@ -5,22 +5,22 @@ import com.haloofwar.dependences.audio.SoundManager;
 import com.haloofwar.dependences.collision.CollisionManager;
 import com.haloofwar.dependences.gameplay.BulletManager;
 import com.haloofwar.dependences.input.InputManager;
-import com.haloofwar.enumerators.SoundType;
+import com.haloofwar.enumerators.game.SoundType;
 import com.haloofwar.weapons.Weapon;
 
 public abstract class Gun extends Weapon {
 	private final BulletManager bulletManager;
 	private final TextureManager textureManager;
-	private final CollisionManager collisionManager;
 	private final SoundManager sound;
+	private final CollisionManager collisionManager;
 	
 	public Gun(String name, int damage, int speed, int cooldown, InputManager inputManager, BulletManager bulletManager,
 			TextureManager textureManager, CollisionManager collisionManager, SoundManager sound) {
 		super(name, damage, speed, cooldown, inputManager);
 		this.bulletManager = bulletManager;
 		this.textureManager = textureManager;
-		this.collisionManager = collisionManager;
 		this.sound = sound;
+		this.collisionManager = collisionManager;
 	}
 
 	@Override

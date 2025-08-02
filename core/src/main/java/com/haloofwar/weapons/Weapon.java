@@ -12,13 +12,13 @@ public abstract class Weapon {
 	protected int speed;
 	
 	// Dependencias
-	private InputManager inputManager;
+	private InputManager input;
 	
-	public Weapon(String name, int damage, int speed, int cooldown, InputManager inputManager) {
+	public Weapon(String name, int damage, int speed, int cooldown, InputManager input) {
 		this.name = name;
 		this.damage = damage;
 		this.cooldown = cooldown;
-		this.inputManager = inputManager;
+		this.input = input;
 		this.speed = speed;
 	}
 	
@@ -31,7 +31,7 @@ public abstract class Weapon {
 			}
 		}
 		
-		if(inputManager.isAttack() && this.isReady) {
+		if(input.isAttack() && this.isReady) {
 			this.use(playerX, playerY, mouseX, mouseY);
 	    }
 	}

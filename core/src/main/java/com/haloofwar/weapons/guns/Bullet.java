@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.haloofwar.dependences.assets.TextureManager;
 import com.haloofwar.dependences.collision.Collidable;
 import com.haloofwar.dependences.collision.CollisionManager;
-import com.haloofwar.enumerators.CollisionType;
-import com.haloofwar.enumerators.ProjectileType;
+import com.haloofwar.enumerators.entities.ProjectileType;
+import com.haloofwar.enumerators.entities.behavior.CollisionType;
 
 public class Bullet implements Collidable{
 	private final int SPEED_MULTIPLIER = 10;
@@ -17,20 +17,20 @@ public class Bullet implements Collidable{
     private float speed = 500;
     private boolean active = true;
     private int damage;
+    private int width = 16, height = 16; 
     
     private Texture texture;
-    private CollisionManager collisionManager;
-
-    public Bullet(float x, float y, float dirX, float dirY, int damage, int speed, TextureManager textureManager, CollisionManager collisionManager) {
+    
+    public Bullet(float x, float y, float dirX, float dirY, int damage, int speed, TextureManager texture, CollisionManager collision) {
         this.positionX = x;
         this.positionY = y;
         this.dirX = dirX;
         this.dirY = dirY;
         this.damage = damage;
         this.speed = speed;
-        this.texture = textureManager.get(ProjectileType.BULLET);
-        collisionManager.addCollidable(this);
-        this.collisionManager = collisionManager;
+        this.texture = texture.get(ProjectileType.BULLET);
+        
+        collision.addCollidable(this);
     }
 
     public void update(float delta, int mapWidth, int mapHeight) {
@@ -41,7 +41,6 @@ public class Bullet implements Collidable{
         this.positionX += (this.dirX * this.speed * delta) * this.SPEED_MULTIPLIER;
         this.positionY += (this.dirY * this.speed * delta) * this.SPEED_MULTIPLIER;
         
-        // En caso de que se pase de los limites se destruye
         if(this.positionX <= 0 || this.positionX >= (float) mapWidth) {
         	this.destroy();
         } else if(this.positionY <= 0 || this.positionY >= (float) mapHeight) {
@@ -53,8 +52,22 @@ public class Bullet implements Collidable{
         if (!this.active) {
         	return;
         }
-        
-        batch.draw(this.texture, this.positionX, this.positionY);
+        float angle = (float) Math.toDegrees(Math.atan2(dirY, dirX));
+
+       
+        // Generado con CHATGPT (para direccion de la bala)
+        batch.draw(
+        	    texture,
+        	    positionX, positionY,            
+        	    width / 2f, height / 2f,       
+        	    width, height,               
+        	    1f, 1f,                 
+        	    angle,                  
+        	    0, 0,                          
+        	    texture.getWidth(), texture.getHeight(),
+        	    false, false                      
+        	);
+
     }
 
     public boolean isActive() {
@@ -63,7 +76,6 @@ public class Bullet implements Collidable{
     
     public void destroy() {
     	this.active = false;
-    	this.collisionManager.removeCollidable(this);
     }
 
 	@Override

@@ -1,4 +1,4 @@
-package com.haloofwar.enumerators;
+package com.haloofwar.enumerators.game;
 
 public enum SoundType {
     CLICK("audio/sounds/click.wav"),

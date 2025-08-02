@@ -1,12 +1,13 @@
-package com.haloofwar.game;
+package com.haloofwar.game.safezonescene;
 
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.characters.Player;
-import com.haloofwar.enumerators.SceneType;
+import com.haloofwar.enumerators.game.SceneType;
+import com.haloofwar.game.GameScene;
 
-public abstract class Area extends GameScene{
+public abstract class SafeZoneScene extends GameScene{
 
-	public Area(GameContext gameContext, SceneType scene, Player player) {
+	public SafeZoneScene(GameContext gameContext, SceneType scene, Player player) {
 		super(gameContext, scene, player);
 	}
 }

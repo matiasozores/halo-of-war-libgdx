@@ -1,4 +1,4 @@
-package com.haloofwar.enumerators;
+package com.haloofwar.enumerators.game;
 
 import com.haloofwar.interfaces.TextureDescriptor;
 

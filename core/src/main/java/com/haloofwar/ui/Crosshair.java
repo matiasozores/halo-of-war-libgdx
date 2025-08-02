@@ -6,20 +6,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.haloofwar.cameras.GameWorldCamera;
 import com.haloofwar.dependences.assets.TextureManager;
-import com.haloofwar.enumerators.CrosshairType;
+import com.haloofwar.enumerators.entities.behavior.CrosshairType;
 
 public class Crosshair {
     private int mouseX, mouseY;
     private Texture crosshairImage;
-    private GameWorldCamera camera;
-    private int width = 16, height = 16; 
+    private int width = 16, height = 16;
     
-    public Crosshair(CrosshairType type, GameWorldCamera camera, TextureManager texture) {
+    GameWorldCamera camera;
+    
+    public Crosshair(CrosshairType type, TextureManager texture, GameWorldCamera camera) {
         this.crosshairImage = texture.get(type);
         this.camera = camera;
-        if(this.camera == null) {
-        	System.out.println("Se ha ingresado una camara nula");
-        }
     }
 
     public void update() {

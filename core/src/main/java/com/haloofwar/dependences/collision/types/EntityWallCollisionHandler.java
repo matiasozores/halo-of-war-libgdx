@@ -4,18 +4,19 @@ import com.badlogic.gdx.math.Rectangle;
 import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.dependences.collision.Collidable;
 import com.haloofwar.dependences.collision.CollisionHandler;
-import com.haloofwar.entities.Entity;
+import com.haloofwar.dependences.collision.CollisionManager;
+import com.haloofwar.entities.LivingEntity;
 
 public class EntityWallCollisionHandler implements CollisionHandler{
 
 	@Override
-	public void handle(Collidable a, Collidable b) {
+	public void handle(Collidable a, Collidable b, CollisionManager manager) {
 	    Rectangle playerBounds = a.getBounds();
 	    Rectangle wallBounds = b.getBounds();
 
 	    if (playerBounds.overlaps(wallBounds)) {
 
-	        if (!(a instanceof Entity)) {
+	        if (!(a instanceof LivingEntity)) {
 	            System.out.println("No es una entidad, no puedo aplicar colisión de movimiento");
 	            return;
 	        }
@@ -29,7 +30,7 @@ public class EntityWallCollisionHandler implements CollisionHandler{
 	        float minOverlapX = Math.min(overlapLeft, overlapRight);
 	        float minOverlapY = Math.min(overlapTop, overlapBottom);
 
-	        MovementComponent movement = ((Entity) a).getMovement();
+	        MovementComponent movement = ((LivingEntity) a).getMovement();
 
 	        if (minOverlapX < minOverlapY) {
 	            if (overlapLeft < overlapRight) {

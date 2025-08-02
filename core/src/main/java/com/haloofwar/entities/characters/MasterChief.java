@@ -1,8 +1,8 @@
 package com.haloofwar.entities.characters;
 
-import com.haloofwar.components.AnimationComponent;
+import com.haloofwar.components.animations.AnimationComponent;
 import com.haloofwar.components.movement.MovementComponent;
-import com.haloofwar.enumerators.PlayerType;
+import com.haloofwar.enumerators.entities.PlayerType;
 import com.haloofwar.ui.Crosshair;
 import com.haloofwar.weapons.Weapon;
 

@@ -2,21 +2,21 @@ package com.haloofwar.game.components;
 
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.haloofwar.cameras.GameWorldCamera;
-import com.haloofwar.enumerators.SceneType;
+import com.haloofwar.enumerators.game.SceneType;
 import com.haloofwar.game.MapMetaData;
 
 public class MapRenderer {
 	private final MapMetaData metaData;
-	private final OrthogonalTiledMapRenderer mapRenderer;
+	private final OrthogonalTiledMapRenderer map;
 	
 	public MapRenderer(SceneType scene) {
 		this.metaData = new MapMetaData(scene);
-		this.mapRenderer = new OrthogonalTiledMapRenderer(this.metaData.getTiledMap());
+		this.map = new OrthogonalTiledMapRenderer(this.metaData.getTiledMap());
 	}
 	
 	public void render(GameWorldCamera camera) {
-	    this.mapRenderer.setView(camera.getOrthographic());
-	    this.mapRenderer.render(); 
+	    this.map.setView(camera.getOrthographic());
+	    this.map.render(); 
 	}
 
 	public MapMetaData getMetaData() {
@@ -24,7 +24,7 @@ public class MapRenderer {
 	}
 
 	public void dispose() {
-		this.mapRenderer.dispose();
+		this.map.dispose();
 		this.metaData.dispose();
 	}
 }

@@ -1,14 +1,14 @@
-package com.haloofwar.enumerators;
+package com.haloofwar.enumerators.entities.behavior;
 
 public enum CollisionType {
     ENTITY,
-    ENEMY,
-    WALL,
+    OBSTACLE,
     BULLET,
     PICKUP,
     EXPLOSION,
     TRIGGER,
     OBJECT,
-    MAP;
+    MAP,
+    ZONE_DETECTION,;
 }
 	

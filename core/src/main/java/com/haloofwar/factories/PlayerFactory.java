@@ -1,13 +1,13 @@
 package com.haloofwar.factories;
 
-import com.haloofwar.components.AnimationComponent;
+import com.haloofwar.components.animations.AnimationComponent;
 import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.components.movement.PlayerMovementController;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.characters.Kratos;
 import com.haloofwar.entities.characters.MasterChief;
 import com.haloofwar.entities.characters.Player;
-import com.haloofwar.enumerators.PlayerType;
+import com.haloofwar.enumerators.entities.PlayerType;
 import com.haloofwar.ui.Crosshair;
 import com.haloofwar.weapons.Weapon;
 
@@ -19,7 +19,8 @@ public class PlayerFactory {
 	}
 	
 	public Player create(PlayerType type) {
-		MovementComponent movement = new MovementComponent(new PlayerMovementController(context.getInput()));
+		// Valor provisiorio de coordenadas en el mapa, hay que reemplazarlos por los valores de spawn del mapa
+		MovementComponent movement = new MovementComponent(new PlayerMovementController(context.getInput()), 100, 100);
 		AnimationComponent animation = new AnimationComponent(type, this.context.getTexture());
 		
 		final UICrosshairFactory CROSSHAIR_FACTORY = new UICrosshairFactory(this.context);

@@ -1,9 +1,9 @@
-package com.haloofwar.enumerators;
+package com.haloofwar.enumerators.entities;
 
 import com.haloofwar.interfaces.TextureDescriptor;
 
 public enum ObjectType implements TextureDescriptor{
-	CHEST("LOGO.png");
+	POTION("images/objects/potion.png");
 
 	private String path;
 	

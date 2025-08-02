@@ -1,14 +1,14 @@
-package com.haloofwar.factories;
+package com.haloofwar.game;
 
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.characters.Player;
-import com.haloofwar.enumerators.GameState;
-import com.haloofwar.enumerators.SceneType;
-import com.haloofwar.game.GameScene;
+import com.haloofwar.enumerators.game.GameState;
+import com.haloofwar.enumerators.game.SceneType;
+import com.haloofwar.factories.SceneFactory;
 
 public class GameFlowManager {
 	private GameScene currentScene;
-	private GameState currentState = GameState.PLAYING;
+	private GameState currentState = GameState.WAITING;
 	private final GameContext context;
 	
 	public GameFlowManager(GameContext context) {
@@ -40,7 +40,11 @@ public class GameFlowManager {
 				break;
 			case PAUSED:
 				break;
+			case WAITING:
+				break;
 			case GAME_OVER:
+				break;
+			default:
 				break;
 		}
 	}
@@ -50,12 +54,6 @@ public class GameFlowManager {
 		if(this.currentScene != null) {
 			this.currentScene.render(delta);
 		}
-	}
-	
-	public void changeScene(SceneType nextScene, Player player) {
-		this.currentScene.dispose();
-		this.currentScene = SceneFactory.create(nextScene, this.context, player);
-		this.currentScene.show();
 	}
 	
 	public void setGameState(GameState state) {

@@ -17,10 +17,8 @@ public class World {
 	}
 
 	public void update(float delta) {
-		this.context.getEntities().update(delta);
+		this.context.getGameplay().update(delta);
 		this.context.getCamera().update();
-		this.context.getBullets().update(delta);
-		this.context.getCollisions().checkCollisions();
 	}
 
 	public void render() {
@@ -28,8 +26,7 @@ public class World {
 		
 		this.batch.setProjectionMatrix(this.context.getCamera().getOrthographic().combined);
 		this.batch.begin();
-		this.context.getEntities().render(this.batch);
-		this.context.getBullets().render(this.batch);
+		this.context.getGameplay().render(this.batch);
 		this.batch.end();
 	}
 

@@ -3,7 +3,7 @@ package com.haloofwar.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.enumerators.MusicTrack;
+import com.haloofwar.enumerators.game.MusicTrack;
 import com.haloofwar.screens.MainMenuScreen;
 import com.haloofwar.utilities.GraphicsUtils;
 

@@ -1,7 +1,7 @@
 package com.haloofwar.factories;
 
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.enumerators.PlayerType;
+import com.haloofwar.enumerators.entities.PlayerType;
 import com.haloofwar.ui.Crosshair;
 
 public class UICrosshairFactory {
@@ -12,7 +12,7 @@ public class UICrosshairFactory {
 	}
 	
 	public Crosshair create(PlayerType type) {
-		return new Crosshair(type.getCrosshair(), context.getGameplay().getCamera(), this.context.getTexture());
+		return new Crosshair(type.getCrosshair(), this.context.getTexture(), this.context.getWorldCamera());
 	}
 	
 }

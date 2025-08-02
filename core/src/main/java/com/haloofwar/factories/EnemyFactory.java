@@ -1,11 +1,12 @@
 package com.haloofwar.factories;
 
-import com.haloofwar.components.AnimationComponent;
+import com.haloofwar.components.animations.AnimationComponent;
 import com.haloofwar.components.movement.EnemyMovementController;
 import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.enemies.Enemy;
-import com.haloofwar.enumerators.PlayerType;
+import com.haloofwar.entities.enemies.Grunt;
+import com.haloofwar.enumerators.entities.EnemyType;
 
 public class EnemyFactory {
 	private final GameContext context;
@@ -14,20 +15,18 @@ public class EnemyFactory {
 		this.context = context;
 	}
 	
-	public Enemy create(PlayerType type) {
-		MovementComponent movement = new MovementComponent(new EnemyMovementController());
+	public Enemy create(EnemyType type) {
+		
+		// Lo mismo que en player, valores provisionales de coordenadas, hay que reemplazarlos por los del mapa
+		MovementComponent movement = new MovementComponent(new EnemyMovementController(), 750, 325);
 		AnimationComponent animation = new AnimationComponent(type, this.context.getTexture());
 		
 		switch (type) {
-		case KRATOS:
-			return new Enemy(movement, animation);
+		case GRUNT:
+			return new Grunt(movement, animation);
 			
-		case MASTER_CHIEF:
-			return new Enemy(movement, animation);
-
 		default:
-			System.out.println("Ha ocurrido un error inesperado al seleccionar un personaje. ERROR 01");
-			return new Enemy(movement, animation);
+			return new Grunt(movement, animation);
 		}
 	}
 }

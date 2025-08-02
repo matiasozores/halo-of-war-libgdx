@@ -3,7 +3,7 @@ package com.haloofwar.utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class Image {
@@ -23,7 +23,7 @@ public class Image {
         this.visible = true;
     }
 
-    public void draw(Batch batch) {
+    public void draw(SpriteBatch batch) {
         if (!visible) return;
 
         Color oldColor = batch.getColor();

@@ -1,11 +1,17 @@
 package com.haloofwar.components.movement;
 
 public class MovementComponent {
-	private float x = 100, y= 100;
+	private float x = 500, y= 100;
 	private final MovementController controller;
 
 	public MovementComponent(MovementController controller) {
 		this.controller = controller;
+	}
+	
+	public MovementComponent(MovementController controller, float x, float y) {
+		this.controller = controller;
+		this.x = x;
+		this.y = y;
 	}
 
 	public void update(float delta, float speed) {

@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.haloofwar.cameras.GameStaticCamera;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.enumerators.SoundType;
+import com.haloofwar.enumerators.game.SoundType;
 import com.haloofwar.utilities.Figure;
 import com.haloofwar.utilities.text.Text;
 
@@ -57,9 +57,7 @@ public abstract class Menu implements Screen {
         this.context.getRender().getShape().begin(ShapeRenderer.ShapeType.Filled);
 
         float selectorY = this.baseY - this.selectedIndex * this.OPTION_SPACING;
-        float targetY = baseY - selectedIndex * OPTION_SPACING;
-        selectorY += (targetY - selectorY) * 0.15f; // suaviza
-
+        
         this.selector.draw(this.context.getRender().getShape(), this.baseX - this.SELECTOR_OFFSET_X, selectorY);
 
         this.context.getRender().getShape().end();

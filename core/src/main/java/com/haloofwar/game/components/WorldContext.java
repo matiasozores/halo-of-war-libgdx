@@ -3,46 +3,34 @@ package com.haloofwar.game.components;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.cameras.GameWorldCamera;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.dependences.collision.CollisionManager;
-import com.haloofwar.dependences.gameplay.BulletManager;
-import com.haloofwar.dependences.gameplay.EntityManager;
+import com.haloofwar.dependences.gameplay.GameplayContext;
 import com.haloofwar.entities.characters.Player;
 
 public class WorldContext {
-	private final EntityManager entities;
-	private final BulletManager bullets;
-	private final CollisionManager collisions;
-	private final GameWorldCamera camera;
-	private final SpriteBatch batch;
+	private final GameplayContext gameplay;
 	
-	public WorldContext(GameContext context, Player player, MapRenderer map) {
-		this.entities = context.getGameplay().getEntities();
-		this.bullets = context.getGameplay().getBullets();
-		this.collisions = context.getCollision();
-		this.camera = context.getGameplay().getCamera();
+	// Dependencias
+	private final SpriteBatch batch;
+	private final GameWorldCamera camera;
+	
+	public WorldContext(Player player, MapRenderer map, GameContext context) {
+		this.gameplay = context.getGameplay();
+		
+		this.camera = context.getWorldCamera();
 		this.camera.configure(player, map.getMetaData());
 		
 		this.batch = context.getRender().getBatch();
 	}
 	
-	public EntityManager getEntities() {
-		return this.entities;
-	}
-	
-	public BulletManager getBullets() {
-		return this.bullets;
-	}
-	
-	public CollisionManager getCollisions() {
-		return this.collisions;
-	}
-	
-	public GameWorldCamera getCamera() {
-		return this.camera;
+	public GameplayContext getGameplay() {
+		return this.gameplay;
 	}
 	
 	public SpriteBatch getBatch() {
 		return this.batch;
 	}
 	
+	public GameWorldCamera getCamera() {
+		return this.camera;
+	}
 }
