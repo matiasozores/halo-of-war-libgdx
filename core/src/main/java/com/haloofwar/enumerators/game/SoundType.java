@@ -5,7 +5,8 @@ public enum SoundType {
     ENTER("audio/sounds/enter.wav"),
     LOAD_GAME("audio/sounds/load_game.wav"),
     WALK("audio/sounds/walk.wav"),
-    SHOOT_ASSAULT_RIFLE("audio/sounds/assault_rifle_shoot.wav"),;
+    SHOOT_ASSAULT_RIFLE("audio/sounds/assault_rifle_shoot.wav"),
+    ITEM_PICKUP("audio/sounds/item_pickup.wav"),;
 	
     private final String path;
 

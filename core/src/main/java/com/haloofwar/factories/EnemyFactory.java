@@ -4,6 +4,7 @@ import com.haloofwar.components.animations.AnimationComponent;
 import com.haloofwar.components.movement.EnemyMovementController;
 import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.dependences.GameContext;
+import com.haloofwar.entities.components.EntitySoundHandler;
 import com.haloofwar.entities.enemies.Enemy;
 import com.haloofwar.entities.enemies.Grunt;
 import com.haloofwar.enumerators.entities.EnemyType;
@@ -20,13 +21,15 @@ public class EnemyFactory {
 		// Lo mismo que en player, valores provisionales de coordenadas, hay que reemplazarlos por los del mapa
 		MovementComponent movement = new MovementComponent(new EnemyMovementController(), 750, 325);
 		AnimationComponent animation = new AnimationComponent(type, this.context.getTexture());
+		EntitySoundHandler sound = new EntitySoundHandler(this.context.getAudio().getSound());
+		
 		
 		switch (type) {
 		case GRUNT:
-			return new Grunt(movement, animation);
+			return new Grunt(movement, animation, sound);
 			
 		default:
-			return new Grunt(movement, animation);
+			return new Grunt(movement, animation, sound);
 		}
 	}
 }

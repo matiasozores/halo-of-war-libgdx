@@ -31,7 +31,7 @@ public class EntityPickupCollisionHandler implements CollisionHandler{
 		}
 	
 		if(this.input.isInteract()) {
-			player.getInventory().add(item);
+			player.addItemToInventory(item);
 			manager.remove(item);
 			this.entities.remove(item);
 		}

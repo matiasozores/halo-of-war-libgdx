@@ -7,6 +7,7 @@ import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.characters.Kratos;
 import com.haloofwar.entities.characters.MasterChief;
 import com.haloofwar.entities.characters.Player;
+import com.haloofwar.entities.components.EntitySoundHandler;
 import com.haloofwar.enumerators.entities.PlayerType;
 import com.haloofwar.ui.Crosshair;
 import com.haloofwar.weapons.Weapon;
@@ -22,6 +23,7 @@ public class PlayerFactory {
 		// Valor provisiorio de coordenadas en el mapa, hay que reemplazarlos por los valores de spawn del mapa
 		MovementComponent movement = new MovementComponent(new PlayerMovementController(context.getInput()), 100, 100);
 		AnimationComponent animation = new AnimationComponent(type, this.context.getTexture());
+		EntitySoundHandler sound = new EntitySoundHandler(this.context.getAudio().getSound());
 		
 		final UICrosshairFactory CROSSHAIR_FACTORY = new UICrosshairFactory(this.context);
 		Crosshair crosshair = CROSSHAIR_FACTORY.create(type);
@@ -31,14 +33,14 @@ public class PlayerFactory {
 		
 		switch (type) {
 		case KRATOS:
-			return new Kratos(movement, animation, crosshair, weapon);
+			return new Kratos(movement, animation, crosshair, weapon, sound);
 			
 		case MASTER_CHIEF:
-			return new MasterChief(movement, animation, crosshair, weapon);
+			return new MasterChief(movement, animation, crosshair, weapon, sound);
 
 		default:
 			System.out.println("Ha ocurrido un error inesperado al seleccionar un personaje. ERROR 01");
-			return new Kratos(movement, animation, crosshair, weapon);
+			return new Kratos(movement, animation, crosshair, weapon, sound);
 		}
 	}
 }

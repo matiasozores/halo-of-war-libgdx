@@ -5,6 +5,7 @@ import com.haloofwar.components.animations.AnimationComponent;
 import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.entities.LivingEntity;
 import com.haloofwar.entities.characters.components.Inventory;
+import com.haloofwar.entities.components.EntitySoundHandler;
 import com.haloofwar.entities.statics.Item;
 import com.haloofwar.enumerators.entities.PlayerType;
 import com.haloofwar.enumerators.entities.behavior.CollisionType;
@@ -24,9 +25,10 @@ public class Player extends LivingEntity implements Positionable {
         AnimationComponent animation,
         Crosshair crosshair,
         Weapon weapon,
-        PlayerType type
+        PlayerType type,
+        EntitySoundHandler sound
     ) {
-        super(name, movement, animation, CollisionType.ENTITY);
+        super(name, movement, animation, CollisionType.ENTITY, sound);
         this.crosshair = crosshair;
         this.weapon = weapon;
         this.type = type;
@@ -51,8 +53,9 @@ public class Player extends LivingEntity implements Positionable {
 			System.out.println("Ha ocurrido un error al intentar añadir el item a la mochila: el item es nulo.");
 			return;
     	}
-    	
+    	System.out.println("Agregando en el inventario desde player");
 		this.inventory.add(item);
+		this.sound.onItemPickup(item);
 	}
     
     @Override

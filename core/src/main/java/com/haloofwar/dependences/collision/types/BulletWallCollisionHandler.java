@@ -9,9 +9,14 @@ public class BulletWallCollisionHandler implements CollisionHandler{
 
 	@Override
 	public void handle(Collidable a, Collidable b, CollisionManager manager) {
-		Bullet bullet = (Bullet) b;
+		Bullet bullet;
+		if(a instanceof Bullet) {
+			bullet = (Bullet) a;
+		} else {
+			bullet = (Bullet) b;
+		}
+
 		bullet.destroy();
-		manager.remove(bullet);
-		
+		manager.remove(bullet);		
 	}
 }

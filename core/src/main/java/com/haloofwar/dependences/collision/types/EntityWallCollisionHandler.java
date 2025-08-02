@@ -17,10 +17,11 @@ public class EntityWallCollisionHandler implements CollisionHandler{
 	    if (playerBounds.overlaps(wallBounds)) {
 
 	        if (!(a instanceof LivingEntity)) {
-	            System.out.println("No es una entidad, no puedo aplicar colisión de movimiento");
-	            return;
+	            System.out.println("NO ES");
+	        	return;
 	        }
-
+	        
+	        
 	        // Calculamos las distancias de solapamiento
 	        float overlapLeft = playerBounds.x + playerBounds.width - wallBounds.x;
 	        float overlapRight = wallBounds.x + wallBounds.width - playerBounds.x;

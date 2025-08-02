@@ -26,6 +26,8 @@ public class CollisionManager {
     public void checkCollisions() {
         ArrayList<Collidable> snapshot = new ArrayList<>(this.collidables);
         int size = snapshot.size();
+        
+        // Sabemos que no es optimo
         for (int i = 0; i < size - 1; i++) {
             Collidable a = snapshot.get(i);
             for (int j = i + 1; j < size; j++) {
@@ -37,7 +39,6 @@ public class CollisionManager {
             }
         }
     }
-
 
     public void clear() {
         this.collidables.clear();
