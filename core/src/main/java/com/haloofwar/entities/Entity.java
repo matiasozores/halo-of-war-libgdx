@@ -23,7 +23,7 @@ public abstract class Entity implements Collidable, Renderable {
 	    this.x = x;
 	    this.y = y;
     }
-	
+		
 	@Override
 	public Rectangle getBounds() {
 		return new Rectangle(this.x, this.y, this.width, this.height);

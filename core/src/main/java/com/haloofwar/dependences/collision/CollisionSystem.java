@@ -9,7 +9,7 @@ import com.haloofwar.dependences.collision.types.EntityDetectionCollisionHandler
 import com.haloofwar.dependences.collision.types.EntityObjectCollisionHandler;
 import com.haloofwar.dependences.collision.types.EntityPickupCollisionHandler;
 import com.haloofwar.dependences.collision.types.EntityWallCollisionHandler;
-import com.haloofwar.dependences.gameplay.ObjectManager;
+import com.haloofwar.dependences.gameplay.EntityManager;
 import com.haloofwar.dependences.input.InputManager;
 import com.haloofwar.enumerators.entities.behavior.CollisionType;
 
@@ -17,13 +17,13 @@ public class CollisionSystem {
 
     private final Map<String, CollisionHandler> handlers = new HashMap<String, CollisionHandler>();
     private InputManager input;
-    private ObjectManager objects;
+    private EntityManager entities;
     
-    public CollisionSystem(InputManager input, ObjectManager objects) {
+    public CollisionSystem(InputManager input, EntityManager entities) {
 		this.input = input;
-		this.objects = objects;
+		this.entities = entities;
 		this.registerHandlers();
-    }
+	}
 
     private void registerHandlers() {
         this.handlers.put(this.key(CollisionType.ENTITY, CollisionType.BULLET), new EntityBulletCollisionHandler());
@@ -31,7 +31,7 @@ public class CollisionSystem {
         this.handlers.put(this.key(CollisionType.ENTITY, CollisionType.OBJECT), new EntityObjectCollisionHandler());
         this.handlers.put(this.key(CollisionType.BULLET, CollisionType.OBSTACLE), new BulletWallCollisionHandler());
         this.handlers.put(this.key(CollisionType.ENTITY, CollisionType.ENTITY), new EntityWallCollisionHandler());
-        this.handlers.put(this.key(CollisionType.ENTITY, CollisionType.PICKUP), new EntityPickupCollisionHandler(this.input, this.objects));
+        this.handlers.put(this.key(CollisionType.ENTITY, CollisionType.PICKUP), new EntityPickupCollisionHandler(this.input, this.entities));
         this.handlers.put(this.key(CollisionType.ENTITY, CollisionType.ZONE_DETECTION), new EntityDetectionCollisionHandler());
         
     }

@@ -1,61 +1,43 @@
 package com.haloofwar.weapons.guns;
 
-import com.haloofwar.dependences.assets.TextureManager;
-import com.haloofwar.dependences.audio.SoundManager;
-import com.haloofwar.dependences.collision.CollisionManager;
-import com.haloofwar.dependences.gameplay.BulletManager;
 import com.haloofwar.dependences.input.InputManager;
-import com.haloofwar.enumerators.game.SoundType;
+import com.haloofwar.interfaces.Shooter;
 import com.haloofwar.weapons.Weapon;
 
 public abstract class Gun extends Weapon {
-	private final BulletManager bulletManager;
-	private final TextureManager textureManager;
-	private final SoundManager sound;
-	private final CollisionManager collisionManager;
-	
-	public Gun(String name, int damage, int speed, int cooldown, InputManager inputManager, BulletManager bulletManager,
-			TextureManager textureManager, CollisionManager collisionManager, SoundManager sound) {
-		super(name, damage, speed, cooldown, inputManager);
-		this.bulletManager = bulletManager;
-		this.textureManager = textureManager;
-		this.sound = sound;
-		this.collisionManager = collisionManager;
-	}
 
-	@Override
-	protected void use(float playerX, float playerY, float mouseX, float mouseY) {
-		if (!this.isReady) {
-			return;
-		}		
+    private final Shooter shooter;
 
-		this.sound.play(SoundType.SHOOT_ASSAULT_RIFLE);
-		
-		// Calculo sacado con CHATGPT
-		float dx = mouseX - playerX;
-		float dy = mouseY - playerY;
+    public Gun(
+        String name,
+        int damage,
+        int speed,
+        int cooldown,
+        InputManager inputManager,
+        Shooter shooter
+    ) {
+        super(name, damage, speed, cooldown, inputManager);
+        this.shooter = shooter;
+    }
 
-		float length = (float) Math.sqrt(dx * dx + dy * dy);
-		if (length == 0) {
-			return;
-		}
+    @Override
+    protected void use(float playerX, float playerY, float mouseX, float mouseY) {
+        if (!this.isReady) return;
 
-		float dirX = dx / length;
-		float dirY = dy / length;
-		// ----------------------------
-		
-		float offset = 45f; 
-		float bulletX = playerX + dirX * offset;
-		float bulletY = playerY + dirY * offset;
+        float dx = mouseX - playerX;
+        float dy = mouseY - playerY;
 
-		Bullet bullet = new Bullet(bulletX, bulletY, dirX, dirY, this.damage, this.speed, this.textureManager, this.collisionManager);
+        float length = (float) Math.sqrt(dx * dx + dy * dy);
+        if (length == 0) return;
 
-		this.bulletManager.add(bullet);
-		this.resetCooldown();
-	}
+        float dirX = dx / length;
+        float dirY = dy / length;
 
-	@Override
-	public void update(float delta, float playerX, float playerY, float mouseX, float mouseY) {
-		super.update(delta, playerX, playerY, mouseX, mouseY);
-	}
+        float offset = 45f;
+        float bulletX = playerX + dirX * offset;
+        float bulletY = playerY + dirY * offset;
+
+        this.shooter.shoot(bulletX, bulletY, dirX, dirY, this.damage, this.speed);
+        this.resetCooldown();
+    }
 }

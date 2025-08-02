@@ -23,7 +23,8 @@ public class WorldCollisionInitializer {
             if (object instanceof RectangleMapObject) {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
                 Obstacle wall = new Obstacle(rect.x, rect.y, (int) rect.width, (int) rect.height);
-                context.getGameplay().getCollisions().addCollidable(wall);
+                context.getGameplay().getCollisions().add(wall);
+                context.getGameplay().getEntities().add(wall);
             }
         }
         
@@ -40,8 +41,8 @@ public class WorldCollisionInitializer {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
                 ItemsFactory itemsFactory = new ItemsFactory(context);
                 Item item = itemsFactory.create(rect.x, rect.y, (int) rect.width, (int) rect.height);
-                context.getGameplay().getCollisions().addCollidable(item);
-                context.getGameplay().getObjects().addObject(item);
+                context.getGameplay().getCollisions().add(item);
+                context.getGameplay().getEntities().add(item);
             }
         }
         
@@ -58,7 +59,7 @@ public class WorldCollisionInitializer {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
    
              ZoneDetection zoneObject = new ZoneDetection(rect.x, rect.y, rect.width, rect.height);
-             context.getGameplay().getCollisions().addCollidable(zoneObject);
+             context.getGameplay().getCollisions().add(zoneObject);
                 
             }
         }

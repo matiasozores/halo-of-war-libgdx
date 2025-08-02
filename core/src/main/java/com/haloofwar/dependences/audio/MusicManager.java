@@ -8,7 +8,7 @@ public class MusicManager {
 	private Music currentMusic;
 	private boolean musicMuted = false;
 	private boolean musicLooping = true;
-	private float musicVolume = 0.75f; 
+	private float musicVolume = 0.15f; 
 	private float lastMusicVolume = 0.0f;
 	
 	public void play(MusicTrack track) {

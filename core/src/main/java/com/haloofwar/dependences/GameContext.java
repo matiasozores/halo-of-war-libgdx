@@ -31,7 +31,7 @@ public class GameContext {
 		
 		this.staticCamera = new GameStaticCamera();
 		this.worldCamera = new GameWorldCamera();
-		this.gameplay = new GameplayContext(this.input);
+		this.gameplay = new GameplayContext(this.input, this.texture);
 	}
 	
 	public HaloOfWarPrincipal getGame() {

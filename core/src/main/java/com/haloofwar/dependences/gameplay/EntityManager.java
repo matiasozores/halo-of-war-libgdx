@@ -3,45 +3,54 @@ package com.haloofwar.dependences.gameplay;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.haloofwar.entities.Entity;
 import com.haloofwar.entities.LivingEntity;
-import com.haloofwar.entities.characters.Player;
+import com.haloofwar.interfaces.Updatable;
 
 public class EntityManager {
-    private ArrayList<LivingEntity> entities = new ArrayList<LivingEntity>();
-        
-    public void addEntity(LivingEntity entity) {
-        this.entities.add(entity);
-    }
 
-    public void removeEntity(LivingEntity entity) {
+    private final ArrayList<Entity> entities = new ArrayList<>();
+    private final ArrayList<Updatable> updatables = new ArrayList<>();
+    
+    
+    public void add(Entity entity) {
+        this.entities.add(entity);
+        if (entity instanceof Updatable) {
+            this.updatables.add((Updatable) entity);
+        }
+    }
+    	
+    public void remove(Entity entity) {
         this.entities.remove(entity);
+
+        if (entity instanceof Updatable updatable) {
+            this.updatables.remove(updatable);
+        }
     }
 
     public void update(float delta) {
-        for (int i = this.entities.size() - 1; i >= 0; i--) {
-            LivingEntity entity = this.entities.get(i);
+        for (int i = this.updatables.size() - 1; i >= 0; i--) {
+            Updatable entity = this.updatables.get(i);
             entity.update(delta);
 
-            if(entity instanceof Player) {
-            }
-            
-            if (!entity.isAlive()) {
-                this.entities.remove(i); 
+            if (entity instanceof LivingEntity living && !living.isAlive()) {
+                this.remove(living);
             }
         }
     }
 
     public void render(SpriteBatch batch) {
-        for (LivingEntity entity : this.entities) {
+        for (Entity entity : this.entities) {
             entity.render(batch);
         }
     }
 
     public void clear() {
-    	this.entities.clear();
+        this.entities.clear();
+        this.updatables.clear();
     }
 
-    public ArrayList<LivingEntity> getEntities() {
+    public ArrayList<Entity> getEntities() {
         return this.entities;
     }
 }

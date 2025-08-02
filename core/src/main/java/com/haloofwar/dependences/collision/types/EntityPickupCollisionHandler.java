@@ -3,7 +3,7 @@ package com.haloofwar.dependences.collision.types;
 import com.haloofwar.dependences.collision.Collidable;
 import com.haloofwar.dependences.collision.CollisionHandler;
 import com.haloofwar.dependences.collision.CollisionManager;
-import com.haloofwar.dependences.gameplay.ObjectManager;
+import com.haloofwar.dependences.gameplay.EntityManager;
 import com.haloofwar.dependences.input.InputManager;
 import com.haloofwar.entities.characters.Player;
 import com.haloofwar.entities.statics.Item;
@@ -11,11 +11,11 @@ import com.haloofwar.entities.statics.Item;
 public class EntityPickupCollisionHandler implements CollisionHandler{
 
 	private InputManager input;
-	private ObjectManager objects;
+	private EntityManager entities;
 	
-	public EntityPickupCollisionHandler(InputManager input, ObjectManager objects) {
+	public EntityPickupCollisionHandler(InputManager input, EntityManager entities) {
 		this.input = input;
-		this.objects = objects;
+		this.entities = entities;
 	}
 	
 	@Override
@@ -32,8 +32,8 @@ public class EntityPickupCollisionHandler implements CollisionHandler{
 	
 		if(this.input.isInteract()) {
 			player.getInventory().add(item);
-			manager.removeCollidable(item);
-			this.objects.removeObject(item);
+			manager.remove(item);
+			this.entities.remove(item);
 		}
 		
 	}

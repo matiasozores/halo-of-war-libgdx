@@ -62,6 +62,7 @@ public class GameManager implements Screen {
 	}
 	
 	public void reset() {
+		this.context.getGameplay().dispose();
 	}
 
 	@Override

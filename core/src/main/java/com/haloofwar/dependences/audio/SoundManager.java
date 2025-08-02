@@ -9,7 +9,7 @@ import com.haloofwar.enumerators.game.SoundType;
 public class SoundManager {
     private final HashMap<SoundType, Sound> soundMap = new HashMap<>();
     private boolean muted = false;
-    private float volume = 0.7f;
+    private float volume = 0.15f;
     private float lastVolume = 0.5f;
 
     public SoundManager() {

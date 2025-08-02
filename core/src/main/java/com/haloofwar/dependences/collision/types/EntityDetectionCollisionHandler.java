@@ -8,7 +8,7 @@ public class EntityDetectionCollisionHandler implements CollisionHandler {
 
 	@Override
 	public void handle(Collidable a, Collidable b, CollisionManager manager) {
-		System.out.println("Colision detected between " + a.getClass().getSimpleName() + " and " + b.getClass().getSimpleName());
+		
 	}
 	
 }

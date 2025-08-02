@@ -11,9 +11,7 @@ public class SceneBuilder {
 		MapRenderer map = new MapRenderer(type);
 		WorldContext worldContext = new WorldContext(player, map, context);
 	
-		worldContext.getGameplay().getEntities().addEntity(player);
-		worldContext.getGameplay().getCollisions().addCollidable(player);
-
+		// Se encarga de agregar las collisiones del mapa al collision manager
 		WorldCollisionInitializer.initializeMapColliders(map, context);
 		return new World(map, worldContext);
 	}

@@ -3,7 +3,7 @@ package com.haloofwar.dependences.collision.types;
 import com.haloofwar.dependences.collision.Collidable;
 import com.haloofwar.dependences.collision.CollisionHandler;
 import com.haloofwar.dependences.collision.CollisionManager;
-import com.haloofwar.weapons.guns.Bullet;
+import com.haloofwar.entities.Bullet;
 
 public class BulletWallCollisionHandler implements CollisionHandler{
 
@@ -11,7 +11,7 @@ public class BulletWallCollisionHandler implements CollisionHandler{
 	public void handle(Collidable a, Collidable b, CollisionManager manager) {
 		Bullet bullet = (Bullet) b;
 		bullet.destroy();
-		manager.removeCollidable(bullet);
-
+		manager.remove(bullet);
+		
 	}
 }

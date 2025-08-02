@@ -10,7 +10,6 @@ public class Inventory {
 	public void add(Item item) {
 		if(this.items.size() == 0) {
 			this.items.add(item);
-			System.out.println("Se ha agregado el item " + item.getName() + " al inventario");
 		} else {
 			int i = 0;
 			boolean found = false;
@@ -50,10 +49,8 @@ public class Inventory {
 		if(found) {
 			if(this.items.get(index).getStock() > 1) {
 				this.items.get(index).affectStock(-1);
-				System.out.println("Se ha reducido el stock del item " + item.getName() + " a " + this.items.get(index).getStock());
 			} else {
 				this.items.remove(index);
-				System.out.println("Se ha eliminado el item " + item.getName() + " del inventario");	
 			}
 		}
 	}
