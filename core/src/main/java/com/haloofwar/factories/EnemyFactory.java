@@ -6,7 +6,7 @@ import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.components.EntitySoundHandler;
 import com.haloofwar.entities.enemies.Enemy;
-import com.haloofwar.entities.enemies.Grunt;
+import com.haloofwar.entities.enemies.Elite;
 import com.haloofwar.enumerators.entities.EnemyType;
 
 public class EnemyFactory {
@@ -25,11 +25,11 @@ public class EnemyFactory {
 		
 		
 		switch (type) {
-		case GRUNT:
-			return new Grunt(movement, animation, sound);
+		case ELITE:
+			return new Elite(movement, animation, sound);
 			
 		default:
-			return new Grunt(movement, animation, sound);
+			return new Elite(movement, animation, sound);
 		}
 	}
 }

@@ -1,10 +1,13 @@
 package com.haloofwar.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.haloofwar.cameras.GameStaticCamera;
 import com.haloofwar.dependences.GameContext;
+import com.haloofwar.enumerators.game.Background;
 import com.haloofwar.enumerators.game.SoundType;
 import com.haloofwar.utilities.Figure;
 import com.haloofwar.utilities.text.Text;
@@ -22,6 +25,7 @@ public abstract class Menu implements Screen {
 
     private final Text[] OPTIONS;
     private final Text TITLE;
+    private final Texture BACKGROUND;
     
     protected int selectedIndex = 0;
     protected int actionCooldown = ACTION_COOLDOWN;
@@ -41,6 +45,7 @@ public abstract class Menu implements Screen {
         }
         
         this.TITLE = new Text(title, context.getRender().getFont().getTitleFont());
+        this.BACKGROUND = context.getTexture().get(Background.MAIN_MENU);
     }
     
     public Menu(GameContext gameContext, String title, String[] options) {
@@ -65,6 +70,7 @@ public abstract class Menu implements Screen {
         this.context.getRender().getBatch().setProjectionMatrix(this.camera.getOrthographic().combined);
         this.context.getRender().getBatch().begin();
         
+        this.context.getRender().getBatch().draw(this.BACKGROUND, 0, 0, this.context.getStaticCamera().getViewportWidth(),  this.context.getStaticCamera().getViewportHeight());
         // Título
         this.TITLE.draw(this.context.getRender().getBatch(), this.baseX, this.baseY + this.OPTION_SPACING);
 

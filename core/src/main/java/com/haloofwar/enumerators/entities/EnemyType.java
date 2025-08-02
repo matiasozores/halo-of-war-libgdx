@@ -3,7 +3,7 @@ package com.haloofwar.enumerators.entities;
 import com.haloofwar.interfaces.EntityDescriptor;
 
 public enum EnemyType implements EntityDescriptor{
-	GRUNT("sprites/kratos.png", 6, 8);
+	ELITE("sprites/elite.png", 2, 8);
 
 	private String path;
 	private int idleLength;
