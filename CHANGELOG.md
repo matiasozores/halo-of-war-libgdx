@@ -22,7 +22,8 @@ Manejo de entidades con el uso de diferentes clases, siendo la principal de toda
 - Colisiones:
 Control de colisiones para las balas, los objetos del mapa, items y demas entidades. Esto es con el uso de clases como CollisionSystem, CollisionManager, CollisionHandler.
 - Animaciones:
-Sistema de animaciones usando spritesheets y texture region, aplicando las clases como: AnimationComponent, AnimationRenderer, ect.
-
-  
+Sistema de animaciones usando spritesheets y texture region, aplicando las clases como: AnimationComponent, AnimationRenderer, etc.
+- Audio:
+Manejo de sonidos y musica utilizando las clases de: AudioManager, SoundManager, etc.
+En lineas generales, el codigo se encuentra en su primera etapa de desarrollo, por lo que se proporciona una vista general de este para presentar su contenido inicial.
 
