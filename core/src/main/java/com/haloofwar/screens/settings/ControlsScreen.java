@@ -5,26 +5,20 @@ import com.haloofwar.screens.Menu;
 
 public class ControlsScreen extends Menu {
 
-	public ControlsScreen(GameContext gameContext, Menu menu) {
-		super(gameContext, "Controles",new String[] {
-				"Nada",
-				"Volver",
-			}, menu);
-	}
+    public ControlsScreen(GameContext gameContext, Menu previousMenu) {
+        super(gameContext, "Controles", new String[] {
+            "Moverse: Flechas",
+            "Atacar: Click izquierdo",
+            "Interactuar: E",
+            "Inventario: I",
+            "Volver"
+        }, previousMenu);
+    }
 
-	@Override
-	protected void processOption(int optionIndex) {
-		switch (optionIndex) {
-			case 0: 
-				System.out.println("Configuración de movimiento hacia arriba seleccionada.");
-				break;
-
-			case 1:
-				this.goBack();
-				break;
-			default:
-				break;
-		}
-	}
-
+    @Override
+    protected void processOption(int optionIndex) {
+        if (optionIndex == 4) {
+            this.goBack();
+        }
+    }
 }
