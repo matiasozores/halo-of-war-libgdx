@@ -7,7 +7,7 @@ import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.components.EntitySoundHandler;
 import com.haloofwar.entities.components.EntityStateHandler;
 import com.haloofwar.entities.enemies.Enemy;
-import com.haloofwar.entities.enemies.Grunt;
+import com.haloofwar.entities.enemies.Elite;
 import com.haloofwar.enumerators.entities.EnemyType;
 
 public class EnemyFactory {
@@ -26,11 +26,13 @@ public class EnemyFactory {
 		EntityStateHandler state = new EntityStateHandler(this.context.getGameplay().getCollisions(), this.context.getGameplay().getEntities());
 		
 		switch (type) {
-		case GRUNT:
-			return new Grunt(movement, animation, sound, state);
+
+		case ELITE:
+			return new Elite(movement, animation, sound, state);
 			
 		default:
-			return new Grunt(movement, animation, sound, state); 
+			return new Elite(movement, animation, sound, state);
+
 		}
 	}
 }

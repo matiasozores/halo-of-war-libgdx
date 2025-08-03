@@ -5,14 +5,15 @@ import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.entities.components.EntitySoundHandler;
 import com.haloofwar.entities.components.EntityStateHandler;
 
-public class Grunt extends Enemy{
+public class Elite extends Enemy{
 	
-	public Grunt(
+	public Elite(
 		MovementComponent movement,
 		AnimationComponent animation,
 		EntitySoundHandler sound,
 		EntityStateHandler state
 	) {
-		super("Grunt", movement, animation, sound, state);
+
+		super("Elite", movement, animation, sound, state);
 	}
 }

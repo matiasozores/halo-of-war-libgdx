@@ -23,7 +23,7 @@ public class WorldContext {
 		this.addEntity(player);
 		
 		EnemyFactory enemyFactory = new EnemyFactory(context);
-		this.addEntity(enemyFactory.create(EnemyType.GRUNT));
+		this.addEntity(enemyFactory.create(EnemyType.ELITE));
 		
 		this.camera = context.getWorldCamera();
 		this.camera.configure(player, map.getMetaData());
