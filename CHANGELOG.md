@@ -13,4 +13,4 @@ El formato sigue el estándar [Keep a Changelog](https://keepachangelog.com/es-E
 - Se inicializa el proyecto "Halo of War" con su respectiva documentación.
 ## [0.1.0] - 2025-08-3
 ### Segunda entrega
-Documentación de la segunda entrega del proyecto:
+# Documentación de la segunda entrega del proyecto:
