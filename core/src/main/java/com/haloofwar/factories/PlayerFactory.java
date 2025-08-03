@@ -1,0 +1,50 @@
+package com.haloofwar.factories;
+
+import com.haloofwar.components.animations.AnimationComponent;
+import com.haloofwar.components.movement.MovementComponent;
+import com.haloofwar.components.movement.PlayerMovementController;
+import com.haloofwar.dependences.GameContext;
+import com.haloofwar.entities.components.EntitySoundHandler;
+import com.haloofwar.entities.components.EntityStateHandler;
+import com.haloofwar.entities.players.Kratos;
+import com.haloofwar.entities.players.MasterChief;
+import com.haloofwar.entities.players.Player;
+import com.haloofwar.enumerators.entities.PlayerType;
+import com.haloofwar.ui.Crosshair;
+import com.haloofwar.weapons.Weapon;
+
+public class PlayerFactory {
+	private final GameContext context;
+	
+	public PlayerFactory(GameContext context) {
+		this.context = context;
+	}
+	
+	public Player create(PlayerType type) {
+		// Valor provisiorio de coordenadas en el mapa, hay que reemplazarlos por los valores de spawn del mapa
+		MovementComponent movement = new MovementComponent(new PlayerMovementController(context.getInput()), 100, 100);
+		AnimationComponent animation = new AnimationComponent(type, this.context.getTexture());
+		EntitySoundHandler sound = new EntitySoundHandler(this.context.getAudio().getSound());
+		EntityStateHandler state = new EntityStateHandler(this.context.getGameplay().getCollisions(), this.context.getGameplay().getEntities());
+		
+		final UICrosshairFactory CROSSHAIR_FACTORY = new UICrosshairFactory(this.context);
+		Crosshair crosshair = CROSSHAIR_FACTORY.create(type);
+		
+		final WeaponFactory WEAPON_FACTORY = new WeaponFactory(this.context);
+		Weapon weapon = WEAPON_FACTORY.create(type.getDefaultWeapon());	
+		
+		
+		
+		switch (type) {
+		case KRATOS:
+			return new Kratos(movement, animation, crosshair, weapon, sound, state);
+			
+		case MASTER_CHIEF:
+			return new MasterChief(movement, animation, crosshair, weapon, sound, state);
+
+		default:
+			System.out.println("Ha ocurrido un error inesperado al seleccionar un personaje. ERROR 01");
+			return new Kratos(movement, animation, crosshair, weapon, sound, state);
+		}
+	}
+}
