@@ -1,7 +1,3 @@
-# Changelog
-
-Todos los cambios importantes de este proyecto se documentarán en este archivo.
-
 El formato sigue el estándar [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/).
 
 ---
@@ -15,9 +11,7 @@ El formato sigue el estándar [Keep a Changelog](https://keepachangelog.com/es-E
 ### Segunda entrega
 En esta segunda entrega del proyecto se veran los primeros avances del mismo, donde se incluyen:
 - Menu:
-En este, el usuario podra acceder a las opciones de jugar, configuracion y salir: 
-- El apartado de jugar dara a elegir al usuario con que personaje jugar y asi dar inicio al gameplay;.
-- El apartado de configuracion permite el ajuste del volumen del juego (efectos de sonido y musica) y de la resolucion de la pantalla.
+En este, el usuario podra acceder a las opciones de jugar, configuracion y salir. El apartado de jugar dara a elegir al usuario con que personaje jugar y asi dar inicio al gameplay; Configuracion permite el ajuste del volumen del juego (efectos de sonido y musica) y de la resolucion de la pantalla; Salir cierra el juego.
 - Primer escena de juego:
-Se presenta un mapa donde el jugador aprendera las mecanicas basicas del juego: moverse (WASD), disparar (click izquierdo)
+Se presenta un mapa donde el jugador aprendera las mecanicas basicas del juego: Moverse (WASD), disparar (click izquierdo), recoger (E)
 
