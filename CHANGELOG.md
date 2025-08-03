@@ -13,5 +13,5 @@ En esta segunda entrega del proyecto se veran los primeros avances del mismo, do
 - Menu:
 En este, el usuario podra acceder a las opciones de jugar, configuracion y salir. El apartado de jugar dara a elegir al usuario con que personaje jugar y asi dar inicio al gameplay; Configuracion permite el ajuste del volumen del juego (efectos de sonido y musica) y de la resolucion de la pantalla; Salir cierra el juego.
 - Primer escena de juego:
-Se presenta un mapa donde el jugador aprendera las mecanicas basicas del juego: Moverse (WASD), disparar (click izquierdo), recoger (E)
+Se presenta un mapa donde el jugador aprendera las mecanicas basicas del juego: Moverse (WASD), disparar (click izquierdo), recoger (E).
 
