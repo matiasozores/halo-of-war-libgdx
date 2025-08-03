@@ -2,9 +2,10 @@ package com.haloofwar.entities.characters.components;
 
 import java.util.ArrayList;
 
-import com.haloofwar.entities.statics.Item;
+import com.haloofwar.entities.statics.items.Item;
 
 public class Inventory {
+	// Por ahora son items, probablemente a futuro lo modifiquemos para mas tipos de objetos
 	private ArrayList<Item> items = new ArrayList<Item>();
 	
 	public void add(Item item) {
@@ -63,5 +64,9 @@ public class Inventory {
 		}
 		
 		return count;
+	}
+	
+	public ArrayList<Item> getItems(){
+		return this.items;
 	}
 }

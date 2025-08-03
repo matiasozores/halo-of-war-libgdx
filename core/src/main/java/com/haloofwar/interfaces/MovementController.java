@@ -1,4 +1,4 @@
-package com.haloofwar.components.movement;
+package com.haloofwar.interfaces;
 
 public interface MovementController {
 	float getDirectionX();

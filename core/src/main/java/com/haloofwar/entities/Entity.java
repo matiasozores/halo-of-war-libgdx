@@ -11,22 +11,20 @@ public abstract class Entity implements Collidable, Renderable {
 	private String name;
 	protected int width, height;
 	protected float x, y;
-	protected CollisionType collisionType;	
 	protected boolean active = true; 
 	
 	protected CollisionVisitor collisionBehavior;
 	protected StateHandler state;
 	
-    public Entity(String name, int width, int height, CollisionType collisionType, StateHandler state) {
+    public Entity(String name, int width, int height, StateHandler state) {
         this.name = name;
         this.width = width;
         this.height = height;
-        this.collisionType = collisionType;
         this.state = state;
     }
     
-    public Entity(String name, float x, float y, int width, int height, CollisionType collisionType, StateHandler state) {
-	    this(name, width, height, collisionType, state);
+    public Entity(String name, float x, float y, int width, int height, StateHandler state) {
+	    this(name, width, height, state);
 	    this.x = x;
 	    this.y = y;
     }
@@ -38,11 +36,11 @@ public abstract class Entity implements Collidable, Renderable {
 	
     @Override
     public CollisionType getCollisionType() {
-        return this.collisionType;
+        return this.collisionBehavior.getCollisionType();
     }
     
     @Override
-    public void accept(CollisionVisitor visitor, Entity self) {
+    public void accept(CollisionVisitor visitor, Collidable self) {
         visitor.visit(this, self);
     }
     
@@ -60,8 +58,16 @@ public abstract class Entity implements Collidable, Renderable {
 		return this.name;
 	}
 	
+    public boolean isActive() {
+    	return this.active;
+    }
+    
 	public void setPosition(float x, float y) {
 	    this.x = x;
 	    this.y = y;
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 }

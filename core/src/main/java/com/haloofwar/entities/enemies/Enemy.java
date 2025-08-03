@@ -5,7 +5,6 @@ import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.entities.LivingEntity;
 import com.haloofwar.entities.components.EntitySoundHandler;
 import com.haloofwar.entities.components.EntityStateHandler;
-import com.haloofwar.enumerators.entities.behavior.CollisionType;
 
 public class Enemy extends LivingEntity {
 	
@@ -16,6 +15,6 @@ public class Enemy extends LivingEntity {
 		EntitySoundHandler sound,
 		EntityStateHandler state
 	) {
-		super(name, movement, animation, CollisionType.ENTITY, sound, state);
+		super(name, movement, animation, sound, state);
 	}
 }

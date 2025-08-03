@@ -19,7 +19,7 @@ public class EnemyFactory {
 	
 	public Enemy create(EnemyType type) {
 		
-		// Lo mismo que en player, valores provisionales de coordenadas, hay que reemplazarlos por los del mapa
+		// Lo mismo que en player, valores provisionales de coordenadas, en este caso habria que crear un sistema de generacion de enemigos
 		MovementComponent movement = new MovementComponent(new EnemyMovementController(), 750, 325);
 		AnimationComponent animation = new AnimationComponent(type, this.context.getTexture());
 		EntitySoundHandler sound = new EntitySoundHandler(this.context.getAudio().getSound());

@@ -3,8 +3,9 @@ package com.haloofwar.interfaces;
 import com.haloofwar.entities.Bullet;
 import com.haloofwar.entities.Entity;
 import com.haloofwar.entities.LivingEntity;
-import com.haloofwar.entities.statics.Item;
 import com.haloofwar.entities.statics.Obstacle;
+import com.haloofwar.entities.statics.items.Item;
+import com.haloofwar.enumerators.entities.behavior.CollisionType;
 
 public interface CollisionVisitor {
 	/*
@@ -16,9 +17,10 @@ public interface CollisionVisitor {
 	 * 
 	 * */
 	
-	void visit(Bullet bullet, Entity entity);
-	void visit(LivingEntity living, Entity entity);
-	void visit(Obstacle obstacle, Entity entity);
-	void visit(Item item, Entity entity); 
-	void visit(Entity entity, Entity otherEntity); // General method for other entity types
+	void visit(Bullet bullet, Collidable entity);
+	void visit(LivingEntity living, Collidable entity);
+	void visit(Obstacle obstacle, Collidable entity);
+	void visit(Item item, Collidable entity); 
+	void visit(Entity entity, Collidable otherEntity); // General method for other entity types
+	CollisionType getCollisionType(); 
 }

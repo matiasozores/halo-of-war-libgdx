@@ -71,7 +71,7 @@ public class MusicManager {
 	}
 	
 	public String getVolumeText() {
-		return  (int)(this.musicVolume * 100) + "/100";
+		return (int)(this.musicVolume * 100) + "/100";
 	}
 	
 	public boolean isMuted() {
@@ -79,6 +79,9 @@ public class MusicManager {
 	}
 	
 	public void dispose() {
-		this.currentMusic.dispose();
+		System.out.println("Liberando recursos del MusicManager");
+		if(this.currentMusic != null) {
+			this.currentMusic.dispose();
+		}
 	}
 }

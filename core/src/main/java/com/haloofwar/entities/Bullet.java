@@ -4,14 +4,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.haloofwar.dependences.collision.behaviors.BulletCollisionBehavior;
-import com.haloofwar.enumerators.entities.behavior.CollisionType;
+import com.haloofwar.interfaces.Collidable;
 import com.haloofwar.interfaces.CollisionVisitor;
 import com.haloofwar.interfaces.StateHandler;
 import com.haloofwar.interfaces.Updatable;
 
 public class Bullet extends Entity implements Updatable {
 
-    private static final int SPEED_MULTIPLIER = 10;
+    private final int DEFAULT_SPEED_MULTIPLIER = 10;
 
     private float dirX, dirY;
     private float speed;
@@ -27,7 +27,7 @@ public class Bullet extends Entity implements Updatable {
         Texture texture,
         StateHandler state
     ) {
-        super("Bullet", x, y, 16, 16, CollisionType.BULLET, state);
+        super("Bullet", x, y, 16, 16, state);
         this.dirX = dirX;
         this.dirY = dirY;
         this.speed = speed;
@@ -39,15 +39,19 @@ public class Bullet extends Entity implements Updatable {
 
     @Override
     public void update(float delta) {
-        if (!active) return;
+        if (!this.active) {
+        	return;
+        }
 
-        this.x += (dirX * speed * delta) * SPEED_MULTIPLIER;
-        this.y += (dirY * speed * delta) * SPEED_MULTIPLIER;
+        this.x += (this.dirX * this.speed * delta) * this.DEFAULT_SPEED_MULTIPLIER;
+        this.y += (this.dirY * this.speed * delta) * this.DEFAULT_SPEED_MULTIPLIER;
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        if (!active) return;
+        if (!this.active) {
+        	return;
+        }
 
         // Calculo hecho con CHATPGT --------
         
@@ -88,7 +92,7 @@ public class Bullet extends Entity implements Updatable {
     }
     
     @Override
-    public void accept(CollisionVisitor visitor, Entity self) {
+    public void accept(CollisionVisitor visitor, Collidable self) {
         visitor.visit(this, self);
     }
 }

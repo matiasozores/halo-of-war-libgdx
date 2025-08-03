@@ -20,21 +20,42 @@ public class SoundManager {
     }
     
     public void load(SoundType soundType) {
-        Sound sound = Gdx.audio.newSound(Gdx.files.internal(soundType.getPath()));
-        this.soundMap.put(soundType, sound);
+        try {
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal(soundType.getPath()));
+            this.soundMap.put(soundType, sound);
+        } catch (Exception e) {
+        	 System.out.println("Error al cargar el sonido: " + soundType + " (" + soundType.getPath() + ")");
+             e.printStackTrace(); // también podés sacarlo si no querés stacktrace completo
+        }
     }
 
+
     public void play(SoundType soundType) {
-        if (!this.muted) {
-            Sound sound = this.soundMap.get(soundType);
+        if (this.muted) {
+        	return;
+        }
+
+        Sound sound = this.soundMap.get(soundType);
+        
+        if (sound != null) {
+            sound.play(this.volume);
+        } else {
+            this.load(soundType);
+            sound = this.soundMap.get(soundType);
             if (sound != null) {
                 sound.play(this.volume);
             } else {
-            	this.load(soundType);
-            	this.play(soundType);
+            	System.out.println("No se pudo reproducir el sonido: " + soundType);
             }
         }
     }
+    
+    public void stopAll() {
+        for (Sound sound : this.soundMap.values()) {
+            sound.stop();
+        }
+    }
+
 
     public void setVolume(float newVolume) {
         if (newVolume >= 0 && newVolume <= 1) {
@@ -46,12 +67,12 @@ public class SoundManager {
         }
     }
 
-	public void toggleSoundMute() {
+	public void toggleMute() {
 		if(this.muted) {
 			this.volume = this.lastVolume;
 			this.muted = false;
 		} else {
-			this.lastVolume = volume;
+			this.lastVolume = this.volume;
 			this.volume = 0;
 			this.muted = true;
 		}
@@ -61,24 +82,17 @@ public class SoundManager {
         return this.volume;
     }
 
-    public boolean isMuted() {
-        return this.muted;
-    }
-
-    public float getSoundVolume() {
-        return this.volume;
-    }
-    
-    public String getSoundVolumeText() {
+    public String getVolumeText() {
         return (int)(this.volume * 100) + "/100";
     }
     
-	public boolean isSoundMuted() {
+	public boolean isMuted() {
 		return this.muted;
 	}
 
     public void dispose() {
-        for (Sound sound : soundMap.values()) {
+    	System.out.println("Liberando recursos de SoundManager");
+        for (Sound sound : this.soundMap.values()) {
             sound.dispose();
         }
         this.soundMap.clear();

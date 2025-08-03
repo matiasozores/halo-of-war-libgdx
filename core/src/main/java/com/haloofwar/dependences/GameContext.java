@@ -10,6 +10,8 @@ import com.haloofwar.dependences.graphics.RenderContext;
 import com.haloofwar.dependences.input.InputManager;
 
 public class GameContext {
+	private boolean disposed = false;
+	
 	private final HaloOfWarPrincipal game;
 
 	private final TextureManager texture;
@@ -64,11 +66,25 @@ public class GameContext {
 		return this.worldCamera;
 	}
 	
-	public void dispose() {
-		this.texture.dispose();
-		this.audio.dispose();
-	}
+    public void dispose() {
+        if (this.disposed) {
+        	return;
+        }
+        
+        this.disposed = true;
+
+        System.out.println("Se está liberando los recursos del GameContext");
+        this.disposeScene();
+        this.render.dispose();
+    }
+    
+    public void disposeScene() {
+    	this.gameplay.dispose();
+    	this.texture.dispose();
+    	this.audio.dispose();
+    }
 	
+
 	// Gameplay (no crear mas instancias de esto sino que reutilizar la misma)
 	
 	public GameplayContext getGameplay() {

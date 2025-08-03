@@ -39,4 +39,13 @@ public class BulletManager implements StateHandler {
 		this.collision.remove(entity);
 		this.entities.remove(entity);
 	}
+	
+	public void clear() {
+		System.out.println("Eliminando todas las balas");
+		for (Bullet bullet : this.bullets) {
+			this.collision.remove(bullet);
+			this.entities.remove(bullet);
+		}
+		this.bullets.clear();
+	}
 }

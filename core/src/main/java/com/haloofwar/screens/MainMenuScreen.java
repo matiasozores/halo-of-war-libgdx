@@ -2,6 +2,7 @@ package com.haloofwar.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.haloofwar.dependences.GameContext;
+import com.haloofwar.enumerators.game.MusicTrack;
 import com.haloofwar.screens.settings.SettingsScreen;
 
 public class MainMenuScreen extends Menu{
@@ -12,6 +13,8 @@ public class MainMenuScreen extends Menu{
 				"Configuracion",
 				"Salir"
 			}, null);
+		
+        gameContext.getAudio().getMusic().play(MusicTrack.MAIN);
 	}
 
 	@Override
@@ -24,7 +27,6 @@ public class MainMenuScreen extends Menu{
 				this.context.getGame().setScreen(new SettingsScreen(this.context, this));
 				break;
 			case 2: 
-				this.context.getGame().dispose();
 				Gdx.app.exit();
 				break;
 			default:

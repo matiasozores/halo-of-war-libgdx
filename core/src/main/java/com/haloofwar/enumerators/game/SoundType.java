@@ -6,15 +6,16 @@ public enum SoundType {
     LOAD_GAME("audio/sounds/load_game.wav"),
     WALK("audio/sounds/walk.wav"),
     SHOOT_ASSAULT_RIFLE("audio/sounds/assault_rifle_shoot.wav"),
-    ITEM_PICKUP("audio/sounds/item_pickup.wav"),;
+    ITEM_PICKUP("audio/sounds/item_pickup.wav"),
+    GAME_OVER("audio/sounds/game_over.wav"),;
 	
     private final String path;
 
-    SoundType(String path) {
+    private SoundType(String path) {
         this.path = path;
     }
 
     public String getPath() {
-        return path;
+        return this.path;
     }
 }

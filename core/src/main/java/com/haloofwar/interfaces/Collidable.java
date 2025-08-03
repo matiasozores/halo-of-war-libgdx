@@ -1,7 +1,6 @@
 package com.haloofwar.interfaces;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.haloofwar.entities.Entity;
 import com.haloofwar.enumerators.entities.behavior.CollisionType;
 
 public interface Collidable {
@@ -9,6 +8,6 @@ public interface Collidable {
     CollisionType getCollisionType();
     CollisionVisitor getCollisionBehavior();
  
-    void accept(CollisionVisitor visitor, Entity self);
+    void accept(CollisionVisitor visitor, Collidable self);
 }
 

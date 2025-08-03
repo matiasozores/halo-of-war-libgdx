@@ -6,7 +6,7 @@ import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.dependences.collision.behaviors.LivingEntityCollisionBehavior;
 import com.haloofwar.entities.components.EntitySoundHandler;
 import com.haloofwar.entities.components.EntityStateHandler;
-import com.haloofwar.enumerators.entities.behavior.CollisionType;
+import com.haloofwar.interfaces.Collidable;
 import com.haloofwar.interfaces.CollisionVisitor;
 import com.haloofwar.interfaces.Updatable;
 
@@ -16,7 +16,6 @@ public abstract class LivingEntity extends Entity implements Updatable {
 
 	protected int health;
 	protected float velocity;
-	protected boolean alive;
 
 	protected final MovementComponent movement;
 	protected final AnimationComponent animation;
@@ -27,17 +26,15 @@ public abstract class LivingEntity extends Entity implements Updatable {
 		String name,
 		MovementComponent movement,
 		AnimationComponent animation,
-		CollisionType type,
 		EntitySoundHandler sound,
 		EntityStateHandler state
 	) {
-		super(name, 32, 32, type, state);
+		super(name, 32, 32, state);
 		this.movement = movement;
 		this.animation = animation;
 
 		this.health = DEFAULT_HEALTH;
 		this.velocity = DEFAULT_VELOCITY;
-		this.alive = true;
 
 		this.sound = sound;
 		
@@ -46,7 +43,7 @@ public abstract class LivingEntity extends Entity implements Updatable {
 
 	@Override
 	public void update(float delta) {
-		if (!this.alive) {
+		if (!this.active) {
 			return;
 		}
 
@@ -59,7 +56,7 @@ public abstract class LivingEntity extends Entity implements Updatable {
 
 	@Override
 	public void render(SpriteBatch batch) {
-		if (!this.alive) {
+		if (!this.active) {
 			return;
 		}
 
@@ -72,7 +69,6 @@ public abstract class LivingEntity extends Entity implements Updatable {
 
 		if (this.health <= 0) {
 			this.health = 0;
-			this.active = false;
 			this.sound.onDeath(this);
 			this.state.onDeath(this);
 		}
@@ -81,11 +77,7 @@ public abstract class LivingEntity extends Entity implements Updatable {
 	public int getHealth() {
 		return this.health;
 	}
-
-	public boolean isAlive() {
-		return this.alive;
-	}
-
+	
 	public int getDEFAULT_HEALTH() {
 		return this.DEFAULT_HEALTH;
 	}
@@ -99,7 +91,7 @@ public abstract class LivingEntity extends Entity implements Updatable {
 	}
 
 	@Override
-	public void accept(CollisionVisitor visitor, Entity self) {
+	public void accept(CollisionVisitor visitor, Collidable self) {
 		visitor.visit(this, self);
 	}
 

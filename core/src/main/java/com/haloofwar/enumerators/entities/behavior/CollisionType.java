@@ -4,7 +4,7 @@ public enum CollisionType {
     ENTITY,
     OBSTACLE,
     BULLET,
-    PICKUP,
+    ITEM,
     ZONE_DETECTION;
 }
 	

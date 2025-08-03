@@ -82,23 +82,6 @@ public class InputManager implements InputProcessor {
 		return true;
 	}
 	
-	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
-	    return true;
-	}
-
-
-	@Override
-	public boolean scrolled(float amountX, float amountY) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	@Override
-	public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	// Getters
 	
@@ -146,6 +129,11 @@ public class InputManager implements InputProcessor {
 		return this.escape;
 	}
 	
+	public void clearEscape() {
+	    this.escape = false;
+	}
+
+	
 	public boolean isAttack() {
 		return this.attack;
 	}
@@ -164,5 +152,22 @@ public class InputManager implements InputProcessor {
 	
 	public int getMouseY() {
 		return this.mouseY;
+	}
+	
+	// Metodos que no se usan
+	
+	@Override
+	public boolean mouseMoved(int screenX, int screenY) {
+	    return true;
+	}
+
+	@Override
+	public boolean scrolled(float amountX, float amountY) {
+		return false;
+	}
+	
+	@Override
+	public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+		return false;
 	}
 }

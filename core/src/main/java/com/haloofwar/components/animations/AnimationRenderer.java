@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AnimationRenderer {
     public void render(TextureRegion frame, boolean facingLeft, float x, float y, float width, float height, SpriteBatch batch) {
-        if (frame == null) return;
+        if (frame == null) {
+        	return;
+        }
 
         if (facingLeft) {
             batch.draw(frame, x + width, y, -width, height);

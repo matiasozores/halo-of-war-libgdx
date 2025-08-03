@@ -1,10 +1,12 @@
 package com.haloofwar.components.movement;
 
+import com.haloofwar.interfaces.MovementController;
+
 public class EnemyMovementController implements MovementController {
 	
 	/* * Esta es una implementación provisional para el EnemyMovementController.
 	* No proporciona ninguna lógica de movimiento, ya que los enemigos suelen ser controlados
-	* por la IA u otra lógica del juego, en lugar de por la entrada directa.
+	* por la IA u otra lógica del juego.
 	*/
 	
 	@Override

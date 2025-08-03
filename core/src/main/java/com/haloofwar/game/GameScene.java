@@ -5,7 +5,7 @@ import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.players.Player;
 import com.haloofwar.enumerators.game.SceneType;
 import com.haloofwar.game.components.SceneBuilder;
-import com.haloofwar.ui.HUD;
+import com.haloofwar.ui.hud.HUD;
 
 public abstract class GameScene implements Screen {
     protected final GameContext context;
@@ -33,13 +33,12 @@ public abstract class GameScene implements Screen {
 	
 	public void update(float delta) {
 		this.world.update(delta);
-		this.hud.update();
 	}
 	
 	@Override
 	public void resize(int width, int height) {
 		this.world.getCamera().resize(width, height);
-		this.hud.getCamera().resize(width, height);
+		this.hud.resize(width, height);
 	}
 	
     @Override

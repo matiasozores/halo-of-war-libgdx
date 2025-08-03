@@ -22,32 +22,31 @@ public class GameFlowManager {
 	}
 	
 	public void update(float delta) {
-		if (this.context.getInput().isEscape()) {
-			if (this.currentState == GameState.PLAYING) {
-				this.context.getAudio().getMusic().pause();
-				this.currentState = GameState.PAUSED;
-				return;
-			} else if (this.currentState == GameState.PAUSED) {
-				this.context.getAudio().getMusic().resume();
-				this.currentState = GameState.PLAYING;
-				return;
-			}
-		}
+		this.handleInput();
 
 		switch (this.currentState) {
 			case PLAYING:
 				this.currentScene.update(delta);
 				break;
 			case PAUSED:
-				break;
 			case WAITING:
-				break;
 			case GAME_OVER:
-				break;
-			default:
 				break;
 		}
 	}
+
+	private void handleInput() {
+		if (this.context.getInput().isEscape()) {
+			if (this.currentState == GameState.PLAYING) {
+				this.context.getAudio().getMusic().pause();
+				this.currentState = GameState.PAUSED;
+			} else if (this.currentState == GameState.PAUSED) {
+				this.context.getAudio().getMusic().resume();
+				this.currentState = GameState.PLAYING;
+			}
+		}
+	}
+
 
 	
 	public void render(float delta) {

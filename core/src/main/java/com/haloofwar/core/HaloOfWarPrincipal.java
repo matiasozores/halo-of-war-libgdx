@@ -3,12 +3,11 @@ package com.haloofwar.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.enumerators.game.MusicTrack;
 import com.haloofwar.screens.MainMenuScreen;
 import com.haloofwar.utilities.GraphicsUtils;
 
 public class HaloOfWarPrincipal extends Game {
-    private GameContext gameContext;
+    private GameContext context;
     
     @Override
     public void create() {
@@ -28,18 +27,19 @@ public class HaloOfWarPrincipal extends Game {
 
     @Override
     public void dispose() {
-    	this.gameContext.dispose();
+    	if(this.context != null) {
+    		this.context.dispose();
+		}
     }
     
     private void initializeGame() {
-        this.gameContext = new GameContext(this);
-        this.gameContext.getAudio().getMusic().play(MusicTrack.MAIN);
+        this.context = new GameContext(this);
         this.setInputManager();
-        this.setScreen(new MainMenuScreen(this.gameContext));
+        this.setScreen(new MainMenuScreen(this.context));
     }
     
     private void setInputManager() {
-    	Gdx.input.setInputProcessor(this.gameContext.getInput());
+    	Gdx.input.setInputProcessor(this.context.getInput());
 		Gdx.input.setCursorCatched(true);
     }
     

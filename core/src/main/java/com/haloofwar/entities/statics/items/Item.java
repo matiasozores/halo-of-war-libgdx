@@ -1,13 +1,12 @@
-package com.haloofwar.entities.statics;
+package com.haloofwar.entities.statics.items;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.dependences.collision.behaviors.ItemCollisionBehavior;
 import com.haloofwar.entities.StaticEntity;
 import com.haloofwar.entities.components.EntityStateHandler;
-import com.haloofwar.enumerators.entities.behavior.CollisionType;
 
-public class Item extends StaticEntity {
+public abstract class Item extends StaticEntity {
 	private final int DEFAULT_WIDTH = 16;
 	private final int DEFAULT_HEIGHT = 16;
 
@@ -19,8 +18,8 @@ public class Item extends StaticEntity {
 	// Dependencias
 	private Texture texture;
 
-	public Item(Texture texture, float x, float y, int width, int height, EntityStateHandler state, ItemCollisionBehavior collisionBehavior) {
-		super("Posion", x, y, width, height, CollisionType.PICKUP, state);
+	public Item(String name, Texture texture, float x, float y, int width, int height, EntityStateHandler state, ItemCollisionBehavior collisionBehavior) {
+		super(name, x, y, width, height, state);
 		
 		this.texture = texture;
 		this.visibleWidth = this.DEFAULT_WIDTH;
@@ -40,6 +39,10 @@ public class Item extends StaticEntity {
     
     public int getStock() {
 		return this.stock;
+	}
+    
+    public Texture getTexture() {
+		return this.texture;
 	}
 
 }

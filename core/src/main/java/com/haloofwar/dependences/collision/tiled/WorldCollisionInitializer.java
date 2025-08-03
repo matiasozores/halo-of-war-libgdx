@@ -5,49 +5,35 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.components.EntityStateHandler;
-import com.haloofwar.entities.statics.Item;
-import com.haloofwar.entities.statics.Obstacle;
-import com.haloofwar.factories.ItemsFactory;
+import com.haloofwar.entities.Entity;
+import com.haloofwar.enumerators.game.LayerType;
 import com.haloofwar.game.components.MapRenderer;
+import com.haloofwar.interfaces.Collidable;
+import com.haloofwar.interfaces.IEntityCreator;
 
 public class WorldCollisionInitializer {
-	
-    public static void initializeMapColliders(MapRenderer map, GameContext context) {
-        MapLayer collisionLayer = map.getMetaData().getTiledMap().getLayers().get("collision");
-        
-        if (collisionLayer == null) {
-        	return;
-        }
-     
-        for (MapObject object : collisionLayer.getObjects()) {
-            if (object instanceof RectangleMapObject) {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
-                EntityStateHandler state = new EntityStateHandler(context.getGameplay().getCollisions(), context.getGameplay().getEntities());
-                Obstacle wall = new Obstacle(rect.x, rect.y, (int) rect.width, (int) rect.height, state);
-                context.getGameplay().getCollisions().add(wall);
-                context.getGameplay().getEntities().add(wall);
-            }
-        }
-        
-        
-        MapLayer itemsLayer = map.getMetaData().getTiledMap().getLayers().get("items");
 
-        if (itemsLayer == null) {
+    public static void initializeMapColliders(MapRenderer map, GameContext context) {
+    	// se utiliza implementaciones de IEntityCreator para crear entidades a partir de los objetos del mapa.
+    	initializeLayerEntities(map, context, LayerType.OBSTACLE, new ObstacleCreator(context));
+    	initializeLayerEntities(map, context, LayerType.ITEM, new ItemCreator(context));
+    }
+
+    private static void initializeLayerEntities(MapRenderer map, GameContext context, LayerType type, IEntityCreator creator) {
+    	MapLayer layer = map.getMetaData().getTiledMap().getLayers().get(type.getName());
+       
+        if (layer == null) {
         	return;
-        }
-        
-     
-        for (MapObject object : itemsLayer.getObjects()) {
+        } 
+
+        for (MapObject object : layer.getObjects()) {
             if (object instanceof RectangleMapObject) {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
-                ItemsFactory itemsFactory = new ItemsFactory(context);
-                Item item = itemsFactory.create(rect.x, rect.y, (int) rect.width, (int) rect.height);
-                context.getGameplay().getCollisions().add(item);
-                context.getGameplay().getEntities().add(item);
+                Object entity = creator.create(rect);
+                
+                context.getGameplay().getCollisions().add((Collidable) entity);
+                context.getGameplay().getEntities().add((Entity) entity);
             }
         }
-        
     }
 }
-

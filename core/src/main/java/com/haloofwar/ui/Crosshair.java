@@ -24,12 +24,6 @@ public class Crosshair {
     	Vector3 mouseWorldPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
     	this.camera.getOrthographic().unproject(mouseWorldPos);
 		
-		/* Por ahora no voy a limitar el crosshair
-		if (mouseWorldPos.x < 0 || mouseWorldPos.x > camera.getViewportWidth() ||
-			mouseWorldPos.y < 0 || mouseWorldPos.y > camera.getViewportHeight()) {
-			return;
-		}*/
-		
 		this.mouseX = (int) mouseWorldPos.x;
 		this.mouseY = (int) mouseWorldPos.y;
 	}

@@ -42,7 +42,9 @@ public class GameplayContext implements Renderable, Updatable {
 	}
 	
 	public void dispose() {
+		System.out.println("Ejecutando dispose de GameplayContext");
 		this.entities.clear();
 		this.collisions.clear();
+		this.bullets.clear();
 	}
 }

@@ -1,49 +1,47 @@
 package com.haloofwar.screens;
 
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.haloofwar.cameras.GameStaticCamera;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.enumerators.game.Background;
 import com.haloofwar.enumerators.game.SoundType;
-import com.haloofwar.utilities.Figure;
+import com.haloofwar.screens.components.MenuNavigator;
+import com.haloofwar.screens.components.MenuRenderer;
 import com.haloofwar.utilities.text.Text;
 
 public abstract class Menu implements Screen {
     protected final int SELECTOR_COOLDOWN = 35;
     protected final int ACTION_COOLDOWN = 30;
-    private final int OPTION_SPACING = 100;
-    private final int SELECTOR_OFFSET_X = 50;
-
+	private final int ESCAPE_COOLDOWN = 30;
+	
     protected final GameContext context;
-    private final GameStaticCamera camera = new GameStaticCamera();
-
-    private final Figure selector = new Figure(10, 10);
+    private final Screen previousScreen;
+    
+    private final MenuRenderer renderer;
+    protected final MenuNavigator navigator;
 
     private final Text[] OPTIONS;
     private final Text TITLE;
     private final Texture BACKGROUND;
     
-    protected int selectedIndex = 0;
     protected int actionCooldown = ACTION_COOLDOWN;
-    protected int selectorCooldown = SELECTOR_COOLDOWN;
-
-    private float baseX = 100, baseY = 525;
-
-    private final Screen previousScreen;
+    private int escapeCooldown = this.ESCAPE_COOLDOWN;
 
     public Menu(GameContext context, String title, String[] optionTexts, Screen previousScreen) {
         this.context = context;
         this.previousScreen = previousScreen;
 
+        this.renderer = new MenuRenderer();
+        this.navigator = new MenuNavigator(optionTexts.length, SELECTOR_COOLDOWN);
+        
         this.OPTIONS = new Text[optionTexts.length];
         for (int i = 0; i < optionTexts.length; i++) {
             this.OPTIONS[i] = new Text(optionTexts[i], context.getRender().getFont().getDefaultFont());
         }
         
         this.TITLE = new Text(title, context.getRender().getFont().getTitleFont());
+        
+        // A futuro podriamos hacer que algunos menu tengan un fondo distinto
         this.BACKGROUND = context.getTexture().get(Background.MAIN_MENU);
     }
     
@@ -51,39 +49,17 @@ public abstract class Menu implements Screen {
     	this(gameContext, title, options, null); 
     }
 
-
     @Override
     public void render(float delta) {
         this.update();
-
-        this.camera.update();
-        this.context.getRender().getShape().setProjectionMatrix(this.camera.getOrthographic().combined);
-        this.context.getRender().getShape().begin(ShapeRenderer.ShapeType.Filled);
-
-        float selectorY = this.baseY - this.selectedIndex * this.OPTION_SPACING;
-        
-        this.selector.draw(this.context.getRender().getShape(), this.baseX - this.SELECTOR_OFFSET_X, selectorY);
-
-        this.context.getRender().getShape().end();
-
-        this.context.getRender().getBatch().setProjectionMatrix(this.camera.getOrthographic().combined);
-        this.context.getRender().getBatch().begin();
-        
-        this.context.getRender().getBatch().draw(this.BACKGROUND, 0, 0, this.context.getStaticCamera().getViewportWidth(),  this.context.getStaticCamera().getViewportHeight());
-        // Título
-        this.TITLE.draw(this.context.getRender().getBatch(), this.baseX, this.baseY + this.OPTION_SPACING);
-
-        // Opciones
-        for (int i = 0; i < this.OPTIONS.length; i++) {
-            if (i == this.selectedIndex) {
-                this.OPTIONS[i].setColor(Color.RED);
-            } else {
-                this.OPTIONS[i].setColor(Color.WHITE);
-            }
-            this.OPTIONS[i].draw(this.context.getRender().getBatch(), this.baseX, this.baseY - i * this.OPTION_SPACING);
-        }
-
-        this.context.getRender().getBatch().end();
+        this.renderer.render(
+    	    this.context.getRender().getBatch(),
+    	    this.context.getRender().getShape(),
+    	    this.BACKGROUND,
+    	    this.TITLE,
+    	    this.OPTIONS,
+    	    this.navigator.getSelectedIndex()
+    	);
 
     }
 
@@ -94,26 +70,22 @@ public abstract class Menu implements Screen {
     }
 
     private void handleNavigation() {
-        if (this.selectorCooldown > 0) {
-        	this.selectorCooldown--;
-            return;
-        }
+        this.navigator.updateCooldown();
 
         boolean moved = false;
 
-        if (this.context.getInput().isArrowDown()) {
-        	this.selectedIndex = (this.selectedIndex + 1) % this.OPTIONS.length;
-            moved = true;
-        } else if (this.context.getInput().isArrowUp()) {
-        	this.selectedIndex = (this.selectedIndex - 1 + this.OPTIONS.length) % this.OPTIONS.length;
-            moved = true;
+        if (this.navigator.canMove()) {
+            if (this.context.getInput().isArrowDown()) {
+                this.navigator.moveDown();
+                moved = true;
+            } else if (this.context.getInput().isArrowUp()) {
+                this.navigator.moveUp();
+                moved = true;
+            }
         }
 
         if (moved) {
-        	this.context.getAudio().getSound().play(SoundType.CLICK);
-        	this.selectorCooldown = this.SELECTOR_COOLDOWN;
-            float newY = this.baseY - this.selectedIndex * this.OPTION_SPACING;
-            this.selector.setPosition(this.baseX - this.SELECTOR_OFFSET_X, newY);
+            this.context.getAudio().getSound().play(SoundType.CLICK);
         }
     }
 
@@ -126,13 +98,19 @@ public abstract class Menu implements Screen {
         if (this.context.getInput().isEnter()) {
         	this.context.getAudio().getSound().play(SoundType.ENTER);
         	this.actionCooldown = this.ACTION_COOLDOWN;
-            processOption(this.selectedIndex);
+        	processOption(this.navigator.getSelectedIndex());
         }
     }
 
     private void handleBack() {
+        if (this.escapeCooldown > 0) {
+            this.escapeCooldown--;
+            return;
+        }
+
         if (this.context.getInput().isEscape()) {
-            goBack();
+            this.goBack();
+            this.escapeCooldown = this.ESCAPE_COOLDOWN;
         }
     }
 
@@ -151,7 +129,12 @@ public abstract class Menu implements Screen {
     protected abstract void processOption(int optionIndex);
 
     @Override public void show() {}
-    @Override public void resize(int width, int height) { this.camera.resize(width, height); }
+    
+    @Override
+    public void resize(int width, int height) {
+        this.renderer.resize(width, height);
+    }
+
     @Override public void pause() {}
     @Override public void resume() {}
     @Override public void hide() {}

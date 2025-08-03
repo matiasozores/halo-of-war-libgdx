@@ -2,7 +2,7 @@ package com.haloofwar.entities.components;
 
 import com.haloofwar.dependences.audio.SoundManager;
 import com.haloofwar.entities.LivingEntity;
-import com.haloofwar.entities.statics.Item;
+import com.haloofwar.entities.statics.items.Item;
 import com.haloofwar.enumerators.game.SoundType;
 import com.haloofwar.interfaces.DamageSoundHandler;
 import com.haloofwar.interfaces.InteractionSoundHandler;

@@ -27,6 +27,7 @@ public class RenderContext {
 	}
 	
 	public void dispose() {
+		System.out.println("Liberando recursos del RenderContext");
 		this.batch.dispose();
 		this.shape.dispose();
 		this.font.dispose();

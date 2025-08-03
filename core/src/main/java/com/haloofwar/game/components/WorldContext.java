@@ -20,8 +20,7 @@ public class WorldContext {
 		this.gameplay = context.getGameplay();
 		
 		// El agregado de entidades se debe hacer a partir de SceneType pero por ahora se hace de esta manera
-		this.addEntity(player);
-		
+		this.addEntity(player);	
 		EnemyFactory enemyFactory = new EnemyFactory(context);
 		this.addEntity(enemyFactory.create(EnemyType.ELITE));
 		

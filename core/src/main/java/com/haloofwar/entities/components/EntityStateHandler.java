@@ -17,8 +17,10 @@ public class EntityStateHandler implements StateHandler {
 	
 	@Override
 	public void onDeath(Entity entity) {
+		entity.setActive(false);
 		this.collision.remove(entity);
 		this.entities.remove(entity);
+		
 	}
 
 }

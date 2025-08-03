@@ -1,5 +1,7 @@
 package com.haloofwar.entities.players;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.components.animations.AnimationComponent;
 import com.haloofwar.components.movement.MovementComponent;
@@ -7,9 +9,8 @@ import com.haloofwar.entities.LivingEntity;
 import com.haloofwar.entities.characters.components.Inventory;
 import com.haloofwar.entities.components.EntitySoundHandler;
 import com.haloofwar.entities.components.EntityStateHandler;
-import com.haloofwar.entities.statics.Item;
+import com.haloofwar.entities.statics.items.Item;
 import com.haloofwar.enumerators.entities.PlayerType;
-import com.haloofwar.enumerators.entities.behavior.CollisionType;
 import com.haloofwar.interfaces.Positionable;
 import com.haloofwar.ui.Crosshair;
 import com.haloofwar.weapons.Weapon;
@@ -30,7 +31,7 @@ public class Player extends LivingEntity implements Positionable {
         EntitySoundHandler sound,
         EntityStateHandler state
     ) {
-        super(name, movement, animation, CollisionType.ENTITY, sound, state);
+        super(name, movement, animation, sound, state);
         this.crosshair = crosshair;
         this.weapon = weapon;
         this.type = type;
@@ -82,7 +83,7 @@ public class Player extends LivingEntity implements Positionable {
 		return this.type;
 	}
     
-    public Inventory getInventory() {
-		return this.inventory;
+    public ArrayList<Item> getItemsInventory() {
+		return this.inventory.getItems();
 	}	
 }

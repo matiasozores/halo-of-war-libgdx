@@ -6,7 +6,7 @@ import com.haloofwar.dependences.GameContext;
 public class GameOverScreen extends Menu{
 
 	public GameOverScreen(GameContext gameContext) {
-		super(gameContext, "Has fracasado...",new String[] {
+		super(gameContext, "Has muerto...",new String[] {
 				"Volver al menu principal",
 				"Salir del juego",
 			}, null);
@@ -16,12 +16,10 @@ public class GameOverScreen extends Menu{
 	protected void processOption(int optionIndex) {
 		switch (optionIndex) {
 			case 0: 
-				this.context.dispose();
+				this.context.disposeScene();
 				this.context.getGame().setScreen(new MainMenuScreen(this.context));
 				break;
 			case 1: 
-				this.context.dispose();
-				this.context.getGame().dispose();
 				Gdx.app.exit();
 				break;
 
