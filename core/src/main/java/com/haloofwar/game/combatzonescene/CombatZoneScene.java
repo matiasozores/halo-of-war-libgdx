@@ -1,7 +1,7 @@
 package com.haloofwar.game.combatzonescene;
 
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.characters.Player;
+import com.haloofwar.entities.players.Player;
 import com.haloofwar.enumerators.game.SceneType;
 import com.haloofwar.game.GameScene;
 

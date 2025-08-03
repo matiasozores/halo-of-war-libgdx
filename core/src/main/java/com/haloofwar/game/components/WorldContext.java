@@ -5,7 +5,7 @@ import com.haloofwar.cameras.GameWorldCamera;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.dependences.gameplay.GameplayContext;
 import com.haloofwar.entities.Entity;
-import com.haloofwar.entities.characters.Player;
+import com.haloofwar.entities.players.Player;
 import com.haloofwar.enumerators.entities.EnemyType;
 import com.haloofwar.factories.EnemyFactory;
 

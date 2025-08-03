@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.entities.Entity;
-import com.haloofwar.entities.LivingEntity;
 import com.haloofwar.interfaces.Updatable;
 
 public class EntityManager {
@@ -32,10 +31,6 @@ public class EntityManager {
         for (int i = this.updatables.size() - 1; i >= 0; i--) {
             Updatable entity = this.updatables.get(i);
             entity.update(delta);
-
-            if (entity instanceof LivingEntity living && !living.isAlive()) {
-                this.remove(living);
-            }
         }
     }
 

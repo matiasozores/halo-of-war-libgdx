@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.haloofwar.dependences.GameContext;
+import com.haloofwar.entities.components.EntityStateHandler;
 import com.haloofwar.entities.statics.Item;
 import com.haloofwar.entities.statics.Obstacle;
 import com.haloofwar.factories.ItemsFactory;
@@ -22,7 +23,8 @@ public class WorldCollisionInitializer {
         for (MapObject object : collisionLayer.getObjects()) {
             if (object instanceof RectangleMapObject) {
                 Rectangle rect = ((RectangleMapObject) object).getRectangle();
-                Obstacle wall = new Obstacle(rect.x, rect.y, (int) rect.width, (int) rect.height);
+                EntityStateHandler state = new EntityStateHandler(context.getGameplay().getCollisions(), context.getGameplay().getEntities());
+                Obstacle wall = new Obstacle(rect.x, rect.y, (int) rect.width, (int) rect.height, state);
                 context.getGameplay().getCollisions().add(wall);
                 context.getGameplay().getEntities().add(wall);
             }
@@ -43,24 +45,6 @@ public class WorldCollisionInitializer {
                 Item item = itemsFactory.create(rect.x, rect.y, (int) rect.width, (int) rect.height);
                 context.getGameplay().getCollisions().add(item);
                 context.getGameplay().getEntities().add(item);
-            }
-        }
-        
-        MapLayer zone = map.getMetaData().getTiledMap().getLayers().get("zone_detection");
-
-        
-        
-        if (zone == null) {
-        	return;
-        }
-        
-        for (MapObject object : zone.getObjects()) {
-            if (object instanceof RectangleMapObject) {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
-   
-             ZoneDetection zoneObject = new ZoneDetection(rect.x, rect.y, rect.width, rect.height);
-             context.getGameplay().getCollisions().add(zoneObject);
-                
             }
         }
         

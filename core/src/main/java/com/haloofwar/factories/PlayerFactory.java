@@ -4,10 +4,11 @@ import com.haloofwar.components.animations.AnimationComponent;
 import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.components.movement.PlayerMovementController;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.characters.Kratos;
-import com.haloofwar.entities.characters.MasterChief;
-import com.haloofwar.entities.characters.Player;
 import com.haloofwar.entities.components.EntitySoundHandler;
+import com.haloofwar.entities.components.EntityStateHandler;
+import com.haloofwar.entities.players.Kratos;
+import com.haloofwar.entities.players.MasterChief;
+import com.haloofwar.entities.players.Player;
 import com.haloofwar.enumerators.entities.PlayerType;
 import com.haloofwar.ui.Crosshair;
 import com.haloofwar.weapons.Weapon;
@@ -24,6 +25,7 @@ public class PlayerFactory {
 		MovementComponent movement = new MovementComponent(new PlayerMovementController(context.getInput()), 100, 100);
 		AnimationComponent animation = new AnimationComponent(type, this.context.getTexture());
 		EntitySoundHandler sound = new EntitySoundHandler(this.context.getAudio().getSound());
+		EntityStateHandler state = new EntityStateHandler(this.context.getGameplay().getCollisions(), this.context.getGameplay().getEntities());
 		
 		final UICrosshairFactory CROSSHAIR_FACTORY = new UICrosshairFactory(this.context);
 		Crosshair crosshair = CROSSHAIR_FACTORY.create(type);
@@ -31,16 +33,18 @@ public class PlayerFactory {
 		final WeaponFactory WEAPON_FACTORY = new WeaponFactory(this.context);
 		Weapon weapon = WEAPON_FACTORY.create(type.getDefaultWeapon());	
 		
+		
+		
 		switch (type) {
 		case KRATOS:
-			return new Kratos(movement, animation, crosshair, weapon, sound);
+			return new Kratos(movement, animation, crosshair, weapon, sound, state);
 			
 		case MASTER_CHIEF:
-			return new MasterChief(movement, animation, crosshair, weapon, sound);
+			return new MasterChief(movement, animation, crosshair, weapon, sound, state);
 
 		default:
 			System.out.println("Ha ocurrido un error inesperado al seleccionar un personaje. ERROR 01");
-			return new Kratos(movement, animation, crosshair, weapon, sound);
+			return new Kratos(movement, animation, crosshair, weapon, sound, state);
 		}
 	}
 }

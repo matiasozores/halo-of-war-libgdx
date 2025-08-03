@@ -1,29 +1,36 @@
 package com.haloofwar.entities;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.haloofwar.dependences.collision.Collidable;
 import com.haloofwar.enumerators.entities.behavior.CollisionType;
+import com.haloofwar.interfaces.Collidable;
+import com.haloofwar.interfaces.CollisionVisitor;
 import com.haloofwar.interfaces.Renderable;
+import com.haloofwar.interfaces.StateHandler;
 
 public abstract class Entity implements Collidable, Renderable {
 	private String name;
 	protected int width, height;
 	protected float x, y;
-	protected CollisionType collisionType;
+	protected CollisionType collisionType;	
+	protected boolean active = true; 
 	
-    public Entity(String name, int width, int height, CollisionType collisionType) {
+	protected CollisionVisitor collisionBehavior;
+	protected StateHandler state;
+	
+    public Entity(String name, int width, int height, CollisionType collisionType, StateHandler state) {
         this.name = name;
         this.width = width;
         this.height = height;
         this.collisionType = collisionType;
+        this.state = state;
     }
     
-    public Entity(String name, float x, float y, int width, int height, CollisionType collisionType) {
-	    this(name, width, height, collisionType);
+    public Entity(String name, float x, float y, int width, int height, CollisionType collisionType, StateHandler state) {
+	    this(name, width, height, collisionType, state);
 	    this.x = x;
 	    this.y = y;
     }
-		
+ 
 	@Override
 	public Rectangle getBounds() {
 		return new Rectangle(this.x, this.y, this.width, this.height);
@@ -34,7 +41,27 @@ public abstract class Entity implements Collidable, Renderable {
         return this.collisionType;
     }
     
+    @Override
+    public void accept(CollisionVisitor visitor, Entity self) {
+        visitor.visit(this, self);
+    }
+    
+    @Override
+    public CollisionVisitor getCollisionBehavior() {
+    	if(this.collisionBehavior == null) {
+			System.out.println("El behavior de colision no ha sido inicializado para " + this.name);
+			return null;
+		} 
+    	
+		return this.collisionBehavior;
+	}
+
     public String getName() {
 		return this.name;
+	}
+	
+	public void setPosition(float x, float y) {
+	    this.x = x;
+	    this.y = y;
 	}
 }

@@ -16,25 +16,29 @@ public class AnimationStateController {
     }
 
     public void update(float delta, float dirX, float dirY) {
-        stateTime += delta;
+        this.stateTime += delta;
 
         boolean moving = dirX != 0 || dirY != 0;
 
-        if (dirX < 0) facingLeft = true;
-        else if (dirX > 0) facingLeft = false;
+        if (dirX < 0) {
+        	this.facingLeft = true;
+        }
+        else if (dirX > 0) {
+        	this.facingLeft = false;
+        }
 
         if (moving) {
-            currentAnimation = animationSet.getAnimation(SpriteState.WALK);
+            this.currentAnimation = this.animationSet.getAnimation(SpriteState.WALK);
         } else {
-            currentAnimation = animationSet.getAnimation(SpriteState.IDLE);
+            this.currentAnimation = this.animationSet.getAnimation(SpriteState.IDLE);
         }
     }
 
     public TextureRegion getCurrentFrame() {
-        return currentAnimation.getKeyFrame(stateTime);
+        return this.currentAnimation.getKeyFrame(stateTime);
     }
 
     public boolean isFacingLeft() {
-        return facingLeft;
+        return this.facingLeft;
     }
 }

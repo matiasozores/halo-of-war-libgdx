@@ -2,7 +2,7 @@ package com.haloofwar.screens;
 
 import com.badlogic.gdx.Screen;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.characters.Player;
+import com.haloofwar.entities.players.Player;
 import com.haloofwar.enumerators.entities.PlayerType;
 import com.haloofwar.enumerators.game.SoundType;
 import com.haloofwar.factories.PlayerFactory;

@@ -5,6 +5,7 @@ import com.haloofwar.components.movement.EnemyMovementController;
 import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.entities.components.EntitySoundHandler;
+import com.haloofwar.entities.components.EntityStateHandler;
 import com.haloofwar.entities.enemies.Enemy;
 import com.haloofwar.entities.enemies.Grunt;
 import com.haloofwar.enumerators.entities.EnemyType;
@@ -22,14 +23,14 @@ public class EnemyFactory {
 		MovementComponent movement = new MovementComponent(new EnemyMovementController(), 750, 325);
 		AnimationComponent animation = new AnimationComponent(type, this.context.getTexture());
 		EntitySoundHandler sound = new EntitySoundHandler(this.context.getAudio().getSound());
-		
+		EntityStateHandler state = new EntityStateHandler(this.context.getGameplay().getCollisions(), this.context.getGameplay().getEntities());
 		
 		switch (type) {
 		case GRUNT:
-			return new Grunt(movement, animation, sound);
+			return new Grunt(movement, animation, sound, state);
 			
 		default:
-			return new Grunt(movement, animation, sound);
+			return new Grunt(movement, animation, sound, state); 
 		}
 	}
 }

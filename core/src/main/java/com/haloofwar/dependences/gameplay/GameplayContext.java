@@ -14,7 +14,7 @@ public class GameplayContext implements Renderable, Updatable {
 
 	public GameplayContext(InputManager input, TextureManager texture) {
 		this.entities = new EntityManager();
-		this.collisions = new CollisionManager(input, this.entities); 
+		this.collisions = new CollisionManager(); 
 		this.bullets = new BulletManager(this.collisions, this.entities, texture);
 	}	
 	

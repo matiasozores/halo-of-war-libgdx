@@ -2,16 +2,11 @@ package com.haloofwar.dependences.collision;
 
 import java.util.ArrayList;
 
-import com.haloofwar.dependences.gameplay.EntityManager;
-import com.haloofwar.dependences.input.InputManager;
+import com.haloofwar.entities.Entity;
+import com.haloofwar.interfaces.Collidable;
 
 public class CollisionManager {
     private final ArrayList<Collidable> collidables = new ArrayList<>();
-    private final CollisionSystem collisionSystem;
-    
-    public CollisionManager(InputManager input, EntityManager entities) {
-		this.collisionSystem = new CollisionSystem(input, entities);
-	}
 
     public void add(Collidable entity) {
         if (!this.collidables.contains(entity)) {
@@ -23,24 +18,23 @@ public class CollisionManager {
         this.collidables.remove(entity);
     }
 
+    public void clear() {
+        this.collidables.clear();
+    }
+
     public void checkCollisions() {
         ArrayList<Collidable> snapshot = new ArrayList<>(this.collidables);
         int size = snapshot.size();
-        
-        // Sabemos que no es optimo
+
         for (int i = 0; i < size - 1; i++) {
             Collidable a = snapshot.get(i);
             for (int j = i + 1; j < size; j++) {
                 Collidable b = snapshot.get(j);
-
                 if (a.getBounds().overlaps(b.getBounds())) {
-                    this.collisionSystem.resolveCollision(a, b, this);
+                	a.accept(b.getCollisionBehavior(), (Entity) b);
+                	b.accept(a.getCollisionBehavior(), (Entity) a);
                 }
             }
         }
-    }
-
-    public void clear() {
-        this.collidables.clear();
     }
 }

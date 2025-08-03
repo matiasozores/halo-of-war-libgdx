@@ -3,8 +3,10 @@ package com.haloofwar.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.haloofwar.dependences.collision.behaviors.BulletCollisionBehavior;
 import com.haloofwar.enumerators.entities.behavior.CollisionType;
-import com.haloofwar.interfaces.BulletListener;
+import com.haloofwar.interfaces.CollisionVisitor;
+import com.haloofwar.interfaces.StateHandler;
 import com.haloofwar.interfaces.Updatable;
 
 public class Bullet extends Entity implements Updatable {
@@ -17,24 +19,22 @@ public class Bullet extends Entity implements Updatable {
     private int damage;
 
     private final Texture texture;
-    private final BulletListener listener;
 
     public Bullet(
         float x, float y,
         float dirX, float dirY,
         int damage, int speed,
         Texture texture,
-        BulletListener listener
+        StateHandler state
     ) {
-        super("Bullet", x, y, 16, 16, CollisionType.BULLET);
+        super("Bullet", x, y, 16, 16, CollisionType.BULLET, state);
         this.dirX = dirX;
         this.dirY = dirY;
         this.speed = speed;
         this.damage = damage;
         this.texture = texture;
         this.active = true;
-        this.listener = listener;
-        
+        this.collisionBehavior = new BulletCollisionBehavior();
     }
 
     @Override
@@ -75,9 +75,7 @@ public class Bullet extends Entity implements Updatable {
     public void destroy() {
         if (!active) return;
         this.active = false;
-        if (listener != null) {
-            listener.onBulletDestroyed(this);
-        }
+        this.state.onDeath(this);
     }
 
     public int getDamage() {
@@ -87,5 +85,10 @@ public class Bullet extends Entity implements Updatable {
     @Override
     public Rectangle getBounds() {
         return new Rectangle(this.x, this.y, this.width, this.height);
+    }
+    
+    @Override
+    public void accept(CollisionVisitor visitor, Entity self) {
+        visitor.visit(this, self);
     }
 }

@@ -5,10 +5,11 @@ import java.util.ArrayList;
 import com.haloofwar.dependences.assets.TextureManager;
 import com.haloofwar.dependences.collision.CollisionManager;
 import com.haloofwar.entities.Bullet;
+import com.haloofwar.entities.Entity;
 import com.haloofwar.enumerators.entities.ProjectileType;
-import com.haloofwar.interfaces.BulletListener;
+import com.haloofwar.interfaces.StateHandler;
 
-public class BulletManager implements BulletListener {
+public class BulletManager implements StateHandler {
 
 	private final CollisionManager collision;
 	private final EntityManager entities;
@@ -33,10 +34,9 @@ public class BulletManager implements BulletListener {
     }
 	
 	@Override
-	public void onBulletDestroyed(Bullet bullet) {
-		this.bullets.remove(bullet);
-		this.collision.remove(bullet);
-		this.entities.remove(bullet);
+	public void onDeath(Entity entity) {
+		this.bullets.remove(entity);
+		this.collision.remove(entity);
+		this.entities.remove(entity);
 	}
-
 }

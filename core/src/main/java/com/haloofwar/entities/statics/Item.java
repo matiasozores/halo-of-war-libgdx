@@ -2,7 +2,9 @@ package com.haloofwar.entities.statics;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.haloofwar.dependences.collision.behaviors.ItemCollisionBehavior;
 import com.haloofwar.entities.StaticEntity;
+import com.haloofwar.entities.components.EntityStateHandler;
 import com.haloofwar.enumerators.entities.behavior.CollisionType;
 
 public class Item extends StaticEntity {
@@ -17,12 +19,14 @@ public class Item extends StaticEntity {
 	// Dependencias
 	private Texture texture;
 
-	public Item(Texture texture, float x, float y, int width, int height) {
-		super("Posion", x, y, width, height, CollisionType.PICKUP);
+	public Item(Texture texture, float x, float y, int width, int height, EntityStateHandler state, ItemCollisionBehavior collisionBehavior) {
+		super("Posion", x, y, width, height, CollisionType.PICKUP, state);
 		
 		this.texture = texture;
 		this.visibleWidth = this.DEFAULT_WIDTH;
 		this.visibleHeight = this.DEFAULT_HEIGHT;
+		
+		this.collisionBehavior = collisionBehavior;
 	}
 
 	@Override

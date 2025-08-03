@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.haloofwar.cameras.GameStaticCamera;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.characters.Player;
+import com.haloofwar.entities.players.Player;
 import com.haloofwar.enumerators.entities.PlayerType;
 
 public class HUD {
@@ -75,7 +75,7 @@ public class HUD {
         
         //inventario del personaje
         if (player.getInventory() != null) {
-			String inventoryText = "Inventario: " + player.getInventory().getItemsCount();
+			String inventoryText = "Items en inventario: " + player.getInventory().getItemsCount();
 			smallFont.draw(batch, inventoryText, x + 300, y + barHeight);
         }
         

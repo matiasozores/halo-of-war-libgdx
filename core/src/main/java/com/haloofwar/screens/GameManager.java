@@ -2,7 +2,7 @@ package com.haloofwar.screens;
 
 import com.badlogic.gdx.Screen;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.characters.Player;
+import com.haloofwar.entities.players.Player;
 import com.haloofwar.enumerators.game.GameState;
 import com.haloofwar.enumerators.game.SceneType;
 import com.haloofwar.game.GameFlowManager;

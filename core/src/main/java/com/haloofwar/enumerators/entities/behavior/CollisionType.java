@@ -5,10 +5,6 @@ public enum CollisionType {
     OBSTACLE,
     BULLET,
     PICKUP,
-    EXPLOSION,
-    TRIGGER,
-    OBJECT,
-    MAP,
-    ZONE_DETECTION,;
+    ZONE_DETECTION;
 }
 	

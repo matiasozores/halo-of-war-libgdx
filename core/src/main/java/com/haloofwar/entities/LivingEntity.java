@@ -3,8 +3,11 @@ package com.haloofwar.entities;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.components.animations.AnimationComponent;
 import com.haloofwar.components.movement.MovementComponent;
+import com.haloofwar.dependences.collision.behaviors.LivingEntityCollisionBehavior;
 import com.haloofwar.entities.components.EntitySoundHandler;
+import com.haloofwar.entities.components.EntityStateHandler;
 import com.haloofwar.enumerators.entities.behavior.CollisionType;
+import com.haloofwar.interfaces.CollisionVisitor;
 import com.haloofwar.interfaces.Updatable;
 
 public abstract class LivingEntity extends Entity implements Updatable {
@@ -25,17 +28,20 @@ public abstract class LivingEntity extends Entity implements Updatable {
 		MovementComponent movement,
 		AnimationComponent animation,
 		CollisionType type,
-		EntitySoundHandler sound
+		EntitySoundHandler sound,
+		EntityStateHandler state
 	) {
-		super(name, 32, 32, type);
+		super(name, 32, 32, type, state);
 		this.movement = movement;
 		this.animation = animation;
 
 		this.health = DEFAULT_HEALTH;
 		this.velocity = DEFAULT_VELOCITY;
 		this.alive = true;
-		
+
 		this.sound = sound;
+		
+		this.collisionBehavior = new LivingEntityCollisionBehavior();
 	}
 
 	@Override
@@ -63,11 +69,12 @@ public abstract class LivingEntity extends Entity implements Updatable {
 	public void takeDamage(int amount) {
 		this.health -= amount;
 		this.sound.onDamage(this, amount);
-		
+
 		if (this.health <= 0) {
 			this.health = 0;
-			this.alive = false;
+			this.active = false;
 			this.sound.onDeath(this);
+			this.state.onDeath(this);
 		}
 	}
 
@@ -90,4 +97,10 @@ public abstract class LivingEntity extends Entity implements Updatable {
 	public MovementComponent getMovement() {
 		return this.movement;
 	}
+
+	@Override
+	public void accept(CollisionVisitor visitor, Entity self) {
+		visitor.visit(this, self);
+	}
+
 }

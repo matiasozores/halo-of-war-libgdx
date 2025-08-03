@@ -1,7 +1,7 @@
 package com.haloofwar.game;
 
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.characters.Player;
+import com.haloofwar.entities.players.Player;
 import com.haloofwar.enumerators.game.SceneType;
 
 public abstract class Level extends GameScene{
