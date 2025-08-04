@@ -7,12 +7,14 @@
 ## Descripción Corta del Juego
 Halo of War es un videojuego de acción y aventura en 2D con vista cenital. Está pensado para ser jugado en modo cooperativo en red o de forma individual. Combina exploración, combate cuerpo a cuerpo y a distancia, misiones principales y secundarias, cinemáticas, logros y personalización de personajes, todo ambientado en un mundo visual estilo pixel art. El juego propone una experiencia dinámica con historia original y múltiples modos de juego.
 
+Video demostrativo del proyecto: https://youtu.be/3H6tPp3iHIA?si=LJklA14ZfT9iPoqz
+
 ## Tecnologías y plataformas objetivo
 - Java 8
 - LibGDX
 - Herramientas adicionales: Tiled (para mapas), recursos de OpenGameArt e IA para diseño
 - Plataformas objetivo: Escritorio (Windows, Linux, macOS)
-- IDE utilizado: IntelliJ IDEA
+- IDE utilizado: Eclipse
 
 ## Enlace a la Wiki del Proyecto (Propuesta Detallada)
 [Ver la Propuesta Completa del Proyecto aquí](https://github.com/matiasozores/halo-of-war-libgdx/wiki)
@@ -45,6 +47,6 @@ Halo of War es un videojuego de acción y aventura en 2D con vista cenital. Est�
 ## Estado Actual del Proyecto
 El proyecto se encuentra en su fase inicial de desarrollo:
 - Estructura del proyecto y configuración de entorno completadas.
-- Configuración del entorno de desarrollo completada (preparado para ser importado en un IDE como IntelliJ IDEA o Eclipse).
+- Configuración del entorno de desarrollo completada (preparado para ser importado en un IDE Eclipse).
 - Motor LibGDX integrado.
 
