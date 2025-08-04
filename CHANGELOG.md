@@ -1,29 +1,46 @@
-El formato sigue el estándar [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/).
+# Changelog
 
----
+Todas las versiones siguen el formato [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/) y este proyecto usa [SemVer](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
-## [0.1.0] - 2025-05-21
-### Agregado
-- Se inicializa el proyecto "Halo of War" con su respectiva documentación.
-## [0.1.0] - 2025-08-3
-### Segunda entrega
-En esta segunda entrega del proyecto se veran los primeros avances del mismo:
-#### Experiencia y funcionalidades
-- Escena de juego:
-Se presenta un mapa donde el jugador aprendera las mecanicas basicas del juego: Moverse (WASD), disparar (click izquierdo) y recoger (E). El jugador posee su HUD donde vera su barra de vida (0/100), el arma que tiene, y la cantidad de objetos que lleva en su inventario.
-- Menu:
-En este, el usuario podra acceder a las opciones de jugar, configuracion y salir. El apartado de jugar dara a elegir al usuario con que personaje jugar y asi dar inicio al gameplay; Configuracion permite el ajuste del volumen del juego (efectos de sonido y musica) y de la resolucion de la pantalla; Salir cierra el juego.
-#### Codigo
-Se encuentra separado y organizado por carpetas donde encontraremos
-- Personajes y entidades:
-Manejo de entidades con el uso de diferentes clases, siendo la principal de todas Entity. Existen otras como son Kratos, MasterChief, Elite, que extienden de LivingEntity; Obstacle, Item, que extienden de StaticEntity.
-- Colisiones:
-Control de colisiones para las balas, los objetos del mapa, items y demas entidades. Esto es con el uso de clases como CollisionSystem, CollisionManager, CollisionHandler.
-- Animaciones:
-Sistema de animaciones usando spritesheets y texture region, aplicando las clases como: AnimationComponent, AnimationRenderer, etc.
-- Audio:
-Manejo de sonidos y musica utilizando las clases de: AudioManager, SoundManager, etc.
-En lineas generales, el codigo se encuentra en su primera etapa de desarrollo, por lo que se proporciona una vista general de este para presentar su contenido inicial.
+### Added
+- Clases base de enemigos (`Enemy`, `EnemyFactory`, lógica de colisiones y matables).
+- Sistema de gestión de escenas en desarrollo para permitir la transición entre diferentes mapas (todo lo que es `FlowManager`, `GameScene`, `CombatZoneScene`, `SafeZoneScene`) esta la estructura básica. De aca para adelante solo es desarrollar cada uno.  
 
+### In Progress
+- Movimiento de enemigos: pendiente implementar el algoritmo completo de desplazamiento.
+- Sistema de escenas: aún se está trabajando en la navegación completa entre diferentes mapas (representados como escenas) del juego.
+
+
+## [0.2.0] - 2025-08-03
+
+### Added
+- Escena de juego donde el jugador puede:
+  - Moverse usando WASD.
+  - Disparar con clic izquierdo.
+  - Recoger objetos con la tecla E.
+- HUD del jugador con barra de vida, arma equipada e inventario.
+- Menú principal con opciones de Jugar, Configuración y Salir.
+- Selector de personaje al iniciar partida (Kratos, MasterChief, Elite).
+- Configuración de volumen y resolución de pantalla.
+- Sistema de colisiones para entidades, ítems y balas.
+- Sistema de animaciones usando spritesheets (`AnimationComponent`, `AnimationRenderer`).
+- Manejo de sonido y música (`AudioManager`, `SoundManager`).
+- Organización del código en carpetas lógicas:
+  - Entidades (`Entity`, `LivingEntity`, `StaticEntity`).
+  - Colisiones (`CollisionManager`, interfaces e implementaciones).
+  - Audio.
+  - Animaciones.
+
+### Notes
+- Esta versión representa la **segunda entrega del proyecto**, enfocada en mostrar las mecánicas principales, estructura del código y base de los sistemas.
+
+### Notes
+- Esta versión representa la **segunda entrega del proyecto**, enfocada en mostrar las mecánicas principales, estructura del código y base de los sistemas.
+
+## [0.1.0] - 2025-05-21
+
+### Added
+- Inicialización del proyecto "Halo of War".
+- Estructura base del repositorio y documentación inicial.
