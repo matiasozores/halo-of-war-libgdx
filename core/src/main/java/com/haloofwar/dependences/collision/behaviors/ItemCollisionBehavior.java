@@ -25,6 +25,8 @@ public class ItemCollisionBehavior implements CollisionVisitor {
 	@Override
 	public void visit(LivingEntity living, Collidable entity) {
 		if(entity instanceof Item item && living instanceof Player player) {
+			item.setInRange(true);
+			
 			if(this.input.isInteract()) {
 				player.addItemToInventory(item);
 				item.kill();

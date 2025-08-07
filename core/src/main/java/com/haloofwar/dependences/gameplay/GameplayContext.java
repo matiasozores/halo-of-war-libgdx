@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.dependences.assets.TextureManager;
 import com.haloofwar.dependences.collision.CollisionManager;
 import com.haloofwar.dependences.input.InputManager;
+import com.haloofwar.entities.players.Player;
 import com.haloofwar.interfaces.Renderable;
 import com.haloofwar.interfaces.Updatable;
 
@@ -11,7 +12,8 @@ public class GameplayContext implements Renderable, Updatable {
 	private final EntityManager entities;
 	private final BulletManager bullets;
 	private final CollisionManager collisions;
-
+	private Player player;
+	
 	public GameplayContext(InputManager input, TextureManager texture) {
 		this.entities = new EntityManager();
 		this.collisions = new CollisionManager(); 
@@ -39,6 +41,16 @@ public class GameplayContext implements Renderable, Updatable {
 	
 	public BulletManager getBullets() {
 		return this.bullets;
+	}
+	
+	public Player getPlayer() {
+		return this.player;
+	}
+	
+	public void setPlayer(Player player) {
+		if(player != null) {
+			this.player = player;
+		}
 	}
 	
 	public void dispose() {

@@ -2,6 +2,7 @@ package com.haloofwar.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.components.animations.AnimationComponent;
+import com.haloofwar.components.movement.FollowPlayerController;
 import com.haloofwar.components.movement.MovementComponent;
 import com.haloofwar.dependences.collision.behaviors.LivingEntityCollisionBehavior;
 import com.haloofwar.entities.components.EntitySoundHandler;
@@ -43,16 +44,20 @@ public abstract class LivingEntity extends Entity implements Updatable {
 
 	@Override
 	public void update(float delta) {
-		if (!this.active) {
-			return;
-		}
+	    if (!this.active) return;
 
-		this.movement.update(delta, this.velocity);
-		this.x = this.movement.getX();
-		this.y = this.movement.getY();
+	    // Actualizamos posición para que el controlador sepa dónde está el enemigo
+	    if (movement.getController() instanceof FollowPlayerController controller) {
+	        controller.updatePosition(this.x, this.y);
+	    }
 
-		this.animation.update(delta, this.movement.getDirectionX(), this.movement.getDirectionY());
+	    this.movement.update(delta, this.velocity);
+	    this.x = this.movement.getX();
+	    this.y = this.movement.getY();
+
+	    this.animation.update(delta, this.movement.getDirectionX(), this.movement.getDirectionY());
 	}
+
 
 	@Override
 	public void render(SpriteBatch batch) {

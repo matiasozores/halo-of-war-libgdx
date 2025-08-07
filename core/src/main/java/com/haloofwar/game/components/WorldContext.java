@@ -18,6 +18,7 @@ public class WorldContext {
 	
 	public WorldContext(Player player, MapRenderer map, GameContext context) {
 		this.gameplay = context.getGameplay();
+		context.getGameplay().setPlayer(player);
 		
 		// El agregado de entidades se debe hacer a partir de SceneType pero por ahora se hace de esta manera
 		this.addEntity(player);	
