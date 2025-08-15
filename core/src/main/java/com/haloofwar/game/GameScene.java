@@ -2,23 +2,26 @@ package com.haloofwar.game;
 
 import com.badlogic.gdx.Screen;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.players.Player;
+import com.haloofwar.ecs.Entity;
 import com.haloofwar.enumerators.game.SceneType;
+import com.haloofwar.factories.HUDFactory;
 import com.haloofwar.game.components.SceneBuilder;
 import com.haloofwar.ui.hud.HUD;
 
 public abstract class GameScene implements Screen {
     protected final GameContext context;
-    protected final Player player;
+    protected final Entity player;
     protected final World world;
     protected final HUD hud;
 	
-    public GameScene(GameContext context, SceneType scene, Player player) {
+    public GameScene(GameContext context, SceneType scene, Entity player) {
         this.context = context;
         this.player = player;
 
         this.world = SceneBuilder.build(scene, context, player);
-        this.hud = new HUD(context, player, player.getType());
+        HUDFactory hudFactory = new HUDFactory(context);
+        this.hud = hudFactory.create();
+        
         
         if(scene.getMusic() != null) {
         	this.context.getAudio().getMusic().play(scene.getMusic());

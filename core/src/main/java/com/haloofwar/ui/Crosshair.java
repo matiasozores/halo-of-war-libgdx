@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.haloofwar.cameras.GameWorldCamera;
 import com.haloofwar.dependences.assets.TextureManager;
-import com.haloofwar.enumerators.entities.behavior.CrosshairType;
+import com.haloofwar.enumerators.entities.CrosshairType;
 
 public class Crosshair {
     private int mouseX, mouseY;

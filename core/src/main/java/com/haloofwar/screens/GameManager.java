@@ -2,7 +2,7 @@ package com.haloofwar.screens;
 
 import com.badlogic.gdx.Screen;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.players.Player;
+import com.haloofwar.ecs.Entity;
 import com.haloofwar.enumerators.game.GameState;
 import com.haloofwar.enumerators.game.SceneType;
 import com.haloofwar.enumerators.game.SoundType;
@@ -10,17 +10,14 @@ import com.haloofwar.game.GameFlowManager;
 
 public class GameManager implements Screen {
 	private final GameContext context;
-	private final Player player;
+	private final Entity player;
 	
 	private final GameFlowManager flowManager;
 	private final PauseMenuScreen pauseMenu;
 	
-	// Cooldown temporal para morir
-	private final int DEATH_COOLDOWN = 30; 
-	private int deathCooldown = this.DEATH_COOLDOWN;
 	// ----------------------------------------------------
 
-	public GameManager(GameContext context, Player player) {
+	public GameManager(GameContext context, Entity player) {
 		this.context = context;
 		this.player = player;
 		
@@ -36,23 +33,7 @@ public class GameManager implements Screen {
 	}
 
 	@Override
-	public void render(float delta) {
-		// Temporal para saber que pasa si el jugador muere
-		if(this.context.getInput().isOpenInventory() && this.deathCooldown <= 0) {
-			this.deathCooldown = this.DEATH_COOLDOWN;
-			this.player.takeDamage(10);
-			
-			if (!this.player.isActive()) {
-				// A futuro cuando se muera el jugador tendriamos que disparar un evento para 
-				// cambiar el estado del juego
-				this.flowManager.setGameState(GameState.GAME_OVER);
-			}
-		} else {
-			this.deathCooldown--;
-		}
-		
-		// ----------------------------------------------------
-		
+	public void render(float delta) {	
 		this.flowManager.update(delta);
 		
 		GameState state = this.flowManager.getGameState();

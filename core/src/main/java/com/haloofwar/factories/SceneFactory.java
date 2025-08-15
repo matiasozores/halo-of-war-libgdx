@@ -1,7 +1,7 @@
 package com.haloofwar.factories;
 
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.players.Player;
+import com.haloofwar.ecs.Entity;
 import com.haloofwar.enumerators.game.SceneType;
 import com.haloofwar.game.GameScene;
 import com.haloofwar.game.safezonescene.Tutorial;
@@ -9,7 +9,7 @@ import com.haloofwar.game.safezonescene.Tutorial;
 public final class SceneFactory {
 	private SceneFactory() {}
 	
-    public static GameScene create(SceneType type, GameContext context, Player player) {
+    public static GameScene create(SceneType type, GameContext context, Entity player) {
         switch (type) {
             case TUTORIAL:
                 return new Tutorial(context, player);

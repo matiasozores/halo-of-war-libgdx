@@ -1,13 +1,12 @@
 package com.haloofwar.game.components;
 
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.dependences.collision.tiled.WorldCollisionInitializer;
-import com.haloofwar.entities.players.Player;
+import com.haloofwar.ecs.Entity;
 import com.haloofwar.enumerators.game.SceneType;
 import com.haloofwar.game.World;
 
 public class SceneBuilder {
-	public static World build(SceneType type, GameContext context, Player player) {
+	public static World build(SceneType type, GameContext context, Entity player) {
 		MapRenderer map = new MapRenderer(type);
 		WorldContext worldContext = new WorldContext(player, map, context);
 	

@@ -1,20 +1,22 @@
 package com.haloofwar.enumerators.entities;
 
-import com.haloofwar.interfaces.EntityDescriptor;
+import com.haloofwar.interfaces.entities.AnimatedEntityDescriptor;
 
-public enum EnemyType implements EntityDescriptor{
-	ELITE("sprites/elite.png", 2, 8);
+public enum EnemyType implements AnimatedEntityDescriptor {
+	ELITE("Elite", "sprites/elite.png", 2, 8);
 
-	private String path;
-	private int idleLength;
-	private int walkLength;
-	
-	private EnemyType(String path, int idleLength, int walkLength) {
+	private final String name;
+	private final String path;
+	private final int idleLength;
+	private final int walkLength;
+
+	private EnemyType(String name, String path, int idleLength, int walkLength) {
+		this.name = name;
 		this.path = path;
 		this.idleLength = idleLength;
 		this.walkLength = walkLength;
 	}
-	
+
 	@Override
 	public String getPath() {
 		return this.path;
@@ -28,5 +30,10 @@ public enum EnemyType implements EntityDescriptor{
 	@Override
 	public int getWalkLength() {
 		return this.walkLength;
+	}
+	
+	@Override
+	public String getName() {
+		return this.name;
 	}
 }

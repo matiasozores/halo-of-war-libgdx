@@ -1,0 +1,55 @@
+package com.haloofwar.ecs.systems.render;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
+import com.haloofwar.ecs.Entity;
+import com.haloofwar.ecs.components.render.CrosshairComponent;
+import com.haloofwar.ecs.systems.BaseSystem;
+
+public class CrosshairSystem extends BaseSystem {
+
+    private final SpriteBatch batch;
+
+    public CrosshairSystem(SpriteBatch batch) {
+        this.batch = batch;
+    }
+
+    @Override
+    public void register(Entity e) {
+        if (e.hasComponent(CrosshairComponent.class)) {
+            super.register(e);
+        }
+    }
+
+    @Override
+    public void update(float delta) {
+        for (Entity entity : this.entities) {
+            CrosshairComponent crosshair = entity.getComponent(CrosshairComponent.class);
+            if (crosshair == null) continue;
+
+            // Actualiza la posición del mouse en el mundo
+            Vector3 mouseWorldPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            crosshair.camera.getOrthographic().unproject(mouseWorldPos);
+
+            crosshair.mouseX = (int) mouseWorldPos.x;
+            crosshair.mouseY = (int) mouseWorldPos.y;
+        }
+    }
+
+    @Override
+    public void render() {
+        for (Entity entity : this.entities) {
+            CrosshairComponent crosshair = entity.getComponent(CrosshairComponent.class);
+            if (crosshair == null) continue;
+
+            this.batch.draw(
+                crosshair.texture,
+                crosshair.mouseX,
+                crosshair.mouseY,
+                crosshair.width,
+                crosshair.height
+            );
+        }
+    }
+}

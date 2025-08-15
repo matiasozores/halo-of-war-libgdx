@@ -4,10 +4,10 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.haloofwar.interfaces.TextureDescriptor;
+import com.haloofwar.interfaces.entities.EntityDescriptor;
 
 public class TextureManager {
-    private final HashMap<TextureDescriptor, Texture> textureMap = new HashMap<>();
+    private final HashMap<EntityDescriptor, Texture> textureMap = new HashMap<>();
     private final Texture placeholderTexture;
 
     public TextureManager() {
@@ -20,7 +20,7 @@ public class TextureManager {
         this.placeholderTexture = placeholder;
 	}
     
-    public void load(TextureDescriptor descriptor) {
+    public void load(EntityDescriptor descriptor) {
         if (!this.textureMap.containsKey(descriptor)) {
             try {
                 Texture texture = new Texture(descriptor.getPath());
@@ -35,7 +35,7 @@ public class TextureManager {
         }
     }
 
-    public Texture get(TextureDescriptor descriptor) {
+    public Texture get(EntityDescriptor descriptor) {
         if (!this.textureMap.containsKey(descriptor)) {
             this.load(descriptor); 
         }
@@ -44,7 +44,7 @@ public class TextureManager {
         return this.textureMap.getOrDefault(descriptor, this.placeholderTexture);
     }
 
-    public void unload(TextureDescriptor descriptor) {
+    public void unload(EntityDescriptor descriptor) {
         Texture texture = this.textureMap.remove(descriptor);
         if (texture != null) {
             texture.dispose();

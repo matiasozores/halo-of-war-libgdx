@@ -1,50 +1,38 @@
 package com.haloofwar.factories;
 
-import com.haloofwar.components.animations.AnimationComponent;
-import com.haloofwar.components.movement.MovementComponent;
-import com.haloofwar.components.movement.PlayerMovementController;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.components.EntitySoundHandler;
-import com.haloofwar.entities.components.EntityStateHandler;
-import com.haloofwar.entities.players.Kratos;
-import com.haloofwar.entities.players.MasterChief;
-import com.haloofwar.entities.players.Player;
+import com.haloofwar.ecs.Entity;
 import com.haloofwar.enumerators.entities.PlayerType;
-import com.haloofwar.ui.Crosshair;
-import com.haloofwar.weapons.Weapon;
+import com.haloofwar.factories.components.ComponentPresets;
+import com.haloofwar.factories.components.EntityBuilder;
+import com.haloofwar.interfaces.entities.EntityDescriptor;
+import com.haloofwar.interfaces.factories.EntityFactory;
 
-public class PlayerFactory {
-	private final GameContext context;
-	
-	public PlayerFactory(GameContext context) {
-		this.context = context;
-	}
-	
-	public Player create(PlayerType type) {
-		// Valor provisiorio de coordenadas en el mapa, hay que reemplazarlos por los valores de spawn del mapa
-		MovementComponent movement = new MovementComponent(new PlayerMovementController(context.getInput()), 100, 100);
-		AnimationComponent animation = new AnimationComponent(type, this.context.getTexture());
-		EntitySoundHandler sound = new EntitySoundHandler(this.context.getAudio().getSound());
-		EntityStateHandler state = new EntityStateHandler(this.context.getGameplay().getCollisions(), this.context.getGameplay().getEntities());
-		
-		final UICrosshairFactory CROSSHAIR_FACTORY = new UICrosshairFactory(this.context);
-		Crosshair crosshair = CROSSHAIR_FACTORY.create(type);
-		
-		final WeaponFactory WEAPON_FACTORY = new WeaponFactory(this.context);
-		Weapon weapon = WEAPON_FACTORY.create(type.getDefaultWeapon());	
-		
-		
-		
-		switch (type) {
-		case KRATOS:
-			return new Kratos(movement, animation, crosshair, weapon, sound, state);
-			
-		case MASTER_CHIEF:
-			return new MasterChief(movement, animation, crosshair, weapon, sound, state);
+public class PlayerFactory implements EntityFactory {
 
-		default:
-			System.out.println("Ha ocurrido un error inesperado al seleccionar un personaje. ERROR 01");
-			return new Kratos(movement, animation, crosshair, weapon, sound, state);
-		}
-	}
+    private final GameContext context;
+
+    public PlayerFactory(GameContext context) {
+        this.context = context;
+    }
+
+    @Override
+    public Entity create(EntityDescriptor type, float x, float y) {
+        if (!(type instanceof PlayerType playerType)) {
+            throw new IllegalArgumentException("Tipo inválido para PlayerFactory");
+        }
+        
+        return new EntityBuilder<>(this.context, playerType)
+                .withComponent(ComponentPresets.defaultTransform(x, y))
+                .withComponent(ComponentPresets.defaultAnimation(playerType, this.context.getTexture()))
+                .withComponent(ComponentPresets.defaultHealth())
+                .withComponent(ComponentPresets.defaultCollision(x, y))
+                .withComponent(ComponentPresets.playerMovement(this.context.getInput()))
+                .withComponent(ComponentPresets.defaultCrosshair(playerType, this.context.getTexture(), this.context.getWorldCamera()))
+                .withComponent(ComponentPresets.defaultName(playerType))
+                .withComponent(ComponentPresets.defaultInventory())
+                .withComponent(ComponentPresets.defaultWeapon(playerType))
+                .withComponent(ComponentPresets.defaultShooter())
+                .build();
+    }
 }

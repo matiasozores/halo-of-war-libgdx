@@ -8,12 +8,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.haloofwar.enumerators.animation.SpriteState;
-import com.haloofwar.interfaces.EntityDescriptor;
+import com.haloofwar.interfaces.entities.AnimatedEntityDescriptor;
 
 public class AnimationSet {
     private final Map<SpriteState, Animation<TextureRegion>> animations = new HashMap<>();
 
-    public AnimationSet(Texture spritesheet, EntityDescriptor descriptor) {
+    public AnimationSet(Texture spritesheet, AnimatedEntityDescriptor descriptor) {
         this.animations.put(SpriteState.IDLE, loadAnimation(spritesheet, 0, descriptor.getIdleLength(), 32, 32, 0.3f));
         this.animations.put(SpriteState.WALK, loadAnimation(spritesheet, 1, descriptor.getWalkLength(), 32, 32, 0.1f));
     }

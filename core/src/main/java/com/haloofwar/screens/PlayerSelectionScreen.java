@@ -2,7 +2,7 @@ package com.haloofwar.screens;
 
 import com.badlogic.gdx.Screen;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.players.Player;
+import com.haloofwar.ecs.Entity;
 import com.haloofwar.enumerators.entities.PlayerType;
 import com.haloofwar.enumerators.game.SoundType;
 import com.haloofwar.factories.PlayerFactory;
@@ -47,7 +47,7 @@ public class PlayerSelectionScreen extends Menu{
 		}
 		
 		PlayerFactory playerFactory = new PlayerFactory(this.context);
-		Player player = playerFactory.create(typeChoice);
+		Entity player = playerFactory.create(typeChoice, 200, 200);
 		
 		this.context.getAudio().getSound().play(SoundType.LOAD_GAME);
 		this.context.getAudio().getMusic().stop();

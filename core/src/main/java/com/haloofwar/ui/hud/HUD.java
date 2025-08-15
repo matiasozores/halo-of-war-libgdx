@@ -1,39 +1,44 @@
 package com.haloofwar.ui.hud;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.haloofwar.cameras.GameStaticCamera;
-import com.haloofwar.dependences.GameContext;
-import com.haloofwar.entities.players.Player;
-import com.haloofwar.enumerators.entities.PlayerType;
+import com.haloofwar.ui.hud.components.HealthBar;
+import com.haloofwar.ui.hud.components.InventoryRenderer;
+import com.haloofwar.ui.hud.components.PlayerInfoRenderer;
 
 public class HUD {
+	
+	// Dependencias
     private final GameStaticCamera camera;
     private final SpriteBatch batch;
-    private final ShapeRenderer shape;
     
-    private final HealthBar healthBar;
-    private final PlayerInfoRenderer playerInfoRenderer;
-    private final InventoryRenderer inventoryRenderer;
+    // Componentes
+    private final HealthBar health;
+    private final PlayerInfoRenderer info;
+    private final InventoryRenderer inventory;
     
-    public HUD(GameContext context, Player player, PlayerType type) {
-        this.camera = new GameStaticCamera();
-        this.batch = context.getRender().getBatch();
-        this.shape = new ShapeRenderer();
-        
-        this.healthBar = new HealthBar(this.shape, player, this.camera);
-        this.playerInfoRenderer = new PlayerInfoRenderer(this.batch, context, player);
-        this.inventoryRenderer = new InventoryRenderer(this.batch, player, context.getRender().getFont());
+    public HUD(
+    	GameStaticCamera camera,
+    	SpriteBatch batch,
+		HealthBar health,
+		PlayerInfoRenderer info,
+		InventoryRenderer inventory
+    ) {
+    	this.camera = camera;
+    	this.batch = batch;
+    	this.health = health;
+    	this.info = info;
+    	this.inventory = inventory;
     }
     
     public void render() {
         this.camera.update();
-        this.healthBar.render();
+        this.health.render();
 
         this.batch.setProjectionMatrix(this.camera.getOrthographic().combined);
         this.batch.begin();
-        this.playerInfoRenderer.render();
-        this.inventoryRenderer.render();
+        this.info.render();
+        this.inventory.render();
         this.batch.end();
     }
     
