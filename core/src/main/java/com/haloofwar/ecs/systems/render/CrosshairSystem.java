@@ -26,7 +26,9 @@ public class CrosshairSystem extends BaseSystem {
     public void update(float delta) {
         for (Entity entity : this.entities) {
             CrosshairComponent crosshair = entity.getComponent(CrosshairComponent.class);
-            if (crosshair == null) continue;
+            if (crosshair == null) {
+            	continue;
+            }
 
             // Actualiza la posición del mouse en el mundo
             Vector3 mouseWorldPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import com.haloofwar.ecs.Entity;
 import com.haloofwar.ecs.components.collision.CollisionComponent;
 import com.haloofwar.ecs.components.physics.TransformComponent;
-import com.haloofwar.ecs.events.CollisionEvent;
 import com.haloofwar.ecs.events.EventBus;
-import com.haloofwar.ecs.systems.ECSSystem;
+import com.haloofwar.ecs.events.types.CollisionEvent;
+import com.haloofwar.ecs.systems.EntitySystemInterface;
 
-public class CollisionSystem implements ECSSystem {
+public class CollisionSystem implements EntitySystemInterface {
 
 	private final EventBus bus;
 	private final ArrayList<Entity> collidables = new ArrayList<>();
@@ -45,7 +45,7 @@ public class CollisionSystem implements ECSSystem {
 			if (!collisionA.active || transformA == null) {
 				continue;
 			}
-			collisionA.setPosition(transformA.x, transformA.y);
+			collisionA.syncWithTransform(transformA);
 
 			for (int j = i + 1; j < size; j++) {
 				Entity entityB = snapshot.get(j);
@@ -55,7 +55,7 @@ public class CollisionSystem implements ECSSystem {
 				if (!collisionB.active || transformB == null) {
 					continue;
 				}
-				collisionB.setPosition(transformB.x, transformB.y);
+				collisionB.syncWithTransform(transformB);
 
 				if (collisionA.bounds.overlaps(collisionB.bounds)) {
 					this.bus.publish(new CollisionEvent(entityA, entityB));

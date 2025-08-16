@@ -147,14 +147,14 @@
 </data>
  </layer>
  <objectgroup id="2" name="collision">
-  <object id="15" x="64" y="1.33333" width="822.667" height="76"/>
-  <object id="16" x="909.667" y="0.666667" width="49" height="543.333"/>
-  <object id="18" x="62.6667" y="550.667" width="896" height="88"/>
-  <object id="19" x="-1.33333" y="-1.33333" width="53.3333" height="638.667"/>
+  <object id="15" x="64" y="1.33333" width="841.667" height="76"/>
+  <object id="16" x="900.667" y="0.666667" width="58" height="543.333"/>
+  <object id="18" x="62.6667" y="541.667" width="896" height="97"/>
+  <object id="19" x="-1.33333" y="-1.33333" width="64.3333" height="638.667"/>
   <object id="56" x="160" y="127" width="29" height="29"/>
   <object id="57" x="73" y="144" width="78" height="100"/>
   <object id="58" x="201" y="207" width="77" height="100"/>
-  <object id="59" x="130" y="287.667" width="67.3333" height="81.3333"/>
+  <object id="59" x="130" y="273.667" width="85.3333" height="95.3333"/>
   <object id="60" x="221" y="321" width="33" height="63"/>
   <object id="61" x="104" y="358" width="16" height="22"/>
   <object id="62" x="130" y="480" width="26" height="26"/>

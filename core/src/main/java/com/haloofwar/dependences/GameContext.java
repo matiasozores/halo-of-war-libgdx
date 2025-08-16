@@ -24,19 +24,25 @@ public class GameContext {
 	private final GameWorldCamera worldCamera;
 
 	private final GameplayContext gameplay;
+	private final EventBus bus;
 
 	public GameContext(HaloOfWarPrincipal game) {
 		this.game = game;
 		this.texture = new TextureManager();
 		this.audio = new AudioManager();
 		this.render = new RenderContext();
-		this.input = new InputManager();
+
 
 		this.staticCamera = new GameStaticCamera();
 		this.worldCamera = new GameWorldCamera();
 
+		// Por ahora un solo bus, la idea a mas adelante es tener uno global y uno por escena para evitar
+		// que todo este en un solo bus y que a medida que vayan pasando las escenas queden algunos listeners inutilizables
+		this.bus = new EventBus();
+		this.input = new InputManager(this.bus);
+		
 		this.gameplay = new GameplayContext(this.render.getBatch(), this.input, this.audio.getSound(), this.texture,
-				new EventBus());
+				this.bus);
 	}
 
 	public HaloOfWarPrincipal getGame() {
@@ -67,6 +73,12 @@ public class GameContext {
 
 	public GameWorldCamera getWorldCamera() {
 		return this.worldCamera;
+	}
+	
+	// Eventos 
+	
+	public EventBus getBus() {
+		return this.bus;
 	}
 
 	public void dispose() {

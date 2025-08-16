@@ -2,6 +2,7 @@ package com.haloofwar.game;
 
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.ecs.Entity;
+import com.haloofwar.ecs.events.types.PlayerDiedEvent;
 import com.haloofwar.enumerators.game.GameState;
 import com.haloofwar.enumerators.game.SceneType;
 import com.haloofwar.factories.SceneFactory;
@@ -13,6 +14,7 @@ public class GameFlowManager {
 	
 	public GameFlowManager(GameContext context) {
 		this.context = context;
+		this.context.getBus().subscribe(PlayerDiedEvent.class, this::onPlayerDied);
 	}
 	
 	public void startGame(Entity player, SceneType initialScene) {
@@ -47,13 +49,19 @@ public class GameFlowManager {
 		}
 	}
 
-
-	
 	public void render(float delta) {
 		if(this.currentScene != null) {
 			this.currentScene.render(delta);
 		}
 	}
+	
+	// evento de cuando muere el jugador
+	
+    private void onPlayerDied(PlayerDiedEvent event) {
+    	System.out.println("Ejecutando evento de muerte");
+        this.setGameState(GameState.GAME_OVER);
+        this.context.getAudio().getMusic().stop();
+    }
 	
 	public void setGameState(GameState state) {
 		this.currentState = state;

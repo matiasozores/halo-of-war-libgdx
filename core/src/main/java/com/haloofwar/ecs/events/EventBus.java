@@ -1,38 +1,39 @@
 package com.haloofwar.ecs.events;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class EventBus {
     private final Map<Class<?>, List<Consumer<?>>> listeners = new HashMap<>();
 
-    /** Suscribe un listener a un tipo de evento específico */
     public <T> void subscribe(Class<T> eventType, Consumer<T> listener) {
         if (eventType == null || listener == null) {
         	return;
         }
-        listeners.computeIfAbsent(eventType, k -> new ArrayList<>()).add(listener);
+        
+        this.listeners.computeIfAbsent(eventType, k -> new ArrayList<>()).add(listener);
     }
 
-    /** Desuscribe un listener de un tipo de evento */
     public <T> void unsubscribe(Class<T> eventType, Consumer<T> listener) {
-        List<Consumer<?>> list = listeners.get(eventType);
+        List<Consumer<?>> list = this.listeners.get(eventType);
         if (list != null) {
             list.remove(listener);
             if (list.isEmpty()) {
-                listeners.remove(eventType);
+                this.listeners.remove(eventType);
             }
         }
     }
 
-    /** Publica un evento a todos los listeners correspondientes */
     public <T> void publish(T event) {
         if (event == null) return;
 
         Class<?> eventClass = event.getClass();
 
         // Filtrar solo los listeners que aplican a este tipo de evento
-        listeners.entrySet().stream()
+        this.listeners.entrySet().stream()
             .filter(entry -> entry.getKey().isAssignableFrom(eventClass))
             .forEach(entry -> notifyListeners(entry.getKey(), entry.getValue(), event));
     }
@@ -50,9 +51,7 @@ public class EventBus {
         }
     }
 
-
-    /** Limpia todos los listeners */
     public void clear() {
-        listeners.clear();
+        this.listeners.clear();
     }
 }

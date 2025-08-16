@@ -42,7 +42,7 @@ public class PlayerInfoRenderer {
     }
     
     public void render() {
-        final String HP_TEXT = (int) this.health.currentHealth + "/" + this.health.maxHealth;
+        final String HP_TEXT = (int) this.health.getCurrentHealth() + "/" + this.health.getMaxHealth();
         this.smallFont.draw(this.batch, HP_TEXT, x + 80 + 100, y + 20);
 
         this.titleFont.draw(this.batch, this.nameComponent.name, x + 80, y + 70);

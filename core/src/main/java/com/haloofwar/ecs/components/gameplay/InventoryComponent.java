@@ -10,7 +10,6 @@ public class InventoryComponent implements Component{
 	private ArrayList<Entity> objects = new ArrayList<Entity>();
 	
 	public void add(Entity entity) {
-		System.out.println("Agregando item");
 		if(!entity.hasComponent(NameComponent.class) || !entity.hasComponent(PickupComponent.class)) {
 			return;
 		}
@@ -19,7 +18,6 @@ public class InventoryComponent implements Component{
 		
 		if(this.objects.size() == 0) {
 			this.objects.add(entity);
-			System.out.println("Se ha agregado un item al inventario");
 		} else {
 			int i = 0;
 			boolean found = false;
@@ -38,10 +36,8 @@ public class InventoryComponent implements Component{
 			
 			if(found) {
 				this.objects.get(index).getComponent(PickupComponent.class).affectStock(1);
-				System.out.println("Se ha agregado un item que ya existia al inventario");
 			} else {
 				this.objects.add(entity);
-				System.out.println("Se ha agregado un item al inventario");
 			}
 		}
 	}

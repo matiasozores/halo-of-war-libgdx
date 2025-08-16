@@ -22,17 +22,17 @@ public class PlayerFactory implements EntityFactory {
             throw new IllegalArgumentException("Tipo inválido para PlayerFactory");
         }
         
-        return new EntityBuilder<>(this.context, playerType)
+        return new EntityBuilder<>(this.context)
                 .withComponent(ComponentPresets.defaultTransform(x, y))
                 .withComponent(ComponentPresets.defaultAnimation(playerType, this.context.getTexture()))
                 .withComponent(ComponentPresets.defaultHealth())
                 .withComponent(ComponentPresets.defaultCollision(x, y))
-                .withComponent(ComponentPresets.playerMovement(this.context.getInput()))
+                .withComponent(ComponentPresets.playerMovement(this.context.getBus()))
                 .withComponent(ComponentPresets.defaultCrosshair(playerType, this.context.getTexture(), this.context.getWorldCamera()))
                 .withComponent(ComponentPresets.defaultName(playerType))
                 .withComponent(ComponentPresets.defaultInventory())
                 .withComponent(ComponentPresets.defaultWeapon(playerType))
-                .withComponent(ComponentPresets.defaultShooter())
+                .withComponent(ComponentPresets.defaultPlayer())
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-package com.haloofwar.components.animations;
+package com.haloofwar.ecs.components.render.animations;
 
 import java.util.HashMap;
 import java.util.Map;

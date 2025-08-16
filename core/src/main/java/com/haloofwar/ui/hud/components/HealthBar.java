@@ -31,7 +31,8 @@ public class HealthBar {
     }
     
     public void render() {
-        float HP_PERCENTAGE = Math.max(0, this.health.currentHealth / this.health.maxHealth);
+        float HP_PERCENTAGE = Math.max(0, this.health.getCurrentHealth() / (float) this.health.getMaxHealth());
+        
         
         this.shape.setProjectionMatrix(this.camera.getOrthographic().combined);
         this.shape.begin(ShapeRenderer.ShapeType.Filled);

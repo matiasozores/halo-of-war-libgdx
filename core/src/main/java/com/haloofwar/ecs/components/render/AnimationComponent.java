@@ -2,10 +2,10 @@ package com.haloofwar.ecs.components.render;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.haloofwar.components.animations.AnimationSet;
-import com.haloofwar.components.animations.AnimationStateController;
 import com.haloofwar.dependences.assets.TextureManager;
 import com.haloofwar.ecs.components.Component;
+import com.haloofwar.ecs.components.render.animations.AnimationSet;
+import com.haloofwar.ecs.components.render.animations.AnimationStateController;
 import com.haloofwar.interfaces.entities.AnimatedEntityDescriptor;
 
 public class AnimationComponent implements Component {
@@ -19,12 +19,10 @@ public class AnimationComponent implements Component {
         this.stateController = new AnimationStateController(this.animationSet);
     }
 
-    // Actualiza el estado interno de la animación
     public void update(float delta, float dirX, float dirY) {
         this.stateController.update(delta, dirX, dirY);
     }
-
-    // Solo getters: el sistema de render se encargará de dibujar
+    
     public TextureRegion getCurrentFrame() {
         return this.stateController.getCurrentFrame();
     }

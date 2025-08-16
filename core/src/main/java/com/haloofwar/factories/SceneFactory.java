@@ -9,6 +9,7 @@ import com.haloofwar.game.safezonescene.Tutorial;
 public final class SceneFactory {
 	private SceneFactory() {}
 	
+	// Luego se mejorara para no utilizar switch
     public static GameScene create(SceneType type, GameContext context, Entity player) {
         switch (type) {
             case TUTORIAL:

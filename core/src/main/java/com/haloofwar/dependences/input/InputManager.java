@@ -2,10 +2,20 @@ package com.haloofwar.dependences.input;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.haloofwar.ecs.events.EventBus;
+import com.haloofwar.ecs.events.types.input.AttackEvent;
+import com.haloofwar.ecs.events.types.input.InteractEvent;
+import com.haloofwar.ecs.events.types.input.MoveEvent;
+import com.haloofwar.enumerators.events.Direction;
 
 public class InputManager implements InputProcessor {
 
-	private boolean moveUp, moveDown, moveLeft, moveRight;
+	private final EventBus bus;
+	
+	public InputManager(EventBus bus) {
+		this.bus = bus;
+	}
+	
 	private boolean arrowUp, arrowDown, arrowLeft, arrowRight;
 	private boolean enter, escape;
 	
@@ -15,11 +25,11 @@ public class InputManager implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
-	        case Input.Keys.W: this.moveUp = true; break;
-	        case Input.Keys.S: this.moveDown = true; break;
-	        case Input.Keys.A: this.moveLeft = true; break;
-	        case Input.Keys.D: this.moveRight = true; break;
-	        case Input.Keys.E: this.interact = true; break;
+			case Input.Keys.W: bus.publish(new MoveEvent(Direction.UP, true)); break;
+			case Input.Keys.S: bus.publish(new MoveEvent(Direction.DOWN, true)); break;
+			case Input.Keys.A: bus.publish(new MoveEvent(Direction.LEFT, true)); break;
+			case Input.Keys.D: bus.publish(new MoveEvent(Direction.RIGHT, true)); break;
+	        case Input.Keys.E: bus.publish(new InteractEvent(true)); break;
 	        case Input.Keys.I: this.openInventory = true; break;
 	        case Input.Keys.ESCAPE: this.escape = true; break;
 	        case Input.Keys.UP: this.arrowUp = true; break;
@@ -35,11 +45,11 @@ public class InputManager implements InputProcessor {
 	@Override
 	public boolean keyUp(int keycode) {
 		switch (keycode) {
-	        case Input.Keys.W: this.moveUp = false; break;
-	        case Input.Keys.S: this.moveDown = false; break;
-	        case Input.Keys.A: this.moveLeft = false; break;
-	        case Input.Keys.D: this.moveRight = false; break;
-	        case Input.Keys.E: this.interact = false; break;
+			case Input.Keys.W: bus.publish(new MoveEvent(Direction.UP, false)); break;
+			case Input.Keys.S: bus.publish(new MoveEvent(Direction.DOWN, false)); break;
+			case Input.Keys.A: bus.publish(new MoveEvent(Direction.LEFT, false)); break;
+			case Input.Keys.D: bus.publish(new MoveEvent(Direction.RIGHT, false)); break;
+	        case Input.Keys.E: bus.publish(new InteractEvent(false)); break;
 	        case Input.Keys.I: this.openInventory = false; break;
 	        case Input.Keys.ESCAPE: this.escape = false; break;
 	        case Input.Keys.UP: this.arrowUp = false; break;
@@ -55,7 +65,7 @@ public class InputManager implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		 if (button == Input.Buttons.LEFT) {
-			 this.attack = true;
+			 this.bus.publish(new AttackEvent(true));
 	     }
 		 
 		return true;
@@ -64,7 +74,7 @@ public class InputManager implements InputProcessor {
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if (button == Input.Buttons.LEFT) {
-			this.attack = false;
+			this.bus.publish(new AttackEvent(false));
 		}
 		
 		return true;
@@ -84,26 +94,6 @@ public class InputManager implements InputProcessor {
 	
 
 	// Getters
-	
-	public boolean isMoving() {
-	    return (this.moveDown || this.moveUp || this.moveLeft || this.moveRight);
-	}
-	
-	public boolean isMoveUp() {
-		return this.moveUp;
-	}
-	
-	public boolean isMoveDown() {
-		return this.moveDown;
-	}
-	
-	public boolean isMoveLeft() {
-		return this.moveLeft;
-	}
-	
-	public boolean isMoveRight() {
-		return this.moveRight;
-	}
 	
 	public boolean isArrowUp() {
 		return this.arrowUp;

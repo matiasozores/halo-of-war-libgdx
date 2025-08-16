@@ -1,26 +1,21 @@
 package com.haloofwar.ecs.systems.gameplay;
 
-import com.haloofwar.dependences.input.InputManager;
 import com.haloofwar.ecs.Entity;
+import com.haloofwar.ecs.components.collision.PlayerComponent;
 import com.haloofwar.ecs.components.gameplay.WeaponComponent;
 import com.haloofwar.ecs.components.physics.TransformComponent;
 import com.haloofwar.ecs.components.render.CrosshairComponent;
 import com.haloofwar.ecs.events.EventBus;
-import com.haloofwar.ecs.events.types.PlaySoundEvent;
+import com.haloofwar.ecs.events.types.ShootBulletEvent;
+import com.haloofwar.ecs.events.types.input.AttackEvent;
 import com.haloofwar.ecs.systems.BaseSystem;
-import com.haloofwar.ecs.systems.physics.BulletSystem;
-import com.haloofwar.enumerators.game.SoundType;
 
 public class WeaponSystem extends BaseSystem {
-
-    private final InputManager input;
-    private final BulletSystem bulletSystem;
-    private final EventBus bus;
+    private EventBus bus;
     
-    public WeaponSystem(InputManager input, BulletSystem bulletSystem, EventBus bus) {
-        this.input = input;
-        this.bulletSystem = bulletSystem;
+    public WeaponSystem(EventBus bus) {
         this.bus = bus;
+        this.bus.subscribe(AttackEvent.class, this::onAttack);
     }
 
     @Override
@@ -41,11 +36,12 @@ public class WeaponSystem extends BaseSystem {
 
             this.updateCooldown(weapon, delta);
 
-            if (weapon.isReady && this.input.isAttack()) {
+            if (weapon.isReady && weapon.wantsToFire) {
                 this.fireBullet(entity, weapon, transform, crosshair);
             }
         }
     }
+
     
     private void updateCooldown(WeaponComponent weapon, float delta) {
         if (!weapon.isReady) {
@@ -66,18 +62,33 @@ public class WeaponSystem extends BaseSystem {
         float dirX = dx / length;
         float dirY = dy / length;
 
-        float offset = 45f; // cambiar a futuro para algo mas sensato
+        float offset = 45f; // cambiar a futuro para no dejar en numeros magicos
         float bulletX = transform.x + dirX * offset;
         float bulletY = transform.y + dirY * offset;
 
-        this.bulletSystem.spawnBullet(
-            bulletX, bulletY, dirX, dirY, weapon.damage, weapon.speed
-        );
+        
+        ShootBulletEvent bullet = new ShootBulletEvent(bulletX, bulletY, dirX, dirY, weapon.damage, weapon.speed);
+        this.bus.publish(bullet);
+     
 
         weapon.isReady = false;
         weapon.currentCooldown = weapon.cooldown;
     
-        this.bus.publish(new PlaySoundEvent(SoundType.SHOOT_ASSAULT_RIFLE));
+    }
+    
+    /*
+     * En realidad hay que crear un sistema de armas dividido para que 
+     * uno pueda tener en cuenta el input del jugador y el otro que sea para los enemigos
+     * 
+     * */
+
+    private void onAttack(AttackEvent event) {
+        for (Entity e : this.entities) {
+            if (e.hasComponent(PlayerComponent.class)) { 
+                WeaponComponent weapon = e.getComponent(WeaponComponent.class);
+                weapon.wantsToFire = event.isPressed();
+            }
+        }
     }
 
 }

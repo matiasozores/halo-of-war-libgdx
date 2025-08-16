@@ -20,14 +20,15 @@ public class MovementSystem extends BaseSystem {
             MovementComponent movement = entity.getComponent(MovementComponent.class);
             TransformComponent transform = entity.getComponent(TransformComponent.class);
 
-            if (movement == null || transform == null) continue;
-
-            float dirX = movement.controller.getDirectionX();
-            float dirY = movement.controller.getDirectionY();
-
-            // Guardar la posición anterior
+            if (movement == null || transform == null) {
+            	continue;
+            }
+            
             movement.lastX = transform.x;
             movement.lastY = transform.y;
+            
+            float dirX = movement.controller.getDirectionX();
+            float dirY = movement.controller.getDirectionY();
 
             // Mover
             transform.x += dirX * movement.speed * delta;

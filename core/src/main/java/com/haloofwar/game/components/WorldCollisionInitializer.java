@@ -43,7 +43,7 @@ public class WorldCollisionInitializer {
                     default:
                         entity = new Entity();
                         entity.addComponent(new TransformComponent(rect.x, rect.y, rect.width, rect.height));
-                        entity.addComponent(new CollisionComponent(new Rectangle(rect.x, rect.y, rect.width, rect.height)));
+                        entity.addComponent(new CollisionComponent(rect.width, rect.height));
                         break;
                 }
 

@@ -1,4 +1,4 @@
-package com.haloofwar.components.animations;
+package com.haloofwar.ecs.components.render.animations;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

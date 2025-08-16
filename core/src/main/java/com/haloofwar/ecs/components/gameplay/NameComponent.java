@@ -8,5 +8,4 @@ public class NameComponent implements Component{
 	public NameComponent(String name) {
 		this.name = name;
 	}
-
 }

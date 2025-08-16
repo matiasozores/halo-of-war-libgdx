@@ -1,13 +1,13 @@
-package com.haloofwar.ecs.events;
+package com.haloofwar.ecs.events.types;
 
 import com.haloofwar.ecs.Entity;
 
 public class CollisionEvent {
-    public final Entity a;
-    public final Entity b;
+    public final Entity a, b;
 
     public CollisionEvent(Entity a, Entity b) {
         this.a = a;
         this.b = b;
     }
 }
+

@@ -1,9 +1,15 @@
-// ECS Component
 package com.haloofwar.ecs.components.render;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.haloofwar.cameras.GameWorldCamera;
 import com.haloofwar.ecs.components.Component;
+
+/*
+ * Hubo discusiones mentales si tratar al crosshair como una entidad o componente, por simplicidad se decidio
+ * dejar como componente, lo malo es que esta como utilizando los atributos de un Transform y Render component 
+ * pero es lo mas simple y directo por ahora
+ * 
+ * */
 
 public class CrosshairComponent implements Component {
     public int mouseX = 0;

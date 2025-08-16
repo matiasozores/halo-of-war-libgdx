@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.haloofwar.ecs.Entity;
 
-public abstract class BaseSystem implements ECSSystem {
+public abstract class BaseSystem implements EntitySystemInterface {
 
     protected final ArrayList<Entity> entities = new ArrayList<>();
 

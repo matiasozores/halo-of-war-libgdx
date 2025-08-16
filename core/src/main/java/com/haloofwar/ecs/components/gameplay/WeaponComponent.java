@@ -9,6 +9,9 @@ public class WeaponComponent implements Component {
     public int cooldown;
     public boolean isReady = true;
 
+    // Temporal
+    public boolean wantsToFire = false;
+    
     // Posibles dependencias
     public int currentCooldown = 0;
 

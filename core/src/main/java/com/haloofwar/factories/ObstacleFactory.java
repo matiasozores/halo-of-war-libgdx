@@ -10,8 +10,9 @@ public class ObstacleFactory {
     public static Entity createObstacle(Rectangle rect) {
         return new EntityBuilder<>()
                 .withComponent(ComponentPresets.defaultTransform(rect.x, rect.y, rect.width, rect.height))
-                .withComponent(ComponentPresets.defaultCollision(rect.x, rect.y, rect.width, rect.height))
+                .withComponent(ComponentPresets.defaultCollision(rect.width, rect.height))
                 .withComponent(ComponentPresets.defaultObstacle())
+                .withComponent(ComponentPresets.defaultShape(rect.x, rect.y, rect.width, rect.height))
                 .build();
     }
 }
