@@ -11,6 +11,19 @@ Todas las versiones siguen el formato [Keep a Changelog](https://keepachangelog.
 ### In Progress
 - Movimiento de enemigos: pendiente implementar la lógica completa de desplazamiento de entidades que no sean el jugador dentro del ECS.
 - Sistema de escenas: aún se está trabajando en la navegación completa entre diferentes mapas (representados como escenas) del juego.
+  
+### Areas of improvement
+- Animaciones: Actualmente poca flexibilidad; agregar un tipo nuevo de animación requiere modificar varias clases.
+- EventBus: Problemas de escalabilidad; necesita revisión para manejar grandes cantidades de eventos y listeners.
+- CollisionSystem: Bucles anidados poco eficientes con muchas entidades; se podría reemplazar por una **spatial grid**.
+- BulletSystem: Actualmente se encarga de crear las balas en vez de tratarlas como entidades independientes.
+- CrosshairSystem: No se trata como entidad individual; mezcla responsabilidades como renderizado y actualización del mouse de forma agresiva.
+- HUDFactory: Mientras más componentes tenga, mayor complejidad; poca escalabilidad.
+- SceneFactory: Uso de `switch` limita la escalabilidad al agregar nuevas escenas.
+- WeaponSystem: Mal funcionamiento si hay enemigos con armas.
+- Gestión de música: Debería manejarse mediante eventos para un mejor desacoplamiento.
+- Convenciones de escritura: Falta cambiar a mayúscula algunas constantes que por despistado se olvido cambiar.
+- Componentes de ECS: Por facilidad pusimos en public muchos atributos de los componentes ademas que es un estándar pero por argumentos de la materia se puede considerar cambiar esto si se llama la atención.
 
 ## [0.3.0] - 2025-08-17
 
