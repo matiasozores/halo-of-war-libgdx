@@ -3,6 +3,7 @@ package com.haloofwar.ecs.systems.collision;
 import com.haloofwar.ecs.Entity;
 import com.haloofwar.ecs.components.collision.ObstacleComponent;
 import com.haloofwar.ecs.components.physics.MovementComponent;
+import com.haloofwar.ecs.components.physics.TransformComponent;
 import com.haloofwar.ecs.events.EventBus;
 import com.haloofwar.ecs.events.types.CollisionEvent;
 import com.haloofwar.ecs.systems.EntitySystemInterface;
@@ -23,9 +24,45 @@ public class ObstacleSystem implements EntitySystemInterface {
             this.blockMovement(entityB, entityA);
         }
     }
-  
+
     private void blockMovement(Entity movingEntity, Entity obstacleEntity) {
-    	System.out.println("Bloqueando movimiento");
+        TransformComponent transform = movingEntity.getComponent(TransformComponent.class);
+        MovementComponent movement = movingEntity.getComponent(MovementComponent.class);
+
+        if (transform == null || movement == null) {
+        	return;
+        }
+
+        float originalX = transform.x;
+        float originalY = transform.y;
+
+        transform.x = originalX;
+        transform.y = movement.lastY;
+        if (this.collides(movingEntity, obstacleEntity)) {
+            transform.x = movement.lastX;
+        }
+
+        transform.x = transform.x;
+        transform.y = originalY;
+        if (this.collides(movingEntity, obstacleEntity)) {
+            transform.y = movement.lastY;
+        }
     }
+
+    
+    private boolean collides(Entity a, Entity b) {
+        TransformComponent transformA = a.getComponent(TransformComponent.class);
+        TransformComponent transformB = b.getComponent(TransformComponent.class);
+
+        if (transformA == null || transformB == null) {
+            return false; // si alguno no tiene transform, no puede colisionar
+        }
+
+        boolean overlapX = transformA.x < transformB.x + transformB.width && transformA.x + transformA.width > transformB.x;
+        boolean overlapY = transformA.y < transformB.y + transformB.height && transformA.y + transformA.height > transformB.y;
+
+        return overlapX && overlapY;
+    }
+
 
 }

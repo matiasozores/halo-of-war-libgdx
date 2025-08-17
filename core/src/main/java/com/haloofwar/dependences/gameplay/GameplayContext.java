@@ -27,7 +27,7 @@ import com.haloofwar.ecs.systems.render.RenderSystem;
 import com.haloofwar.ecs.systems.render.ShapeSystem;
 
 public class GameplayContext {
-	private static boolean DEBUG_MODE = true;
+	private static boolean DEBUG_MODE = false;
 	
     private final EntitySystem entities;
     private Entity player;
