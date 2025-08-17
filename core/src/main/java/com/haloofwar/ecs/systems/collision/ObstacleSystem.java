@@ -5,10 +5,10 @@ import com.haloofwar.ecs.components.collision.ObstacleComponent;
 import com.haloofwar.ecs.components.physics.MovementComponent;
 import com.haloofwar.ecs.components.physics.TransformComponent;
 import com.haloofwar.ecs.events.EventBus;
-import com.haloofwar.ecs.events.types.CollisionEvent;
-import com.haloofwar.ecs.systems.EntitySystemInterface;
+import com.haloofwar.ecs.events.types.collision.CollisionEvent;
+import com.haloofwar.interfaces.systems.Registrable;
 
-public class ObstacleSystem implements EntitySystemInterface {
+public class ObstacleSystem implements Registrable {
 
     public ObstacleSystem(EventBus bus) {
         bus.subscribe(CollisionEvent.class, this::onCollision);
@@ -63,6 +63,18 @@ public class ObstacleSystem implements EntitySystemInterface {
 
         return overlapX && overlapY;
     }
+
+	@Override
+	public void register(Entity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregister(Entity entity) {
+		// TODO Auto-generated method stub
+		
+	}
 
 
 }

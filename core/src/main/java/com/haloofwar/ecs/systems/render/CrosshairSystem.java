@@ -6,8 +6,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.haloofwar.ecs.Entity;
 import com.haloofwar.ecs.components.render.CrosshairComponent;
 import com.haloofwar.ecs.systems.BaseSystem;
+import com.haloofwar.interfaces.systems.Renderable;
+import com.haloofwar.interfaces.systems.Updatable;
 
-public class CrosshairSystem extends BaseSystem {
+public class CrosshairSystem extends BaseSystem implements Updatable, Renderable {
 
     private final SpriteBatch batch;
 
@@ -30,7 +32,6 @@ public class CrosshairSystem extends BaseSystem {
             	continue;
             }
 
-            // Actualiza la posición del mouse en el mundo
             Vector3 mouseWorldPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             crosshair.camera.getOrthographic().unproject(mouseWorldPos);
 

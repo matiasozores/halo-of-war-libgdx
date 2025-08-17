@@ -52,7 +52,6 @@ public class TextureManager {
     }
     
     public void dispose() {
-    	System.out.println("Liberando recursos del TextureManager");
         for (Texture texture : this.textureMap.values()) {
         	texture.dispose();
         }

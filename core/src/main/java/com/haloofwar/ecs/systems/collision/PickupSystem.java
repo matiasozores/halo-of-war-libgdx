@@ -1,14 +1,15 @@
 package com.haloofwar.ecs.systems.collision;
 
+import com.haloofwar.ecs.Entity;
 import com.haloofwar.ecs.components.collision.PickupComponent;
 import com.haloofwar.ecs.components.gameplay.InventoryComponent;
 import com.haloofwar.ecs.events.EventBus;
-import com.haloofwar.ecs.events.types.CollisionEvent;
-import com.haloofwar.ecs.events.types.ItemPickedUpEvent;
+import com.haloofwar.ecs.events.types.collision.CollisionEvent;
 import com.haloofwar.ecs.events.types.input.InteractEvent;
-import com.haloofwar.ecs.systems.EntitySystemInterface;
+import com.haloofwar.ecs.events.types.items.ItemPickedUpEvent;
+import com.haloofwar.interfaces.systems.Registrable;
 
-public class PickupSystem implements EntitySystemInterface{
+public class PickupSystem implements Registrable{
 	private final EventBus bus;
 	private boolean interacting = false;
 	
@@ -34,5 +35,17 @@ public class PickupSystem implements EntitySystemInterface{
 	
 	private void onInteract(InteractEvent event) {
 		this.interacting = event.isPressed();
+	}
+
+	@Override
+	public void register(Entity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregister(Entity entity) {
+		// TODO Auto-generated method stub
+		
 	}
 }

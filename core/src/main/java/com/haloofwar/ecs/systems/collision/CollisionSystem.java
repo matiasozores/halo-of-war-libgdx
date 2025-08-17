@@ -6,14 +6,14 @@ import com.haloofwar.ecs.Entity;
 import com.haloofwar.ecs.components.collision.CollisionComponent;
 import com.haloofwar.ecs.components.physics.TransformComponent;
 import com.haloofwar.ecs.events.EventBus;
-import com.haloofwar.ecs.events.types.CollisionEvent;
-import com.haloofwar.ecs.systems.EntitySystemInterface;
+import com.haloofwar.ecs.events.types.collision.CollisionEvent;
+import com.haloofwar.ecs.systems.BaseSystem;
+import com.haloofwar.interfaces.systems.Updatable;
 
-public class CollisionSystem implements EntitySystemInterface {
+public class CollisionSystem extends BaseSystem implements Updatable {
 
 	private final EventBus bus;
-	private final ArrayList<Entity> collidables = new ArrayList<>();
-
+	
 	public CollisionSystem(EventBus bus) {
 		this.bus = bus;
 	}
@@ -21,20 +21,13 @@ public class CollisionSystem implements EntitySystemInterface {
 	@Override
 	public void register(Entity e) {
 		if (e.hasComponent(CollisionComponent.class) && e.hasComponent(TransformComponent.class)) {
-			if (!this.collidables.contains(e)) {
-				this.collidables.add(e);
-			}
+			super.register(e);
 		}
 	}
 
 	@Override
-	public void unregister(Entity e) {
-		this.collidables.remove(e);
-	}
-
-	@Override
 	public void update(float delta) {
-		ArrayList<Entity> snapshot = new ArrayList<>(this.collidables);
+		ArrayList<Entity> snapshot = new ArrayList<>(this.entities);
 		int size = snapshot.size();
 
 		for (int i = 0; i < size - 1; i++) {
@@ -63,10 +56,4 @@ public class CollisionSystem implements EntitySystemInterface {
 			}
 		}
 	}
-	
-	@Override
-	public void dispose() {
-		this.collidables.clear();
-	}
-
 }

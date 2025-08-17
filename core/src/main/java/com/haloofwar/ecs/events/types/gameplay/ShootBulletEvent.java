@@ -1,4 +1,4 @@
-package com.haloofwar.ecs.events.types;
+package com.haloofwar.ecs.events.types.gameplay;
 
 public class ShootBulletEvent {
 	public float x;

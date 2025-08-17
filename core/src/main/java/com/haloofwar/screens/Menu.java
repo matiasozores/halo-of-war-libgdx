@@ -3,8 +3,10 @@ package com.haloofwar.screens;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.haloofwar.dependences.GameContext;
+import com.haloofwar.ecs.events.EventBus;
+import com.haloofwar.ecs.events.types.general.NavigationEvent;
+import com.haloofwar.ecs.events.types.general.SelectOptionEvent;
 import com.haloofwar.enumerators.game.Background;
-import com.haloofwar.enumerators.game.SoundType;
 import com.haloofwar.screens.components.MenuNavigator;
 import com.haloofwar.screens.components.MenuRenderer;
 import com.haloofwar.utilities.text.Text;
@@ -26,6 +28,8 @@ public abstract class Menu implements Screen {
     
     protected int actionCooldown = ACTION_COOLDOWN;
     private int escapeCooldown = this.ESCAPE_COOLDOWN;
+    
+    private final EventBus BUS;
 
     public Menu(GameContext context, String title, String[] optionTexts, Screen previousScreen) {
         this.context = context;
@@ -43,6 +47,8 @@ public abstract class Menu implements Screen {
         
         // A futuro podriamos hacer que algunos menu tengan un fondo distinto
         this.BACKGROUND = context.getTexture().get(Background.MAIN_MENU);
+        
+        this.BUS = context.getBus();
     }
     
     public Menu(GameContext gameContext, String title, String[] options) {
@@ -85,7 +91,7 @@ public abstract class Menu implements Screen {
         }
 
         if (moved) {
-            this.context.getAudio().getSound().play(SoundType.CLICK);
+        	this.BUS.publish(new NavigationEvent());
         }
     }
 
@@ -96,7 +102,7 @@ public abstract class Menu implements Screen {
         }
 
         if (this.context.getInput().isEnter()) {
-        	this.context.getAudio().getSound().play(SoundType.ENTER);
+        	this.BUS.publish(new SelectOptionEvent());
         	this.actionCooldown = this.ACTION_COOLDOWN;
         	processOption(this.navigator.getSelectedIndex());
         }

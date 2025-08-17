@@ -10,7 +10,7 @@ public class EventBus {
     private final Map<Class<?>, List<Consumer<?>>> listeners = new HashMap<>();
 
     public <T> void subscribe(Class<T> eventType, Consumer<T> listener) {
-        if (eventType == null || listener == null) {
+    	if (eventType == null || listener == null) {
         	return;
         }
         

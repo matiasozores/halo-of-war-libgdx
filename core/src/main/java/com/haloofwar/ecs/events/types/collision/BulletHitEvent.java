@@ -1,4 +1,4 @@
-package com.haloofwar.ecs.events.types;
+package com.haloofwar.ecs.events.types.collision;
 
 import com.haloofwar.ecs.Entity;
 

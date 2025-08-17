@@ -3,8 +3,10 @@ package com.haloofwar.ecs.systems;
 import java.util.ArrayList;
 
 import com.haloofwar.ecs.Entity;
+import com.haloofwar.interfaces.systems.Disposable;
+import com.haloofwar.interfaces.systems.Registrable;
 
-public abstract class BaseSystem implements EntitySystemInterface {
+public abstract class BaseSystem implements Registrable, Disposable {
 
     protected final ArrayList<Entity> entities = new ArrayList<>();
 

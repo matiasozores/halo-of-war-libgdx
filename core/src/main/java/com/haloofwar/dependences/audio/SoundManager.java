@@ -25,7 +25,7 @@ public class SoundManager {
             this.soundMap.put(soundType, sound);
         } catch (Exception e) {
         	 System.out.println("Error al cargar el sonido: " + soundType + " (" + soundType.getPath() + ")");
-             e.printStackTrace(); // también podés sacarlo si no querés stacktrace completo
+             e.printStackTrace();
         }
     }
 
@@ -91,7 +91,6 @@ public class SoundManager {
 	}
 
     public void dispose() {
-    	System.out.println("Liberando recursos de SoundManager");
         for (Sound sound : this.soundMap.values()) {
             sound.dispose();
         }

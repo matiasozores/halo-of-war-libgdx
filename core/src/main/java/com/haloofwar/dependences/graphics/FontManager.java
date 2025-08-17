@@ -38,30 +38,29 @@ public class FontManager {
     }
 
     public BitmapFont getDefaultFont() {
-        return defaultFont;
+        return this.defaultFont;
     }
 
     public BitmapFont getTitleFont() {
-        return titleFont;
+        return this.titleFont;
     }
 
     public BitmapFont getSmallFont() {
-        return smallFont;
+        return this.smallFont;
     }
 
     public void dispose() {
-    	System.out.println("Liberando recursos del FontManager");
-        if (defaultFont != null) {
-            defaultFont.dispose();
-            defaultFont = null;
+        if (this.defaultFont != null) {
+        	this.defaultFont.dispose();
+        	this.defaultFont = null;
         }
-        if (titleFont != null) {
-            titleFont.dispose();
-            titleFont = null;
+        if (this.titleFont != null) {
+        	this.titleFont.dispose();
+        	this.titleFont = null;
         }
-        if (smallFont != null) {
-            smallFont.dispose();
-            smallFont = null;
+        if (this.smallFont != null) {
+        	this.smallFont.dispose();
+        	this.smallFont = null;
         }
     }
 }

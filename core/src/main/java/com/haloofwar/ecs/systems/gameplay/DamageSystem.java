@@ -4,11 +4,11 @@ import com.haloofwar.ecs.Entity;
 import com.haloofwar.ecs.components.collision.PlayerComponent;
 import com.haloofwar.ecs.components.gameplay.HealthComponent;
 import com.haloofwar.ecs.events.EventBus;
-import com.haloofwar.ecs.events.types.DamageEvent;
-import com.haloofwar.ecs.events.types.PlayerDiedEvent;
-import com.haloofwar.ecs.systems.EntitySystemInterface;
+import com.haloofwar.ecs.events.types.gameplay.DamageEvent;
+import com.haloofwar.ecs.events.types.gameplay.PlayerDiedEvent;
+import com.haloofwar.interfaces.systems.Registrable;
 
-public class DamageSystem implements EntitySystemInterface{
+public class DamageSystem implements Registrable{
 	private final EventBus bus;
 
     public DamageSystem(EventBus bus) {
@@ -33,4 +33,18 @@ public class DamageSystem implements EntitySystemInterface{
         }
 
     }
+
+    // Se implementa a Registrable aunque no requiera sus metodos para que sea tratado como un sistema
+    
+	@Override
+	public void register(Entity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregister(Entity entity) {
+		// TODO Auto-generated method stub
+		
+	}
 }

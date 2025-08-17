@@ -4,8 +4,9 @@ import com.haloofwar.ecs.Entity;
 import com.haloofwar.ecs.components.physics.MovementComponent;
 import com.haloofwar.ecs.components.render.AnimationComponent;
 import com.haloofwar.ecs.systems.BaseSystem;
+import com.haloofwar.interfaces.systems.Updatable;
 
-public class AnimationSystem extends BaseSystem {
+public class AnimationSystem extends BaseSystem implements Updatable {
 
     @Override
     public void register(Entity e) {

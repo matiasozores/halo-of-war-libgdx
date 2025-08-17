@@ -22,10 +22,8 @@ public class World {
     }
 
     public void render() {
-        // Renderizar mapa
         this.map.render(this.context.getCamera());
 
-        // Renderizar entidades a través de los sistemas
         this.batch.setProjectionMatrix(this.context.getCamera().getOrthographic().combined);
         this.batch.begin();
 

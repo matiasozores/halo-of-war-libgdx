@@ -11,38 +11,40 @@ import com.haloofwar.dependences.input.InputManager;
 import com.haloofwar.ecs.events.EventBus;
 
 public class GameContext {
-	private boolean disposed = false;
-
 	private final HaloOfWarPrincipal game;
 
 	private final TextureManager texture;
 	private final AudioManager audio;
 	private final RenderContext render;
+	
+	private final EventBus bus;
 	private final InputManager input;
 
 	private final GameStaticCamera staticCamera;
 	private final GameWorldCamera worldCamera;
 
 	private final GameplayContext gameplay;
-	private final EventBus bus;
-
+	
 	public GameContext(HaloOfWarPrincipal game) {
 		this.game = game;
+		
 		this.texture = new TextureManager();
 		this.audio = new AudioManager();
 		this.render = new RenderContext();
 
+		this.bus = new EventBus();
+		this.input = new InputManager(this.bus);
 
 		this.staticCamera = new GameStaticCamera();
 		this.worldCamera = new GameWorldCamera();
 
-		// Por ahora un solo bus, la idea a mas adelante es tener uno global y uno por escena para evitar
-		// que todo este en un solo bus y que a medida que vayan pasando las escenas queden algunos listeners inutilizables
-		this.bus = new EventBus();
-		this.input = new InputManager(this.bus);
-		
-		this.gameplay = new GameplayContext(this.render.getBatch(), this.input, this.audio.getSound(), this.texture,
-				this.bus);
+		this.gameplay = new GameplayContext(
+			this.render.getBatch(),
+			this.input,
+			this.audio.getSound(),
+			this.texture,
+			this.bus
+		);
 	}
 
 	public HaloOfWarPrincipal getGame() {
@@ -65,8 +67,6 @@ public class GameContext {
 		return this.input;
 	}
 
-	// Camaras
-
 	public GameStaticCamera getStaticCamera() {
 		return this.staticCamera;
 	}
@@ -75,32 +75,22 @@ public class GameContext {
 		return this.worldCamera;
 	}
 	
-	// Eventos 
-	
 	public EventBus getBus() {
 		return this.bus;
 	}
-
+	
+	public GameplayContext getGameplay() {
+		return this.gameplay;
+	}
+	
 	public void dispose() {
-		if (this.disposed) {
-			return;
-		}
-
-		this.disposed = true;
-
 		this.disposeScene();
 		this.render.dispose();
-	}
-
-	public void disposeScene() {
-		this.gameplay.dispose();
 		this.texture.dispose();
 		this.audio.dispose();
 	}
 
-	// Gameplay (no crear mas instancias de esto sino que reutilizar la misma)
-
-	public GameplayContext getGameplay() {
-		return this.gameplay;
+	public void disposeScene() {
+		this.gameplay.dispose();
 	}
 }

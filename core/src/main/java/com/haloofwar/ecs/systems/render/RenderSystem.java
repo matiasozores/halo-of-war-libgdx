@@ -7,8 +7,9 @@ import com.haloofwar.ecs.components.physics.TransformComponent;
 import com.haloofwar.ecs.components.render.AnimationComponent;
 import com.haloofwar.ecs.components.render.RenderComponent;
 import com.haloofwar.ecs.systems.BaseSystem;
+import com.haloofwar.interfaces.systems.Renderable;
 
-public class RenderSystem extends BaseSystem {
+public class RenderSystem extends BaseSystem implements Renderable {
 
     private final SpriteBatch batch;
 
@@ -18,7 +19,6 @@ public class RenderSystem extends BaseSystem {
 
     @Override
     public void register(Entity e) {
-        // Registramos solo entidades que tengan TransformComponent y (AnimationComponent o RenderComponent)
         if (e.hasComponent(TransformComponent.class) &&
             (e.hasComponent(AnimationComponent.class) || e.hasComponent(RenderComponent.class))) {
             super.register(e);
@@ -36,7 +36,6 @@ public class RenderSystem extends BaseSystem {
             float width = transform.width;
             float height = transform.height;
 
-            // Luego sprite fijo (RenderComponent)
             RenderComponent render = e.getComponent(RenderComponent.class);
             if (render != null && render.texture != null) {
                 this.batch.draw(render.texture,
@@ -51,7 +50,6 @@ public class RenderSystem extends BaseSystem {
                         false, false);
             }
             
-            // Primero animación
             AnimationComponent anim = e.getComponent(AnimationComponent.class);
             if (anim != null) {
                 TextureRegion frame = anim.getCurrentFrame();

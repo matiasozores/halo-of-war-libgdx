@@ -6,11 +6,12 @@ import com.haloofwar.ecs.components.gameplay.WeaponComponent;
 import com.haloofwar.ecs.components.physics.TransformComponent;
 import com.haloofwar.ecs.components.render.CrosshairComponent;
 import com.haloofwar.ecs.events.EventBus;
-import com.haloofwar.ecs.events.types.ShootBulletEvent;
+import com.haloofwar.ecs.events.types.gameplay.ShootBulletEvent;
 import com.haloofwar.ecs.events.types.input.AttackEvent;
 import com.haloofwar.ecs.systems.BaseSystem;
+import com.haloofwar.interfaces.systems.Updatable;
 
-public class WeaponSystem extends BaseSystem {
+public class WeaponSystem extends BaseSystem implements Updatable {
     private EventBus bus;
     
     public WeaponSystem(EventBus bus) {

@@ -4,8 +4,9 @@ import com.haloofwar.ecs.Entity;
 import com.haloofwar.ecs.components.physics.MovementComponent;
 import com.haloofwar.ecs.components.physics.TransformComponent;
 import com.haloofwar.ecs.systems.BaseSystem;
+import com.haloofwar.interfaces.systems.Updatable;
 
-public class MovementSystem extends BaseSystem {
+public class MovementSystem extends BaseSystem implements Updatable {
 
     @Override
     public void register(Entity e) {
@@ -35,5 +36,4 @@ public class MovementSystem extends BaseSystem {
             transform.y += dirY * movement.speed * delta;
         }
     }
-
 }

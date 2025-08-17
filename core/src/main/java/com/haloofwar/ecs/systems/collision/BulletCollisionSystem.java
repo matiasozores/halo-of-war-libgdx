@@ -4,12 +4,12 @@ import com.haloofwar.ecs.Entity;
 import com.haloofwar.ecs.components.gameplay.BulletComponent;
 import com.haloofwar.ecs.components.gameplay.HealthComponent;
 import com.haloofwar.ecs.events.EventBus;
-import com.haloofwar.ecs.events.types.BulletHitEvent;
-import com.haloofwar.ecs.events.types.CollisionEvent;
-import com.haloofwar.ecs.events.types.DamageEvent;
-import com.haloofwar.ecs.systems.EntitySystemInterface;
+import com.haloofwar.ecs.events.types.collision.BulletHitEvent;
+import com.haloofwar.ecs.events.types.collision.CollisionEvent;
+import com.haloofwar.ecs.events.types.gameplay.DamageEvent;
+import com.haloofwar.interfaces.systems.Registrable;
 
-public class BulletCollisionSystem implements EntitySystemInterface {
+public class BulletCollisionSystem implements Registrable {
 
     private final EventBus bus;
 
@@ -43,5 +43,17 @@ public class BulletCollisionSystem implements EntitySystemInterface {
             this.bus.publish(new DamageEvent(targetEntity, DAMAGE, bulletEntity)); 
         }
     }
+
+	@Override
+	public void register(Entity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void unregister(Entity entity) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

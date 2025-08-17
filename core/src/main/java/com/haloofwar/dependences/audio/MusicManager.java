@@ -79,7 +79,6 @@ public class MusicManager {
 	}
 	
 	public void dispose() {
-		System.out.println("Liberando recursos del MusicManager");
 		if(this.currentMusic != null) {
 			this.currentMusic.dispose();
 		}
