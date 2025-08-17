@@ -5,13 +5,25 @@ Todas las versiones siguen el formato [Keep a Changelog](https://keepachangelog.
 ## [Unreleased]
 
 ### Added
-- Clases base de enemigos (`Enemy`, `EnemyFactory`, lógica de colisiones y matables).
-- Sistema de gestión de escenas en desarrollo para permitir la transición entre diferentes mapas (todo lo que es `FlowManager`, `GameScene`, `CombatZoneScene`, `SafeZoneScene`) esta la estructura básica. De aca para adelante solo es desarrollar cada uno.  
+- Componentes de enemigos bajo el nuevo ECS (ejemplo: `EnemyComponent`) para reemplazar la antigua jerarquía de clases.
+- Sistema de gestión de escenas en desarrollo para permitir la transición entre diferentes mapas (todo lo que es `FlowManager`, `GameScene`, `CombatZoneScene`, `SafeZoneScene`) — estructura básica lista, falta implementación de cada escena.
 
 ### In Progress
-- Movimiento de enemigos: pendiente implementar el algoritmo completo de desplazamiento.
+- Movimiento de enemigos: pendiente implementar la lógica completa de desplazamiento de entidades que no sean el jugador dentro del ECS.
 - Sistema de escenas: aún se está trabajando en la navegación completa entre diferentes mapas (representados como escenas) del juego.
 
+## [0.3.0] - 2025-08-17
+
+### Changed
+- Refactor completo del sistema de entidades a un **ECS (Entity Component System)**:
+  - Creación de `Entity` que representa una entidad genérica del ECS que puede tener cualquier combinación de componentes.
+  - Integración de `EventBus` para comunicación desacoplada.
+  - Implementación de diferentes sistemas para que todo lo que funcionaba antes se adapte a lo nuevo.
+  - Reemplazo de la lógica anterior de entidades heredadas por una composición flexible.
+- Reestructuración de carpetas para reflejar la nueva arquitectura ECS.
+
+### Notes
+- Este refactor no agrega nuevas mecánicas jugables visibles, pero sienta la base para escalar el proyecto con sistemas desacoplados y más fáciles de mantener.
 
 ## [0.2.0] - 2025-08-03
 
