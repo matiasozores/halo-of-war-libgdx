@@ -3,12 +3,8 @@ package com.haloofwar.dependences;
 import com.haloofwar.cameras.GameStaticCamera;
 import com.haloofwar.cameras.GameWorldCamera;
 import com.haloofwar.core.HaloOfWarPrincipal;
-import com.haloofwar.dependences.assets.TextureManager;
-import com.haloofwar.dependences.audio.AudioManager;
-import com.haloofwar.dependences.gameplay.GameplayContext;
-import com.haloofwar.dependences.graphics.RenderContext;
-import com.haloofwar.dependences.input.InputManager;
-import com.haloofwar.ecs.events.EventBus;
+import com.haloofwar.events.EventBus;
+import com.haloofwar.factories.components.FactoryCollection;
 
 public class GameContext {
 	private final HaloOfWarPrincipal game;
@@ -24,6 +20,7 @@ public class GameContext {
 	private final GameWorldCamera worldCamera;
 
 	private final GameplayContext gameplay;
+	private final FactoryCollection factories;
 	
 	public GameContext(HaloOfWarPrincipal game) {
 		this.game = game;
@@ -33,18 +30,20 @@ public class GameContext {
 		this.render = new RenderContext();
 
 		this.bus = new EventBus();
-		this.input = new InputManager(this.bus);
-
+	
 		this.staticCamera = new GameStaticCamera();
 		this.worldCamera = new GameWorldCamera();
-
+		
+		this.factories = new FactoryCollection(this);
+		
 		this.gameplay = new GameplayContext(
-			this.render.getBatch(),
-			this.input,
-			this.audio.getSound(),
-			this.texture,
-			this.bus
-		);
+				this.render.getBatch(),
+				this.audio.getSound(),
+				this.texture,
+				this.bus
+			);
+		
+		this.input = new InputManager(this.bus);
 	}
 
 	public HaloOfWarPrincipal getGame() {
@@ -81,6 +80,10 @@ public class GameContext {
 	
 	public GameplayContext getGameplay() {
 		return this.gameplay;
+	}
+	
+	public FactoryCollection getFactories() {
+		return this.factories;
 	}
 	
 	public void dispose() {

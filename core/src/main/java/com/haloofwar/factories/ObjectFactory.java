@@ -1,13 +1,13 @@
 package com.haloofwar.factories;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.haloofwar.dependences.assets.TextureManager;
-import com.haloofwar.ecs.Entity;
-import com.haloofwar.enumerators.entities.objects.ObjectType;
+import com.haloofwar.components.Entity;
+import com.haloofwar.dependences.TextureManager;
+import com.haloofwar.enumerators.ObjectType;
 import com.haloofwar.factories.components.ComponentPresets;
 import com.haloofwar.factories.components.EntityBuilder;
 
-public class ObjectFactory {
+public final class ObjectFactory {
 
 	// Por ahora todos los objetos tendran este tamaño, luego se parametrizara 
 	private static final float WIDTH = 16, HEIGHT = 16;

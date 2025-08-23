@@ -1,7 +1,7 @@
 package com.haloofwar.cameras;
 
-import com.haloofwar.ecs.Entity;
-import com.haloofwar.ecs.components.physics.TransformComponent;
+import com.haloofwar.components.Entity;
+import com.haloofwar.components.TransformComponent;
 import com.haloofwar.game.MapMetaData;
 import com.haloofwar.utilities.GameConfig;
 

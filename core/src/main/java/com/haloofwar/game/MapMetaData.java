@@ -2,7 +2,7 @@ package com.haloofwar.game;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.haloofwar.enumerators.game.SceneType;
+import com.haloofwar.enumerators.SceneType;
 
 public class MapMetaData {
 	private SceneType zone;

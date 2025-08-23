@@ -1,28 +1,29 @@
 package com.haloofwar.screens;
 
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.enumerators.game.GameState;
-import com.haloofwar.screens.settings.SettingsScreen;
+import com.haloofwar.enumerators.GameState;
+import com.haloofwar.game.GameFlowManager;
 
 public class PauseMenuScreen extends Menu {
-
-	private final GameManager gameManager;
-
+	private GameFlowManager flow;
+	private GameManager manager;
 	
-	public PauseMenuScreen(GameContext gameContext, GameManager gameManager) {
-		super(gameContext, "Menu Pausa", new String[] {
+	public PauseMenuScreen(GameContext context, GameManager manager) {
+		super(context, "Menu Pausa", new String[] {
 			"Reanudar",
 			"Configuracion",
 			"Guardar y volver al menu principal"
 		}, null);
-		this.gameManager = gameManager;
+		
+		this.flow = manager.getFlowManager();
+		this.manager = manager;
 	}
-
+	
 	@Override
 	protected void processOption(int optionIndex) {
 		switch (optionIndex) {
 			case 0:
-				this.backToGame();
+				this.goBack();
 				break;
 				
 			case 1:
@@ -30,9 +31,9 @@ public class PauseMenuScreen extends Menu {
 				break;
 
 			case 2: 
-				this.gameManager.reset();
 				this.context.getAudio().getMusic().stop();
 				this.context.getGame().setScreen(new MainMenuScreen(this.context));
+				this.manager.reset();
 				break;
 
 			default:
@@ -42,14 +43,9 @@ public class PauseMenuScreen extends Menu {
 	
 	@Override
 	protected void goBack() {
-	    this.backToGame(); 
-	}
-
-	
-	private void backToGame() {
-		this.gameManager.getFlowManager().setGameState(GameState.PLAYING);
-		this.context.getAudio().getMusic().resume();
-		this.context.getGame().setScreen(this.gameManager);
-		this.context.getInput().clearEscape();
+		if (this.flow.currentState == GameState.PAUSED) {
+			this.flow.currentState = GameState.PLAYING;
+			this.context.getGame().setScreen(this.manager);
+		} 
 	}
 }

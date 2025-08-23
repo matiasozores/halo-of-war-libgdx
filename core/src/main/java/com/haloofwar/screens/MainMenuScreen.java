@@ -2,8 +2,7 @@ package com.haloofwar.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.enumerators.game.MusicTrack;
-import com.haloofwar.screens.settings.SettingsScreen;
+import com.haloofwar.enumerators.MusicTrack;
 
 public class MainMenuScreen extends Menu{
 

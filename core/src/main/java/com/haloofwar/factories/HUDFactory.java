@@ -1,17 +1,20 @@
 package com.haloofwar.factories;
 
+import com.haloofwar.components.Entity;
+import com.haloofwar.components.HealthComponent;
+import com.haloofwar.components.InventoryComponent;
+import com.haloofwar.components.NameComponent;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.ecs.components.gameplay.HealthComponent;
-import com.haloofwar.ecs.components.gameplay.InventoryComponent;
-import com.haloofwar.ecs.components.gameplay.NameComponent;
-import com.haloofwar.enumerators.animation.HeadType;
-import com.haloofwar.enumerators.entities.WeaponType;
-import com.haloofwar.ui.hud.HUD;
-import com.haloofwar.ui.hud.components.HealthBar;
-import com.haloofwar.ui.hud.components.InventoryRenderer;
-import com.haloofwar.ui.hud.components.PlayerInfoRenderer;
+import com.haloofwar.enumerators.HeadType;
+import com.haloofwar.enumerators.UIAsset;
+import com.haloofwar.enumerators.WeaponType;
+import com.haloofwar.ui.HUD;
+import com.haloofwar.ui.components.DialogueBox;
+import com.haloofwar.ui.components.HealthBar;
+import com.haloofwar.ui.components.InventoryRenderer;
+import com.haloofwar.ui.components.PlayerInfoRenderer;
 
-public class HUDFactory {
+public final class HUDFactory {
 
     private final GameContext context;
 
@@ -21,7 +24,7 @@ public class HUDFactory {
 
     public HUD create() {
         // Obtenemos el jugador
-        var player = context.getGameplay().getPlayer();
+        Entity player = context.getGameplay().getPlayer();
         
         // Componentes del jugador necesarios
         HealthComponent healthComp = player.getComponent(HealthComponent.class);
@@ -46,14 +49,21 @@ public class HUDFactory {
                 healthComp
         );
 
-        // Inventory
+        // Inventario
         InventoryRenderer inventory = new InventoryRenderer(
                 context.getRender().getBatch(),
                 context.getRender().getFont().getSmallFont(),
                 inventoryComp
         );
+        
+        // Caja de dialogo
+        DialogueBox dialogue = new DialogueBox(
+        		context.getRender().getBatch(),
+        		context.getTexture().get(UIAsset.DIALOGUE_BOX),
+        		context.getRender().getFont().getDefaultFont()
+        );
 
         // Construcción final del HUD
-        return new HUD(context.getStaticCamera(), context.getRender().getBatch(), health, info, inventory);
+        return new HUD(context.getStaticCamera(), context.getRender().getBatch(), health, info, inventory, dialogue, context.getBus());
     }
 }

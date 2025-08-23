@@ -2,8 +2,8 @@ package com.haloofwar.game;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.cameras.GameWorldCamera;
-import com.haloofwar.game.components.MapRenderer;
-import com.haloofwar.game.components.WorldContext;
+import com.haloofwar.game.dependences.MapRenderer;
+import com.haloofwar.game.dependences.WorldContext;
 
 public class World {
     private final MapRenderer map;

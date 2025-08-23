@@ -2,29 +2,31 @@ package com.haloofwar.factories.components;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.haloofwar.cameras.GameWorldCamera;
-import com.haloofwar.dependences.assets.TextureManager;
-import com.haloofwar.ecs.components.collision.CollisionComponent;
-import com.haloofwar.ecs.components.collision.ObstacleComponent;
-import com.haloofwar.ecs.components.collision.PickupComponent;
-import com.haloofwar.ecs.components.collision.PlayerComponent;
-import com.haloofwar.ecs.components.debug.ShapeComponent;
-import com.haloofwar.ecs.components.gameplay.HealthComponent;
-import com.haloofwar.ecs.components.gameplay.InventoryComponent;
-import com.haloofwar.ecs.components.gameplay.NameComponent;
-import com.haloofwar.ecs.components.gameplay.WeaponComponent;
-import com.haloofwar.ecs.components.physics.MovementComponent;
-import com.haloofwar.ecs.components.physics.TransformComponent;
-import com.haloofwar.ecs.components.physics.movement.PlayerMovementController;
-import com.haloofwar.ecs.components.render.AnimationComponent;
-import com.haloofwar.ecs.components.render.CrosshairComponent;
-import com.haloofwar.ecs.components.render.RenderComponent;
-import com.haloofwar.ecs.events.EventBus;
-import com.haloofwar.enumerators.entities.PlayerType;
-import com.haloofwar.enumerators.entities.objects.ObjectType;
-import com.haloofwar.interfaces.entities.AnimatedEntityDescriptor;
-import com.haloofwar.interfaces.entities.ArmedEntityDescriptor;
-import com.haloofwar.interfaces.entities.EntityDescriptor;
-import com.haloofwar.interfaces.entities.MovementController;
+import com.haloofwar.components.AnimationComponent;
+import com.haloofwar.components.CollisionComponent;
+import com.haloofwar.components.CrosshairComponent;
+import com.haloofwar.components.DialogueComponent;
+import com.haloofwar.components.HealthComponent;
+import com.haloofwar.components.InventoryComponent;
+import com.haloofwar.components.MovementComponent;
+import com.haloofwar.components.NameComponent;
+import com.haloofwar.components.ObstacleComponent;
+import com.haloofwar.components.PlayerComponent;
+import com.haloofwar.components.PlayerMovementController;
+import com.haloofwar.components.PromptComponent;
+import com.haloofwar.components.RenderComponent;
+import com.haloofwar.components.StockComponent;
+import com.haloofwar.components.TransformComponent;
+import com.haloofwar.components.VillagerComponent;
+import com.haloofwar.components.WeaponComponent;
+import com.haloofwar.dependences.TextureManager;
+import com.haloofwar.enumerators.PlayerType;
+import com.haloofwar.events.EventBus;
+import com.haloofwar.interfaces.AnimatedEntityDescriptor;
+import com.haloofwar.interfaces.ArmedEntityDescriptor;
+import com.haloofwar.interfaces.EntityDescriptor;
+import com.haloofwar.interfaces.MovementController;
+import com.haloofwar.interfaces.Talkable;
 
 public class ComponentPresets {
 
@@ -49,7 +51,11 @@ public class ComponentPresets {
     }
 
     public static CollisionComponent defaultCollision(float x, float y) {
-        return new CollisionComponent(WIDTH, HEIGHT);
+        return new CollisionComponent(WIDTH, HEIGHT, x, y);
+    }
+    
+    public static CollisionComponent defaultCollision(float x, float y, float width, float height) {
+        return new CollisionComponent(width, height, x, y);
     }
     
     public static MovementComponent playerMovement(EventBus bus) {
@@ -87,21 +93,29 @@ public class ComponentPresets {
     }
     
 
-    public static RenderComponent defaultRender(ObjectType type, TextureManager manager) {
+    public static RenderComponent defaultRender(EntityDescriptor type, TextureManager manager) {
     	Texture texture = manager.get(type);
         return new RenderComponent(texture);
     }
 
-    public static PickupComponent defaultPickup() {
-        return new PickupComponent();
+    public static StockComponent defaultPickup() {
+        return new StockComponent();
     }
     
     public static PlayerComponent defaultPlayer() {
     	return new PlayerComponent();
     }
     
-    public static ShapeComponent defaultShape(float x, float y, float width, float height) {
-    	return new ShapeComponent(x, y, width, height);
+    public static PromptComponent defaultPrompt(float offset) {
+    	return new PromptComponent(offset);
+    }
+    
+    public static VillagerComponent defaultVillager() {
+    	return new VillagerComponent();
+    }
+    
+    public static DialogueComponent defualtDialogue(Talkable type, Texture avatar) {
+    	return new DialogueComponent(type.getLines(), avatar);
     }
 }
 

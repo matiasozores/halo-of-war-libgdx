@@ -1,53 +1,38 @@
 package com.haloofwar.game;
 
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.ecs.Entity;
-import com.haloofwar.ecs.events.types.gameplay.PlayerDiedEvent;
-import com.haloofwar.enumerators.game.GameState;
-import com.haloofwar.enumerators.game.SceneType;
-import com.haloofwar.factories.SceneFactory;
+import com.haloofwar.enumerators.GameState;
+import com.haloofwar.events.GameStateEvent;
+import com.haloofwar.events.PlayerDiedEvent;
 
 public class GameFlowManager {
 	private GameScene currentScene;
-	private GameState currentState = GameState.WAITING;
-	private final GameContext context;
+	public GameState currentState = GameState.WAITING;
 	
 	public GameFlowManager(GameContext context) {
-		this.context = context;
-		this.context.getBus().subscribe(PlayerDiedEvent.class, this::onPlayerDied);
+		context.getBus().subscribe(PlayerDiedEvent.class, this::onPlayerDied);
+		context.getBus().subscribe(GameStateEvent.class, this::onChangeState);
 	}
 	
-	public void startGame(Entity player, SceneType initialScene) {
-		this.currentScene = SceneFactory.create(initialScene, this.context, player);
+	public void startGame(GameScene initialScene) {
+		this.currentScene = initialScene;
 		this.currentScene.show();
 		this.currentState = GameState.PLAYING;
 	}
 	
 	public void update(float delta) {
-		this.handleInput();
-
 		switch (this.currentState) {
 			case PLAYING:
 				this.currentScene.update(delta);
 				break;
 			case PAUSED:
 			case WAITING:
+				this.currentScene.update(delta);
 			case GAME_OVER:
 				break;
 		}
 	}
 
-	private void handleInput() {
-		if (this.context.getInput().isEscape()) {
-			if (this.currentState == GameState.PLAYING) {
-				this.context.getAudio().getMusic().pause();
-				this.currentState = GameState.PAUSED;
-			} else if (this.currentState == GameState.PAUSED) {
-				this.context.getAudio().getMusic().resume();
-				this.currentState = GameState.PLAYING;
-			}
-		}
-	}
 
 	public void render(float delta) {
 		if(this.currentScene != null) {
@@ -58,13 +43,14 @@ public class GameFlowManager {
     private void onPlayerDied(PlayerDiedEvent event) {
         this.setGameState(GameState.GAME_OVER);
     }
-	
+    
+    private void onChangeState(GameStateEvent event) {
+        this.currentState = event.getState();
+    }
+
+
 	public void setGameState(GameState state) {
 		this.currentState = state;
-	}
-	
-	public GameState getGameState() {
-		return this.currentState;
 	}
 	
 	public GameScene getCurrentScene() {

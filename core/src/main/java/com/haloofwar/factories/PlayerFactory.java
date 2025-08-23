@@ -1,14 +1,14 @@
 package com.haloofwar.factories;
 
+import com.haloofwar.components.Entity;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.ecs.Entity;
-import com.haloofwar.enumerators.entities.PlayerType;
+import com.haloofwar.enumerators.PlayerType;
 import com.haloofwar.factories.components.ComponentPresets;
 import com.haloofwar.factories.components.EntityBuilder;
-import com.haloofwar.interfaces.entities.EntityDescriptor;
-import com.haloofwar.interfaces.factories.EntityFactory;
+import com.haloofwar.interfaces.EntityDescriptor;
+import com.haloofwar.interfaces.EntityFactory;
 
-public class PlayerFactory implements EntityFactory {
+public final class PlayerFactory implements EntityFactory {
 
     private final GameContext context;
 

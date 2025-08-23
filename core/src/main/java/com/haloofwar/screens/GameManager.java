@@ -2,29 +2,25 @@ package com.haloofwar.screens;
 
 import com.badlogic.gdx.Screen;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.ecs.Entity;
-import com.haloofwar.enumerators.game.GameState;
-import com.haloofwar.enumerators.game.SceneType;
-import com.haloofwar.enumerators.game.SoundType;
+import com.haloofwar.enumerators.GameState;
+import com.haloofwar.enumerators.SceneType;
+import com.haloofwar.enumerators.SoundType;
 import com.haloofwar.game.GameFlowManager;
 
 public class GameManager implements Screen {
 	private final GameContext context;
-	private final Entity player;
-	
 	private final GameFlowManager flowManager;
 	private final PauseMenuScreen pauseMenu;
 	
 	// ----------------------------------------------------
 
-	public GameManager(GameContext context, Entity player) {
+	public GameManager(GameContext context) {
 		this.context = context;
-		this.player = player;
-		
-		this.pauseMenu = new PauseMenuScreen(context, this);
-		
+
 		this.flowManager = new GameFlowManager(context);
-		this.flowManager.startGame(this.player, SceneType.TUTORIAL);
+		this.flowManager.startGame(this.context.getFactories().getSCENE_FACTORY().create(SceneType.TUTORIAL));
+	
+		this.pauseMenu = new PauseMenuScreen(context, this);
 	}
 
 	@Override
@@ -36,7 +32,7 @@ public class GameManager implements Screen {
 	public void render(float delta) {	
 		this.flowManager.update(delta);
 		
-		GameState state = this.flowManager.getGameState();
+		GameState state = this.flowManager.currentState;
 
 		switch (state) {
 			case PAUSED:

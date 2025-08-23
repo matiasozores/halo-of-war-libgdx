@@ -1,11 +1,12 @@
 package com.haloofwar.screens;
 
 import com.badlogic.gdx.Screen;
+import com.haloofwar.components.Entity;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.ecs.Entity;
-import com.haloofwar.enumerators.entities.PlayerType;
-import com.haloofwar.enumerators.game.SoundType;
-import com.haloofwar.factories.PlayerFactory;
+import com.haloofwar.enumerators.NPCType;
+import com.haloofwar.enumerators.PlayerType;
+import com.haloofwar.enumerators.SoundType;
+import com.haloofwar.events.NewEntityEvent;
 
 public class PlayerSelectionScreen extends Menu{
 	private final int MASTER_CHIEF_OPTION = 0;
@@ -46,11 +47,13 @@ public class PlayerSelectionScreen extends Menu{
 			return;
 		}
 		
-		PlayerFactory playerFactory = new PlayerFactory(this.context);
-		Entity player = playerFactory.create(typeChoice, 200, 200);
+		Entity player = this.context.getFactories().getPLAYER_FACTORY().create(typeChoice, 200, 200);
+		this.context.getGameplay().initializePlayer(player);
+		Entity villager = this.context.getFactories().getNPC_FACTORY().create(NPCType.VILLAGER, 230, 200);
+		this.context.getBus().publish(new NewEntityEvent(villager));
 		
 		this.context.getAudio().getSound().play(SoundType.LOAD_GAME);
 		this.context.getAudio().getMusic().stop();
-		this.context.getGame().setScreen(new GameManager(this.context, player));
+		this.context.getGame().setScreen(new GameManager(this.context));
 	}
 }

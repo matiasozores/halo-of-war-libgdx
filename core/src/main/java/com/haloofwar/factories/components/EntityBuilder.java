@@ -1,9 +1,9 @@
 package com.haloofwar.factories.components;
 
+import com.haloofwar.components.Entity;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.ecs.Entity;
-import com.haloofwar.ecs.components.Component;
-import com.haloofwar.interfaces.entities.EntityDescriptor;
+import com.haloofwar.interfaces.Component;
+import com.haloofwar.interfaces.EntityDescriptor;
 
 public class EntityBuilder<T extends EntityDescriptor> {
 

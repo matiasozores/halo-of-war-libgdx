@@ -3,13 +3,13 @@ package com.haloofwar.screens;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.haloofwar.dependences.GameContext;
-import com.haloofwar.ecs.events.EventBus;
-import com.haloofwar.ecs.events.types.general.NavigationEvent;
-import com.haloofwar.ecs.events.types.general.SelectOptionEvent;
-import com.haloofwar.enumerators.game.Background;
-import com.haloofwar.screens.components.MenuNavigator;
-import com.haloofwar.screens.components.MenuRenderer;
-import com.haloofwar.utilities.text.Text;
+import com.haloofwar.enumerators.Background;
+import com.haloofwar.events.EventBus;
+import com.haloofwar.events.NavigationEvent;
+import com.haloofwar.events.SelectOptionEvent;
+import com.haloofwar.screens.dependences.MenuNavigator;
+import com.haloofwar.screens.dependences.MenuRenderer;
+import com.haloofwar.utilities.Text;
 
 public abstract class Menu implements Screen {
     protected final int SELECTOR_COOLDOWN = 35;
@@ -57,7 +57,7 @@ public abstract class Menu implements Screen {
 
     @Override
     public void render(float delta) {
-        this.update();
+        this.update(delta);
         this.renderer.render(
     	    this.context.getRender().getBatch(),
     	    this.context.getRender().getShape(),
@@ -69,7 +69,7 @@ public abstract class Menu implements Screen {
 
     }
 
-    protected void update() {
+    protected void update(float delta) {
     	this.handleNavigation();
     	this.handleSelection();
     	this.handleBack();
