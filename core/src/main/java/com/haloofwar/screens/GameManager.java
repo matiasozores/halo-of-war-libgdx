@@ -18,7 +18,7 @@ public class GameManager implements Screen {
 		this.context = context;
 
 		this.flowManager = new GameFlowManager(context);
-		this.flowManager.startGame(this.context.getFactories().getSCENE_FACTORY().create(SceneType.TUTORIAL));
+		this.flowManager.startGame(context.getScene().get(SceneType.MAIN));
 	
 		this.pauseMenu = new PauseMenuScreen(context, this);
 	}
@@ -47,6 +47,8 @@ public class GameManager implements Screen {
 			case PLAYING:
 			case WAITING:
 				this.flowManager.render(delta);
+				break;
+			case CUTSCENE:
 				break;
 		}
 	}

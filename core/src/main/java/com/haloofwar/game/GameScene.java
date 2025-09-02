@@ -1,16 +1,13 @@
 package com.haloofwar.game;
 
 import com.badlogic.gdx.Screen;
-import com.haloofwar.components.Entity;
 import com.haloofwar.ui.HUD;
 
 public class GameScene implements Screen {
-    protected final Entity player;
     protected final World world;
     protected final HUD hud;
 	
-    public GameScene(World world, HUD hud, Entity player) {
-        this.player = player;
+    public GameScene(World world, HUD hud) {
         this.world = world;
         this.hud = hud;
 	}

@@ -15,10 +15,10 @@ import com.haloofwar.systems.CollisionSystem;
 import com.haloofwar.systems.CrosshairSystem;
 import com.haloofwar.systems.DamageSystem;
 import com.haloofwar.systems.DialogueSystem;
-import com.haloofwar.systems.InteractionSystem;
 import com.haloofwar.systems.MovementSystem;
 import com.haloofwar.systems.ObstacleSystem;
 import com.haloofwar.systems.PickupSystem;
+import com.haloofwar.systems.PortalSystem;
 import com.haloofwar.systems.RenderSystem;
 import com.haloofwar.systems.SoundSystem;
 import com.haloofwar.systems.TalkSystem;
@@ -49,8 +49,8 @@ public final class SystemFactory {
             new BulletCollisionSystem(bus),
             new DamageSystem(bus),
             new SoundSystem(sound, bus),
-            new InteractionSystem(bus),
-            new DialogueSystem(bus)
+            new DialogueSystem(bus),
+            new PortalSystem(bus)
         };
 
         for (Object system : allSystems) {

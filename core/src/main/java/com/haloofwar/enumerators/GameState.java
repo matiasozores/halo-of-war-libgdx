@@ -4,6 +4,7 @@ public enum GameState {
     PLAYING,
     PAUSED,
     WAITING,
-    GAME_OVER
+    GAME_OVER,
+    CUTSCENE
 }
 

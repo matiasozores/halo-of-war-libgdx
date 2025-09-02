@@ -40,4 +40,8 @@ public class World {
     public GameWorldCamera getCamera() {
         return this.context.getCamera();
     }
+    
+    public MapRenderer getMap() {
+		return this.map;
+	}
 }

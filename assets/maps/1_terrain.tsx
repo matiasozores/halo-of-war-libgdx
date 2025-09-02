@@ -36,6 +36,16 @@
    <object id="1" type="collision" x="0" y="6" width="32" height="26"/>
   </objectgroup>
  </tile>
+ <tile id="103">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="collision" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="104">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="collision" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
  <tile id="105">
   <objectgroup draworder="index" id="2">
    <object id="1" type="collision" x="12" y="0" width="20" height="32"/>
@@ -69,6 +79,16 @@
  <tile id="112">
   <objectgroup draworder="index" id="2">
    <object id="1" type="collision" x="0" y="0" width="20" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="118">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="collision" x="0" y="0" width="32" height="32"/>
+  </objectgroup>
+ </tile>
+ <tile id="119">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="collision" x="0" y="0" width="32" height="32"/>
   </objectgroup>
  </tile>
  <tile id="120">

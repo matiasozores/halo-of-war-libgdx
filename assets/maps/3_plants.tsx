@@ -183,7 +183,7 @@
  </tile>
  <tile id="53">
   <objectgroup draworder="index" id="2">
-   <object id="2" type="collision" x="8" y="0" width="24" height="28"/>
+   <object id="4" x="8" y="0" width="24" height="28"/>
   </objectgroup>
  </tile>
  <tile id="54">

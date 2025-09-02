@@ -3,6 +3,7 @@ package com.haloofwar.dependences;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.components.Entity;
 import com.haloofwar.components.PlayerComponent;
+import com.haloofwar.events.EnterLevelEvent;
 import com.haloofwar.events.EventBus;
 import com.haloofwar.events.NewEntityEvent;
 import com.haloofwar.factories.SystemFactory;
@@ -21,8 +22,14 @@ public class GameplayContext {
     public GameplayContext(SpriteBatch batch, SoundManager sound, TextureManager texture, EventBus bus) {
     	this.SYSTEMS = SystemFactory.createGameplaySystems(batch, sound, texture, bus);   
     	bus.subscribe(NewEntityEvent.class, this::addEntity);
+    	bus.subscribe(EnterLevelEvent.class, this::onEnterLevel);
     	this.bus = bus;
     }
+    
+    public void onEnterLevel(EnterLevelEvent event) {
+		this.dispose();
+		this.addEntity(new NewEntityEvent(this.player));
+	}
 
     public void update(float delta) {
         for (Updatable system : this.SYSTEMS.getUPDATE_SYSTEMS()) {
@@ -44,6 +51,7 @@ public class GameplayContext {
     
     public void removeEntity(Entity entity) {
     	this.SYSTEMS.removeEntity(entity);
+    	System.out.println("Removed entity: " + entity);
     }
     
     // Agregar jugador

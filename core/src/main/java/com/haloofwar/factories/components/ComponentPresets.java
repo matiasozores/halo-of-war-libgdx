@@ -13,6 +13,7 @@ import com.haloofwar.components.NameComponent;
 import com.haloofwar.components.ObstacleComponent;
 import com.haloofwar.components.PlayerComponent;
 import com.haloofwar.components.PlayerMovementController;
+import com.haloofwar.components.PortalComponent;
 import com.haloofwar.components.PromptComponent;
 import com.haloofwar.components.RenderComponent;
 import com.haloofwar.components.StockComponent;
@@ -117,5 +118,9 @@ public class ComponentPresets {
     public static DialogueComponent defualtDialogue(Talkable type, Texture avatar) {
     	return new DialogueComponent(type.getLines(), avatar);
     }
+    
+    public static PortalComponent defaultPortal() {
+		return new PortalComponent();
+	}
 }
 

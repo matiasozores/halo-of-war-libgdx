@@ -1,5 +1,6 @@
 package com.haloofwar.factories;
 
+import com.haloofwar.components.TransformComponent;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.enumerators.SceneType;
 import com.haloofwar.game.GameScene;
@@ -19,17 +20,24 @@ public final class SceneFactory {
 	// Luego se mejorara para no utilizar switch
     public GameScene create(SceneType type) {
     	World world = this.build(type);
-    	HUD hud = this.context.getFactories().getHUD_FACTORY().create();
+    	this.playerReposition(world);
     	
-    	return new GameScene(world, hud, this.context.getGameplay().getPlayer());
+    	HUD hud = this.context.getFactories().getHUD_FACTORY().create();
+    	return new GameScene(world, hud);
     }
     
 	private World build(SceneType type) {
 		MapRenderer map = new MapRenderer(type);
 		WorldContext worldContext = new WorldContext(this.context.getGameplay().getPlayer(), map, this.context);
 	
-		// Se encarga de agregar las collisiones del mapa al collision manager
 		WorldCollisionInitializer.initializeMapColliders(map, this.context);
 		return new World(map, worldContext);
+	}
+	
+	private void playerReposition(World world) {
+		float x = world.getMap().getMetaData().getxSpawnPoint();
+		float y = world.getMap().getMetaData().getySpawnPoint();
+		
+		this.context.getGameplay().getPlayer().getComponent(TransformComponent.class).setPosition(x, y);
 	}
 }

@@ -15,6 +15,7 @@ import com.haloofwar.enumerators.ObjectType;
 import com.haloofwar.events.NewEntityEvent;
 import com.haloofwar.factories.ObjectFactory;
 import com.haloofwar.factories.ObstacleFactory;
+import com.haloofwar.factories.PortalFactory;
 
 public class WorldCollisionInitializer {
 
@@ -22,8 +23,8 @@ public class WorldCollisionInitializer {
         // Procesa capas de objetos (ObjectLayers)
         initializeLayerEntities(map, context, LayerType.OBSTACLE);
         initializeLayerEntities(map, context, LayerType.ITEM);
-
-        // Procesa colisiones definidas en los tiles de tilesets (tsx)
+        initializeLayerEntities(map, context, LayerType.PORTAL);
+        
         initializeTileColliders(map, context);
     }
 
@@ -51,6 +52,11 @@ public class WorldCollisionInitializer {
                                 context.getTexture()
                         );
                         break;
+                    case PORTAL:
+                    	entity = PortalFactory.create(rect, context.getTexture());
+						break;
+                        
+                        
                     default:
                         entity = new Entity();
                         entity.addComponent(new TransformComponent(rect.x, rect.y, rect.width, rect.height));

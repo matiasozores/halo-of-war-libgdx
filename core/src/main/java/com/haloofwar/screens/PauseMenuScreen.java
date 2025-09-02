@@ -2,11 +2,12 @@ package com.haloofwar.screens;
 
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.enumerators.GameState;
-import com.haloofwar.game.GameFlowManager;
+import com.haloofwar.events.EventBus;
+import com.haloofwar.events.GameStateEvent;
 
 public class PauseMenuScreen extends Menu {
-	private GameFlowManager flow;
 	private GameManager manager;
+	private EventBus bus;
 	
 	public PauseMenuScreen(GameContext context, GameManager manager) {
 		super(context, "Menu Pausa", new String[] {
@@ -14,8 +15,8 @@ public class PauseMenuScreen extends Menu {
 			"Configuracion",
 			"Guardar y volver al menu principal"
 		}, null);
-		
-		this.flow = manager.getFlowManager();
+
+		this.bus = context.getBus();
 		this.manager = manager;
 	}
 	
@@ -43,9 +44,7 @@ public class PauseMenuScreen extends Menu {
 	
 	@Override
 	protected void goBack() {
-		if (this.flow.currentState == GameState.PAUSED) {
-			this.flow.currentState = GameState.PLAYING;
-			this.context.getGame().setScreen(this.manager);
-		} 
+		this.context.getGame().setScreen(this.manager);
+		this.bus.publish(new GameStateEvent(GameState.PLAYING));
 	}
 }

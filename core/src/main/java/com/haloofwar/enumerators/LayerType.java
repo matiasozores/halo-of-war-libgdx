@@ -2,7 +2,8 @@ package com.haloofwar.enumerators;
 
 public enum LayerType {
 	OBSTACLE("collision"),
-	ITEM("items");
+	ITEM("items"),
+	PORTAL("portal");
 	
 	private String name;
 	

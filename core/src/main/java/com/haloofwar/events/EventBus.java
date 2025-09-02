@@ -28,7 +28,9 @@ public class EventBus {
     }
 
     public <T> void publish(T event) {
-        if (event == null) return;
+        if (event == null) {
+        	return;
+        }
 
         Class<?> eventClass = event.getClass();
 

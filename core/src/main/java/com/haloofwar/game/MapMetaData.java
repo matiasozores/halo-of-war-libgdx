@@ -15,8 +15,8 @@ public class MapMetaData {
 	private int mapPixelWidth;
 	private int mapPixelHeight;
 	
-	private int xSpawnPoint;
-	private int ySpawnPoint;
+	private Integer xSpawnPoint;
+	private Integer ySpawnPoint;
 	
 	
 	public MapMetaData(SceneType zone) {
@@ -30,6 +30,18 @@ public class MapMetaData {
 		
 		this.mapPixelWidth = this.mapWidth * this.tileWidth;
 		this.mapPixelHeight = this.mapHeight * this.tileHeight;
+		
+		// Asumiendo que tu layer de spawn se llama "Spawn"
+		this.xSpawnPoint = this.tiledMap.getProperties().get("xSpawnPoint", Integer.class);
+		this.ySpawnPoint = this.tiledMap.getProperties().get("ySpawnPoint", Integer.class);
+
+		// Debugging output
+		if (this.xSpawnPoint == null || this.ySpawnPoint == null) {
+			System.err.println("Warning: Spawn point properties not found in the map properties.");
+			this.xSpawnPoint = 0;
+			this.ySpawnPoint = 0;
+		}
+
 	}
 	
 	public TiledMap getTiledMap() {
@@ -44,11 +56,11 @@ public class MapMetaData {
 		return this.mapPixelHeight;
 	}
 	
-	public int getxSpawnPoint() {
+	public float getxSpawnPoint() {
 		return this.xSpawnPoint;
 	}
 	
-	public int getySpawnPoint() {
+	public float getySpawnPoint() {
 		return this.ySpawnPoint;
 	}
 	

@@ -21,6 +21,7 @@ public class GameContext {
 
 	private final GameplayContext gameplay;
 	private final FactoryCollection factories;
+	private final SceneManager scene;
 	
 	public GameContext(HaloOfWarPrincipal game) {
 		this.game = game;
@@ -44,6 +45,8 @@ public class GameContext {
 			);
 		
 		this.input = new InputManager(this.bus);
+		
+		this.scene = new SceneManager(this.factories.getSCENE_FACTORY());
 	}
 
 	public HaloOfWarPrincipal getGame() {
@@ -84,6 +87,10 @@ public class GameContext {
 	
 	public FactoryCollection getFactories() {
 		return this.factories;
+	}
+	
+	public SceneManager getScene() {
+		return this.scene;
 	}
 	
 	public void dispose() {
