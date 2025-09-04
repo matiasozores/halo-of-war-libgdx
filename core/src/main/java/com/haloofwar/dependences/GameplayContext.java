@@ -3,6 +3,7 @@ package com.haloofwar.dependences;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.components.Entity;
 import com.haloofwar.components.PlayerComponent;
+import com.haloofwar.components.TransformComponent;
 import com.haloofwar.events.EnterLevelEvent;
 import com.haloofwar.events.EventBus;
 import com.haloofwar.events.NewEntityEvent;
@@ -61,6 +62,7 @@ public class GameplayContext {
     		this.player = player;
     		this.addEntity(new NewEntityEvent(this.player));
     		SystemFactory.registerSystem(this.SYSTEMS, new PlayerSystem(player, this.bus));
+    		System.out.println("Se ha inicializado el jugador: " + player.getComponent(TransformComponent.class));
     	}
     }
     

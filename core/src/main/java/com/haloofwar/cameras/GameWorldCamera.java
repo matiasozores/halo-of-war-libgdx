@@ -32,8 +32,9 @@ public class GameWorldCamera extends GameCamera {
 
             float camX = Math.max(halfW, Math.min(this.target.x, this.map.getMapPixelWidth() - halfW));
             float camY = Math.max(halfH, Math.min(this.target.y, this.map.getMapPixelHeight() - halfH));
-
+            
             this.camera.position.set(camX, camY, 0);
+            System.out.println(camX + ", " + camY + " con: " + this.target);
             this.camera.update();
     	} else {
     		System.out.println("Para usar la camera de mundo, primero debes configurar el jugador y el mapa.");

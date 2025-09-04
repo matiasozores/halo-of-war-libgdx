@@ -28,6 +28,10 @@ public class GameScene implements Screen {
 		this.hud.resize(width, height);
 	}
 	
+	public void reconfigureCamera() {
+		this.world.reconfigureCamera();
+	}
+	
     @Override
     public void show() {}
 	@Override

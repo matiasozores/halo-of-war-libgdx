@@ -119,8 +119,8 @@ public class ComponentPresets {
     	return new DialogueComponent(type.getLines(), avatar);
     }
     
-    public static PortalComponent defaultPortal() {
-		return new PortalComponent();
+    public static PortalComponent defaultPortal(String targetScene) {
+		return new PortalComponent(targetScene);
 	}
 }
 

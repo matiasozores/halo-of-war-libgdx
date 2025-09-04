@@ -1,12 +1,15 @@
 package com.haloofwar.game;
 
 import com.haloofwar.components.PortalComponent;
+import com.haloofwar.components.TransformComponent;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.dependences.SceneManager;
 import com.haloofwar.enumerators.GameState;
+import com.haloofwar.enumerators.LevelType;
 import com.haloofwar.enumerators.SceneType;
 import com.haloofwar.events.EnterLevelEvent;
 import com.haloofwar.events.GameStateEvent;
+import com.haloofwar.events.LevelCompletedEvent;
 import com.haloofwar.events.PlayerDiedEvent;
 
 public class GameFlowManager {
@@ -14,11 +17,18 @@ public class GameFlowManager {
 	public GameState currentState = GameState.WAITING;
 	private SceneManager sceneManager;
 	
+	private TransformComponent playerTransform;
+	private float lastPlayerXAtLobby = 0f;
+	private float lastPlayerYAtLobby = 0f;
+	
 	public GameFlowManager(GameContext context) {
 		context.getBus().subscribe(PlayerDiedEvent.class, this::onPlayerDied);
 		context.getBus().subscribe(GameStateEvent.class, this::onChangeState);
 		context.getBus().subscribe(EnterLevelEvent.class, this::onEnterLevel);
+		context.getBus().subscribe(LevelCompletedEvent.class, this::onLevelCompleted);
+		
 		this.sceneManager = context.getScene();
+		this.playerTransform = context.getGameplay().getPlayer().getComponent(TransformComponent.class);
 	}
 	
 	public void startGame(GameScene initialScene) {
@@ -58,22 +68,47 @@ public class GameFlowManager {
         this.currentState = event.getState();
     }
     
-    public void onEnterLevel(EnterLevelEvent event) {
-        PortalComponent portal = event.portal.getComponent(PortalComponent.class);
-        SceneType sceneType = portal.targetScene;
+    private void onLevelCompleted(LevelCompletedEvent event) {
+        // Guardar la posición actual del jugador antes de volver al lobby
+    	System.out.println("El nivel ha sido completado. Volviendo al lobby... con posicion de: " + this.lastPlayerXAtLobby + ", " + this.lastPlayerYAtLobby);
+    	if(this.playerTransform != null) {
+    		this.playerTransform.x = this.lastPlayerXAtLobby;
+    		this.playerTransform.y = this.lastPlayerYAtLobby;
+    	}
 
+        if (this.currentScene != null) {
+            this.currentScene.hide();
+        }
+
+        // Volver al lobby
+        this.currentScene = this.sceneManager.get(SceneType.MAIN);
+        this.currentScene.show();
+        this.currentScene.reconfigureCamera();
+
+
+        this.setGameState(GameState.PLAYING);
+    }
+    
+    public void onEnterLevel(EnterLevelEvent event) {
+    	System.out.println(this.playerTransform);
+    	System.out.println("Posicion actual del jugador antes de entrar al nivel: " + this.playerTransform.x + ", " + this.playerTransform.y);
+    	this.lastPlayerXAtLobby = this.playerTransform.x;
+    	this.lastPlayerYAtLobby = this.playerTransform.y;	
+   
+        PortalComponent portal = event.portal.getComponent(PortalComponent.class);
+        LevelType levelType = portal.targetScene;
+        
         // Liberar escena anterior
         if (this.currentScene != null) {
             this.currentScene.hide();
-            this.currentScene.dispose();
         }
 
         // Crear la nueva escena desde SceneManager
-        this.currentScene = this.sceneManager.get(sceneType);
-        System.out.println("Cambiando a escena: " + sceneType + " -> " + this.currentScene);
+        this.currentScene = this.sceneManager.get(levelType);
 
         // Inicializar y setear el estado
         this.currentScene.show();
+        this.currentScene.reconfigureCamera();
         this.setGameState(GameState.PLAYING);
     }
 

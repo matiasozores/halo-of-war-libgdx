@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="144" height="96" tilewidth="32" tileheight="32" infinite="0" nextlayerid="24" nextobjectid="13">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="144" height="96" tilewidth="32" tileheight="32" infinite="0" nextlayerid="24" nextobjectid="25">
  <properties>
   <property name="xSpawnPoint" type="int" value="2848"/>
   <property name="ySpawnPoint" type="int" value="200"/>
@@ -920,9 +920,6 @@
   <object id="9" x="3261.33" y="2548" width="108" height="45.3333"/>
   <object id="10" x="2456" y="1901.33"/>
  </objectgroup>
- <objectgroup id="22" name="portal">
-  <object id="12" x="3425.33" y="1876" width="66.6667" height="72"/>
- </objectgroup>
  <layer id="2" name="road" width="144" height="96">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -1823,4 +1820,16 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="22" name="portal">
+  <object id="12" x="3425.33" y="1876" width="66.6667" height="72">
+   <properties>
+    <property name="teleportation" value="cave"/>
+   </properties>
+  </object>
+  <object id="24" x="2846.67" y="2460" width="66.6667" height="72">
+   <properties>
+    <property name="teleportation" value="cave"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

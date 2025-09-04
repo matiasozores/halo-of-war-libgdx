@@ -12,12 +12,20 @@ public class WorldContext {
 	// Dependencias
 	private final SpriteBatch batch;
 	private final GameWorldCamera camera;
+	private final Entity player;
+	private final MapRenderer map;
 	
 	public WorldContext(Entity player, MapRenderer map, GameContext context) {
 		this.gameplay = context.getGameplay();
 		this.camera = context.getWorldCamera();
 		this.camera.configure(player, map.getMetaData());
 		this.batch = context.getRender().getBatch();
+		this.player = player;
+		this.map = map;
+	}
+	
+	public void reconfigureCamera() {
+		this.camera.configure(this.player, this.map.getMetaData());
 	}
 	
 	public GameplayContext getGameplay() {

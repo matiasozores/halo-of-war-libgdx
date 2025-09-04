@@ -33,15 +33,20 @@ public class BulletSystem extends BaseSystem implements Updatable {
     }
 
     private void spawnBullet(ShootBulletEvent event) {
-        // en un futuro fabrica de balas para separar un poco las responsabilidades y hacerlo mas escalable (tipos de balas)
         Entity bullet = new Entity();
 
+        // --- Componente de bala ---
         BulletComponent bulletComp = new BulletComponent(
             event.dirX, event.dirY, event.speed * SPEED_MULTIPLIER, event.damage
         );
         bullet.addComponent(bulletComp);
 
-        TransformComponent transform = new TransformComponent(event.x, event.y, 16, 16);
+        // --- Calcular offset para que no colisione con el jugador ---
+        float offset = 20f; // distancia desde el centro del jugador
+        float spawnX = event.x + event.dirX * offset;
+        float spawnY = event.y + event.dirY * offset;
+
+        TransformComponent transform = new TransformComponent(spawnX, spawnY, 16, 16);
         bullet.addComponent(transform);
 
         float angle = (float) Math.toDegrees(Math.atan2(event.dirY, event.dirX));

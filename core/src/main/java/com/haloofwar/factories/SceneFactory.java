@@ -2,8 +2,10 @@ package com.haloofwar.factories;
 
 import com.haloofwar.components.TransformComponent;
 import com.haloofwar.dependences.GameContext;
+import com.haloofwar.enumerators.LevelType;
 import com.haloofwar.enumerators.SceneType;
 import com.haloofwar.game.GameScene;
+import com.haloofwar.game.Level;
 import com.haloofwar.game.World;
 import com.haloofwar.game.dependences.MapRenderer;
 import com.haloofwar.game.dependences.WorldCollisionInitializer;
@@ -17,7 +19,6 @@ public final class SceneFactory {
 		this.context = context;
 	}
 	
-	// Luego se mejorara para no utilizar switch
     public GameScene create(SceneType type) {
     	World world = this.build(type);
     	this.playerReposition(world);
@@ -25,6 +26,15 @@ public final class SceneFactory {
     	HUD hud = this.context.getFactories().getHUD_FACTORY().create();
     	return new GameScene(world, hud);
     }
+    
+    public GameScene create(LevelType type) {
+        World world = this.build(type.getScene());
+        this.playerReposition(world);
+
+        HUD hud = this.context.getFactories().getHUD_FACTORY().create();
+        return new Level(world, hud, type.getData(), this.context.getBus());
+    }
+
     
 	private World build(SceneType type) {
 		MapRenderer map = new MapRenderer(type);

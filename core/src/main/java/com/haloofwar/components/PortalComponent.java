@@ -1,12 +1,12 @@
 package com.haloofwar.components;
 
-import com.haloofwar.enumerators.SceneType;
+import com.haloofwar.enumerators.LevelType;
 import com.haloofwar.interfaces.Component;
 
 public class PortalComponent implements Component {
-	public SceneType targetScene;
+	public LevelType targetScene;
 	
-	public PortalComponent() {
-		this.targetScene = SceneType.CAVE;
+	public PortalComponent(String targetScene) {
+		this.targetScene = LevelType.getLevelByName(targetScene);
 	}
 }

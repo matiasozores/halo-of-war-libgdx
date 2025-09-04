@@ -31,6 +31,10 @@ public class World {
 
         this.batch.end();
     }
+    
+    public void reconfigureCamera() {
+		this.context.reconfigureCamera();
+	}
 
     public void dispose() {
         this.map.dispose();
