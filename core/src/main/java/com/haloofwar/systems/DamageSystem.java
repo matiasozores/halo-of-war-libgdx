@@ -6,6 +6,7 @@ import com.haloofwar.components.PlayerComponent;
 import com.haloofwar.events.DamageEvent;
 import com.haloofwar.events.EventBus;
 import com.haloofwar.events.PlayerDiedEvent;
+import com.haloofwar.events.RemoveEntityEvent;
 import com.haloofwar.interfaces.Registrable;
 
 public class DamageSystem implements Registrable{
@@ -17,6 +18,7 @@ public class DamageSystem implements Registrable{
     }
 
     private void onDamage(DamageEvent event) {
+    	
         Entity target = event.target;
 
         if (!target.hasComponent(HealthComponent.class)) {
@@ -27,11 +29,12 @@ public class DamageSystem implements Registrable{
         health.affectHealth(event.amount);
         
         if (!health.isAlive()) {
+        	this.bus.publish(new RemoveEntityEvent(target));
+        	
             if (target.hasComponent(PlayerComponent.class)) {
                 this.bus.publish(new PlayerDiedEvent(target));
             } 
         }
-
     }
 
     // Se implementa a Registrable aunque no requiera sus metodos para que sea tratado como un sistema

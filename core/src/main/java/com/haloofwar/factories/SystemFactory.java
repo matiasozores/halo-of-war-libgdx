@@ -11,18 +11,24 @@ import com.haloofwar.interfaces.Updatable;
 import com.haloofwar.systems.AnimationSystem;
 import com.haloofwar.systems.BulletCollisionSystem;
 import com.haloofwar.systems.BulletSystem;
+import com.haloofwar.systems.CollectSystem;
 import com.haloofwar.systems.CollisionSystem;
 import com.haloofwar.systems.CrosshairSystem;
 import com.haloofwar.systems.DamageSystem;
 import com.haloofwar.systems.DialogueSystem;
+import com.haloofwar.systems.EnemyWeaponAISystem;
+import com.haloofwar.systems.FireArmSystem;
+import com.haloofwar.systems.MeleeWeaponSystem;
 import com.haloofwar.systems.MovementSystem;
 import com.haloofwar.systems.ObstacleSystem;
 import com.haloofwar.systems.PickupSystem;
+import com.haloofwar.systems.PlayerWeaponInputSystem;
 import com.haloofwar.systems.PortalSystem;
+import com.haloofwar.systems.PowerUpSystem;
 import com.haloofwar.systems.RenderSystem;
 import com.haloofwar.systems.SoundSystem;
 import com.haloofwar.systems.TalkSystem;
-import com.haloofwar.systems.WeaponSystem;
+import com.haloofwar.systems.VisibilitySystem;
 import com.haloofwar.systems.dependences.SystemCollection;
 
 public final class SystemFactory {
@@ -41,7 +47,8 @@ public final class SystemFactory {
             new AnimationSystem(bus),
             new RenderSystem(batch),
             new CrosshairSystem(batch),
-            new WeaponSystem(bus),
+            new MeleeWeaponSystem(bus),
+            new FireArmSystem(bus),
             new CollisionSystem(bus),
             new ObstacleSystem(bus),
             new PickupSystem(bus),
@@ -50,7 +57,12 @@ public final class SystemFactory {
             new DamageSystem(bus),
             new SoundSystem(sound, bus),
             new DialogueSystem(bus),
-            new PortalSystem(bus)
+            new PortalSystem(bus),
+            new PlayerWeaponInputSystem(bus),
+            new CollectSystem(bus),
+            new PowerUpSystem(bus),
+            new EnemyWeaponAISystem(),
+            new VisibilitySystem()
         };
 
         for (Object system : allSystems) {

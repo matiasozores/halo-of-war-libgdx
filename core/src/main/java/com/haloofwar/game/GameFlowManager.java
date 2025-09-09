@@ -70,7 +70,6 @@ public class GameFlowManager {
     
     private void onLevelCompleted(LevelCompletedEvent event) {
         // Guardar la posición actual del jugador antes de volver al lobby
-    	System.out.println("El nivel ha sido completado. Volviendo al lobby... con posicion de: " + this.lastPlayerXAtLobby + ", " + this.lastPlayerYAtLobby);
     	if(this.playerTransform != null) {
     		this.playerTransform.x = this.lastPlayerXAtLobby;
     		this.playerTransform.y = this.lastPlayerYAtLobby;
@@ -91,12 +90,28 @@ public class GameFlowManager {
     
     public void onEnterLevel(EnterLevelEvent event) {
     	System.out.println(this.playerTransform);
-    	System.out.println("Posicion actual del jugador antes de entrar al nivel: " + this.playerTransform.x + ", " + this.playerTransform.y);
     	this.lastPlayerXAtLobby = this.playerTransform.x;
     	this.lastPlayerYAtLobby = this.playerTransform.y;	
    
         PortalComponent portal = event.portal.getComponent(PortalComponent.class);
         LevelType levelType = portal.targetScene;
+        
+        // Verificar si el nivel ya fue completado ------------
+        
+        GameScene targetScene = this.sceneManager.get(levelType);
+        Level level = null;
+        if(targetScene instanceof Level) {
+			level = (Level) targetScene;
+		}
+        
+        if(level != null) {
+        	if(level.isLevelCompleted()) {
+        		System.out.println("El nivel " + levelType + " ya fue completado. No se puede entrar de nuevo.");
+            	return;
+            }
+		}
+        // ----------------------------------------------------
+        
         
         // Liberar escena anterior
         if (this.currentScene != null) {
@@ -104,7 +119,7 @@ public class GameFlowManager {
         }
 
         // Crear la nueva escena desde SceneManager
-        this.currentScene = this.sceneManager.get(levelType);
+        this.currentScene = targetScene;
 
         // Inicializar y setear el estado
         this.currentScene.show();
@@ -120,4 +135,6 @@ public class GameFlowManager {
 	public GameScene getCurrentScene() {
 		return this.currentScene;
 	}
+	
+	
 }

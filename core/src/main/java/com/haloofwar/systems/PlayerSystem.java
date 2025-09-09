@@ -9,13 +9,6 @@ import com.haloofwar.interfaces.Registrable;
 public class PlayerSystem implements Registrable {
 	private final Entity player;
 	
-	/*
-	 * 
-	 * Temporal hasta entender como hacer los dos clientes y el servidor, ahora mismo no se puede diferenciar
-	 * el jugador en el caso que haya dos jugadores
-	 * 
-	 * */
-	
 	public PlayerSystem(Entity player, EventBus bus) {
 		if(!player.hasComponent(PlayerComponent.class)) {
 			System.out.println("No se puede crear el sistema del juagdor porque se paso una entidad que no lo es...");
@@ -34,14 +27,8 @@ public class PlayerSystem implements Registrable {
 	}
 
 	@Override
-	public void register(Entity entity) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void register(Entity entity) {}
 
 	@Override
-	public void unregister(Entity entity) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void unregister(Entity entity) {}
 }

@@ -8,7 +8,7 @@ public class BulletComponent implements Component {
     public int damage;
     public boolean active = true;
 
-    public BulletComponent(float dirX, float dirY, int speed, int damage) {
+    public BulletComponent(float dirX, float dirY, float speed, int damage) {
         this.dirX = dirX;
         this.dirY = dirY;
         this.speed = speed;

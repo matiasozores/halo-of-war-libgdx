@@ -5,9 +5,9 @@ import com.haloofwar.components.HealthComponent;
 import com.haloofwar.components.InventoryComponent;
 import com.haloofwar.components.NameComponent;
 import com.haloofwar.dependences.GameContext;
+import com.haloofwar.enumerators.FireArmType;
 import com.haloofwar.enumerators.HeadType;
 import com.haloofwar.enumerators.UIAsset;
-import com.haloofwar.enumerators.WeaponType;
 import com.haloofwar.ui.HUD;
 import com.haloofwar.ui.components.DialogueBox;
 import com.haloofwar.ui.components.HealthBar;
@@ -44,7 +44,7 @@ public final class HUDFactory {
                 context.getRender().getFont().getSmallFont(),
                 context.getRender().getFont().getTitleFont(),
                 context.getTexture().get(HeadType.KRATOS),      // Podés parametrizar luego
-                context.getTexture().get(WeaponType.RIFLE_ASALTO),
+                context.getTexture().get(FireArmType.RIFLE_ASALTO), // Podés parametrizar luego
                 nameComp,
                 healthComp
         );

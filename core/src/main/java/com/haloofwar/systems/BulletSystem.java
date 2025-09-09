@@ -27,7 +27,8 @@ public class BulletSystem extends BaseSystem implements Updatable {
 
     @Override
     public void register(Entity e) {
-        if (e.hasComponent(BulletComponent.class) && e.hasComponent(RenderComponent.class)) {
+        if (e.hasComponent(BulletComponent.class) &&
+            e.hasComponent(RenderComponent.class)) {
             super.register(e);
         }
     }
@@ -37,24 +38,26 @@ public class BulletSystem extends BaseSystem implements Updatable {
 
         // --- Componente de bala ---
         BulletComponent bulletComp = new BulletComponent(
-            event.dirX, event.dirY, event.speed * SPEED_MULTIPLIER, event.damage
+            event.dirX,
+            event.dirY,
+            event.speed * SPEED_MULTIPLIER,
+            event.damage
         );
         bullet.addComponent(bulletComp);
 
-        // --- Calcular offset para que no colisione con el jugador ---
-        float offset = 20f; // distancia desde el centro del jugador
-        float spawnX = event.x + event.dirX * offset;
-        float spawnY = event.y + event.dirY * offset;
-
-        TransformComponent transform = new TransformComponent(spawnX, spawnY, 16, 16);
+        // --- Transform inicial ---
+        TransformComponent transform = new TransformComponent(event.x, event.y, 16, 16);
         bullet.addComponent(transform);
 
+        // --- Render con rotación ---
         float angle = (float) Math.toDegrees(Math.atan2(event.dirY, event.dirX));
         RenderComponent render = new RenderComponent(this.texture.get(ProjectileType.BULLET), angle);
         bullet.addComponent(render);
 
+        // --- Colisión ---
         bullet.addComponent(new CollisionComponent(transform.width, transform.height));
 
+        // --- Notificar creación ---
         this.bus.publish(new SpawnBulletEvent(bullet));
     }
 

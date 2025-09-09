@@ -31,8 +31,9 @@ public final class PlayerFactory implements EntityFactory {
                 .withComponent(ComponentPresets.defaultCrosshair(playerType, this.context.getTexture(), this.context.getWorldCamera()))
                 .withComponent(ComponentPresets.defaultName(playerType))
                 .withComponent(ComponentPresets.defaultInventory())
-                .withComponent(ComponentPresets.defaultWeapon(playerType))
+                .withComponent(ComponentPresets.defaultWeapon(playerType.getWeapon()))
                 .withComponent(ComponentPresets.defaultPlayer())
+                .withComponent(ComponentPresets.defaultVisibility())
                 .build();
     }
 }

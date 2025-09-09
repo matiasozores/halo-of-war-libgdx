@@ -1,21 +1,21 @@
 	package com.haloofwar.game.dependences;
 	
 	import com.badlogic.gdx.maps.MapLayer;
-	import com.badlogic.gdx.maps.MapObject;
-	import com.badlogic.gdx.maps.objects.RectangleMapObject;
-	import com.badlogic.gdx.maps.tiled.TiledMapTile;
-	import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-	import com.badlogic.gdx.math.Rectangle;
-	import com.haloofwar.components.CollisionComponent;
-	import com.haloofwar.components.Entity;
-	import com.haloofwar.components.TransformComponent;
-	import com.haloofwar.dependences.GameContext;
-	import com.haloofwar.enumerators.LayerType;
-	import com.haloofwar.enumerators.ObjectType;
-	import com.haloofwar.events.NewEntityEvent;
-	import com.haloofwar.factories.ObjectFactory;
-	import com.haloofwar.factories.ObstacleFactory;
-	import com.haloofwar.factories.PortalFactory;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Rectangle;
+import com.haloofwar.components.CollisionComponent;
+import com.haloofwar.components.Entity;
+import com.haloofwar.components.TransformComponent;
+import com.haloofwar.dependences.GameContext;
+import com.haloofwar.enumerators.LayerType;
+import com.haloofwar.enumerators.PowerUpType;
+import com.haloofwar.events.NewEntityEvent;
+import com.haloofwar.factories.ObjectFactory;
+import com.haloofwar.factories.ObstacleFactory;
+import com.haloofwar.factories.PortalFactory;
 	
 	public class WorldCollisionInitializer {
 	
@@ -46,9 +46,9 @@
 	                        entity = ObstacleFactory.createObstacle(rect);
 	                        break;
 	                    case ITEM:
-	                    	entity = ObjectFactory.createItem (
+	                    	entity = ObjectFactory.createPowerUp (
 	                                rect,
-	                                ObjectType.POSION_SIN_EFECTOS,
+	                                PowerUpType.INVISIBILIDAD,
 	                                context.getTexture()
 	                        );
 	                        break;

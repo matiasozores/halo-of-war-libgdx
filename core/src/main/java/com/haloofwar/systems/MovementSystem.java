@@ -37,6 +37,8 @@ public class MovementSystem extends BaseSystem implements Updatable {
             	continue;
             }
             
+            movement.controller.update(delta);
+            
             movement.lastX = transform.x;
             movement.lastY = transform.y;
             

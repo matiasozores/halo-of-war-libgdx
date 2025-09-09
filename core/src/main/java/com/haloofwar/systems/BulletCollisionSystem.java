@@ -22,38 +22,31 @@ public class BulletCollisionSystem implements Registrable {
         Entity bulletEntity = null;
         Entity targetEntity = null;
         
-        if(event.a.hasComponent(BulletComponent.class)) {
+        if (event.a.hasComponent(BulletComponent.class)) {
             bulletEntity = event.a;
             targetEntity = event.b;
-        } else if(event.b.hasComponent(BulletComponent.class)) {
+        } else if (event.b.hasComponent(BulletComponent.class)) {
             bulletEntity = event.b;
             targetEntity = event.a;
         }
 
-        if(bulletEntity == null) {
+        if (bulletEntity == null) {
         	return;
         }
-        
-        final int DAMAGE = bulletEntity.getComponent(BulletComponent.class).damage;
-        
-        bulletEntity.getComponent(BulletComponent.class).active = false;
+
+        BulletComponent bulletComp = bulletEntity.getComponent(BulletComponent.class);
+        bulletComp.active = false;
+
         this.bus.publish(new BulletHitEvent(bulletEntity, targetEntity));
-        
+
         if (targetEntity.hasComponent(HealthComponent.class)) {
-            this.bus.publish(new DamageEvent(targetEntity, DAMAGE, bulletEntity)); 
+            this.bus.publish(new DamageEvent(targetEntity, bulletComp.damage, bulletEntity)); 
         }
     }
 
-	@Override
-	public void register(Entity entity) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void register(Entity entity) { }
 
-	@Override
-	public void unregister(Entity entity) {
-		// TODO Auto-generated method stub
-		
-	}
-
+    @Override
+    public void unregister(Entity entity) { }
 }

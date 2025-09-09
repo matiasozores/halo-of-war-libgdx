@@ -1,27 +1,28 @@
 package com.haloofwar.enumerators;
 
 import com.haloofwar.interfaces.CrosshairEntityDescriptor;
+import com.haloofwar.interfaces.Weapon;
 
 public enum PlayerType implements CrosshairEntityDescriptor {
-	MASTER_CHIEF("Master Chief","sprites/masterchief.png", 6, 8, CrosshairType.GREEN, WeaponType.RIFLE_ASALTO, HeadType.MASTER_CHIEF),
-	KRATOS("Kratos","sprites/kratos.png", 4, 4, CrosshairType.RED, WeaponType.RIFLE_ASALTO, HeadType.KRATOS);
+	MASTER_CHIEF("Master Chief","sprites/masterchief.png", 6, 8, CrosshairType.GREEN, FireArmType.RIFLE_ASALTO, HeadType.MASTER_CHIEF),
+	KRATOS("Kratos","sprites/kratos.png", 4, 4, CrosshairType.RED, MeleeWeaponType.ESPADA, HeadType.KRATOS);
 
 	private final String name;
 	private final String path;
 	private final int idleLength;
 	private final int walkLength;
 	private final CrosshairType crosshair;
-	private final WeaponType defaultWeapon;
+	private final Weapon weapon;
 	private final HeadType head;
 
-	PlayerType(String name, String path, int idleLength, int walkLength, CrosshairType crosshair, WeaponType defaultWeapon,
+	PlayerType(String name, String path, int idleLength, int walkLength, CrosshairType crosshair, Weapon weapon,
 			HeadType head) {
 		this.name = name;
 		this.path = path;
 		this.idleLength = idleLength;
 		this.walkLength = walkLength;
 		this.crosshair = crosshair;
-		this.defaultWeapon = defaultWeapon;
+		this.weapon = weapon;
 		this.head = head;
 	}
 
@@ -41,8 +42,8 @@ public enum PlayerType implements CrosshairEntityDescriptor {
 	}
 
 	@Override
-	public WeaponType getDefaultWeapon() {
-		return this.defaultWeapon;
+	public Weapon getWeapon() {
+		return this.weapon;
 	}
 
 	@Override

@@ -32,7 +32,7 @@ public final class SceneFactory {
         this.playerReposition(world);
 
         HUD hud = this.context.getFactories().getHUD_FACTORY().create();
-        return new Level(world, hud, type.getData(), this.context.getBus());
+        return new Level(world, hud, type.getData(), this.context.getBus(), this.context.getFactories().getENEMY_FACTORY());
     }
 
     
