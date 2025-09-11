@@ -4,12 +4,17 @@ import java.util.ArrayList;
 
 import com.haloofwar.components.Entity;
 import com.haloofwar.components.HealthComponent;
+import com.haloofwar.enumerators.CutSceneDataType;
 import com.haloofwar.enumerators.EnemyType;
+import com.haloofwar.events.ChangeSceneEvent;
 import com.haloofwar.events.EventBus;
 import com.haloofwar.events.LevelCompletedEvent;
 import com.haloofwar.events.NewEntityEvent;
 import com.haloofwar.events.RemoveEntityEvent;
+import com.haloofwar.factories.CutSceneFactory;
 import com.haloofwar.factories.EnemyFactory;
+import com.haloofwar.game.cutscenes.CutScene;
+import com.haloofwar.game.cutscenes.CutSceneData;
 import com.haloofwar.game.dependences.LevelData;
 import com.haloofwar.ui.HUD;
 
@@ -32,18 +37,34 @@ public class Level extends GameScene {
     // Llevar cuenta propia de los enemigos activos
     private ArrayList<HealthComponent> activeEnemies = new ArrayList<>();
    
+    private CutSceneDataType cutSceneType;
+    private boolean cutscenePlayed = false;
+    private CutSceneFactory cutSceneFactory;
 	 
-    public Level(World world, HUD hud, LevelData data, EventBus bus, EnemyFactory enemyFactory) {
+    public Level(World world, HUD hud, LevelData data, EventBus bus, EnemyFactory enemyFactory, CutSceneFactory cutSceneFactory) {
         super(world, hud);
         this.data = data;
         this.bus = bus;
         this.enemyFactory = enemyFactory;
+        this.cutSceneFactory = cutSceneFactory;
         this.bus.subscribe(RemoveEntityEvent.class, this::updateEnemiesDefeated);
+    }
+    
+    public Level(World world, HUD hud, LevelData data, EventBus bus, EnemyFactory enemyFactory, CutSceneFactory cutSceneFactory, CutSceneDataType cutSceneType) {
+        this(world, hud, data, bus, enemyFactory, cutSceneFactory);
+		this.cutSceneType = cutSceneType;	
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
+
+        if (!cutscenePlayed && cutSceneType != null) {
+            // Lanzar cutscene al inicio
+            playCutscene();
+            cutscenePlayed = true; // marcamos que ya se lanzó
+            return; // no hacemos nada más hasta que termine la cutscene
+        }
 
         if (!this.initialSpawnDone) {
             this.initialWait(delta);
@@ -52,6 +73,13 @@ public class Level extends GameScene {
             this.checkLevelCompletion();
         }
     }
+
+    private void playCutscene() {
+        CutSceneData cutSceneData = cutSceneFactory.create(this.cutSceneType, this);
+        this.bus.publish(new ChangeSceneEvent(new CutScene(cutSceneData)));
+    }
+
+    
     private void initialWait(float delta) {
         this.spawnTimer += delta;
         if (this.spawnTimer >= this.INITIAL_DELAY) {

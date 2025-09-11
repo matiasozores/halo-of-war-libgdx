@@ -7,13 +7,15 @@ import com.haloofwar.dependences.SceneManager;
 import com.haloofwar.enumerators.GameState;
 import com.haloofwar.enumerators.LevelType;
 import com.haloofwar.enumerators.SceneType;
+import com.haloofwar.events.ChangeSceneEvent;
 import com.haloofwar.events.EnterLevelEvent;
 import com.haloofwar.events.GameStateEvent;
 import com.haloofwar.events.LevelCompletedEvent;
 import com.haloofwar.events.PlayerDiedEvent;
+import com.haloofwar.interfaces.Scene;
 
 public class GameFlowManager {
-	private GameScene currentScene;
+	private Scene currentScene;
 	public GameState currentState = GameState.WAITING;
 	private SceneManager sceneManager;
 	
@@ -26,6 +28,7 @@ public class GameFlowManager {
 		context.getBus().subscribe(GameStateEvent.class, this::onChangeState);
 		context.getBus().subscribe(EnterLevelEvent.class, this::onEnterLevel);
 		context.getBus().subscribe(LevelCompletedEvent.class, this::onLevelCompleted);
+		context.getBus().subscribe(ChangeSceneEvent.class, this::onChangeScene);
 		
 		this.sceneManager = context.getScene();
 		this.playerTransform = context.getGameplay().getPlayer().getComponent(TransformComponent.class);
@@ -69,72 +72,55 @@ public class GameFlowManager {
     }
     
     private void onLevelCompleted(LevelCompletedEvent event) {
-        // Guardar la posición actual del jugador antes de volver al lobby
-    	if(this.playerTransform != null) {
-    		this.playerTransform.x = this.lastPlayerXAtLobby;
-    		this.playerTransform.y = this.lastPlayerYAtLobby;
-    	}
-
-        if (this.currentScene != null) {
-            this.currentScene.hide();
+        if(this.playerTransform != null) {
+            this.playerTransform.x = this.lastPlayerXAtLobby;
+            this.playerTransform.y = this.lastPlayerYAtLobby;
         }
 
-        // Volver al lobby
-        this.currentScene = this.sceneManager.get(SceneType.MAIN);
-        this.currentScene.show();
-        this.currentScene.reconfigureCamera();
-
-
-        this.setGameState(GameState.PLAYING);
+        this.changeScene(this.sceneManager.get(SceneType.MAIN));
     }
-    
+
     public void onEnterLevel(EnterLevelEvent event) {
-    	System.out.println(this.playerTransform);
-    	this.lastPlayerXAtLobby = this.playerTransform.x;
-    	this.lastPlayerYAtLobby = this.playerTransform.y;	
-   
+        this.lastPlayerXAtLobby = this.playerTransform.x;
+        this.lastPlayerYAtLobby = this.playerTransform.y;	
+
         PortalComponent portal = event.portal.getComponent(PortalComponent.class);
         LevelType levelType = portal.targetScene;
         
-        // Verificar si el nivel ya fue completado ------------
-        
         GameScene targetScene = this.sceneManager.get(levelType);
-        Level level = null;
-        if(targetScene instanceof Level) {
-			level = (Level) targetScene;
-		}
+        Level level = targetScene instanceof Level ? (Level) targetScene : null;
         
-        if(level != null) {
-        	if(level.isLevelCompleted()) {
-        		System.out.println("El nivel " + levelType + " ya fue completado. No se puede entrar de nuevo.");
-            	return;
-            }
-		}
-        // ----------------------------------------------------
-        
-        
-        // Liberar escena anterior
-        if (this.currentScene != null) {
+        if(level != null && level.isLevelCompleted()) {
+            return;
+        }
+
+        this.changeScene(targetScene);
+    }
+    
+    public void onChangeScene(ChangeSceneEvent event) {
+		this.changeScene(event.getNextScene());
+	}
+
+    private void changeScene(Scene newScene) {
+        if(this.currentScene != null) {
             this.currentScene.hide();
         }
 
-        // Crear la nueva escena desde SceneManager
-        this.currentScene = targetScene;
+        this.currentScene = newScene;
 
-        // Inicializar y setear el estado
-        this.currentScene.show();
-        this.currentScene.reconfigureCamera();
+        if(this.currentScene != null) {
+            this.currentScene.show();
+            this.currentScene.reconfigureCamera();
+        }
+
         this.setGameState(GameState.PLAYING);
     }
-
 
 	public void setGameState(GameState state) {
 		this.currentState = state;
 	}
 	
-	public GameScene getCurrentScene() {
+	public Scene getCurrentScene() {
 		return this.currentScene;
 	}
-	
-	
 }

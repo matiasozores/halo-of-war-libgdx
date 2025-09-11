@@ -14,11 +14,9 @@ public class VisibilityComponent implements Component {
 		if(duration == 0f) {
 			this.isVisible = true;
 			this.invisibleDuration = duration;
-			System.out.println("Set to visible");
 		} else if(duration > 0f) {
 			this.invisibleDuration = duration;
 			this.isVisible = false;
-			System.out.println("Set to invisible for " + duration + " seconds");
 		} else {
 			this.invisibleDuration = 0f;
 			return;

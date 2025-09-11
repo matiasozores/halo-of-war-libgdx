@@ -1,9 +1,9 @@
 package com.haloofwar.game;
 
-import com.badlogic.gdx.Screen;
+import com.haloofwar.interfaces.Scene;
 import com.haloofwar.ui.HUD;
 
-public class GameScene implements Screen {
+public class GameScene implements Scene {
     protected final World world;
     protected final HUD hud;
 	
@@ -18,6 +18,7 @@ public class GameScene implements Screen {
 		this.hud.render();
 	}
 	
+	@Override
 	public void update(float delta) {
 		this.world.update(delta);
 	}
@@ -28,6 +29,7 @@ public class GameScene implements Screen {
 		this.hud.resize(width, height);
 	}
 	
+	@Override
 	public void reconfigureCamera() {
 		this.world.reconfigureCamera();
 	}

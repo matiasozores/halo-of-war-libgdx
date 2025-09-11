@@ -5,7 +5,7 @@ import com.haloofwar.interfaces.EntityDescriptor;
 import com.haloofwar.interfaces.Weapon;
 
 public enum FireArmType implements Weapon, EntityDescriptor {
-    RIFLE_ASALTO("Rifle de asalto", "ui/hud/armaHUD.png", 10, 25f, 5f, 60f),
+    RIFLE_ASALTO("Rifle de asalto", "ui/hud/armaHUD.png", 10, 25f, 0.1f, 60f),
     PISTOLA("Pistola", "ui/hud/pistolaHUD.png", 5, 30f, 0.5f, 60f);
 
     private final String name;

@@ -32,10 +32,14 @@ public final class SceneFactory {
         this.playerReposition(world);
 
         HUD hud = this.context.getFactories().getHUD_FACTORY().create();
-        return new Level(world, hud, type.getData(), this.context.getBus(), this.context.getFactories().getENEMY_FACTORY());
+        
+        if(type.getCutSceneType() != null) {
+			return new Level(world, hud, type.getData(), this.context.getBus(), this.context.getFactories().getENEMY_FACTORY(), this.context.getFactories().getCUTSCENE_FACTORY(), type.getCutSceneType());
+        }
+        
+        return new Level(world, hud, type.getData(), this.context.getBus(), this.context.getFactories().getENEMY_FACTORY(), this.context.getFactories().getCUTSCENE_FACTORY());
     }
 
-    
 	private World build(SceneType type) {
 		MapRenderer map = new MapRenderer(type);
 		WorldContext worldContext = new WorldContext(this.context.getGameplay().getPlayer(), map, this.context);

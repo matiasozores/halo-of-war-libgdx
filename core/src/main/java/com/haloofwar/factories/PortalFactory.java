@@ -7,7 +7,7 @@ import com.haloofwar.enumerators.HeadType;
 import com.haloofwar.factories.components.ComponentPresets;
 import com.haloofwar.factories.components.EntityBuilder;
 
-public class PortalFactory {
+public final class PortalFactory {
     public static Entity create(Rectangle rect, TextureManager manager, String teleportationTarget) {
         return new EntityBuilder<>()
                 .withComponent(ComponentPresets.defaultTransform(rect.x, rect.y, rect.width, rect.height))

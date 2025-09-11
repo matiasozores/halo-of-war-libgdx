@@ -4,7 +4,7 @@ import com.haloofwar.interfaces.ArmedEntityDescriptor;
 import com.haloofwar.interfaces.Weapon;
 
 public enum EnemyType implements ArmedEntityDescriptor {
-	ELITE("Elite", "sprites/elite.png", 2, 8, FireArmType.RIFLE_ASALTO);
+	ELITE("Elite", "sprites/elite.png", 2, 8, FireArmType.PISTOLA);
 
 	private final String name;
 	private final String path;

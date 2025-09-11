@@ -1,6 +1,7 @@
 package com.haloofwar.factories.components;
 
 import com.haloofwar.dependences.GameContext;
+import com.haloofwar.factories.CutSceneFactory;
 import com.haloofwar.factories.EnemyFactory;
 import com.haloofwar.factories.HUDFactory;
 import com.haloofwar.factories.NPCFactory;
@@ -15,6 +16,7 @@ public class FactoryCollection {
 	private final PromptFactory PROMPT_FACTORY;
 	private final NPCFactory NPC_FACTORY;
 	private final EnemyFactory ENEMY_FACTORY;
+	private final CutSceneFactory CUTSCENE_FACTORY;	
 	
 	public FactoryCollection(GameContext context) {
 		this.HUD_FACTORY = new HUDFactory(context);
@@ -23,6 +25,7 @@ public class FactoryCollection {
 		this.PROMPT_FACTORY = new PromptFactory(context);
 		this.NPC_FACTORY = new NPCFactory(context);
 		this.ENEMY_FACTORY = new EnemyFactory(context);
+		this.CUTSCENE_FACTORY = new CutSceneFactory(context);
 	}
 	
 	public HUDFactory getHUD_FACTORY() {
@@ -47,5 +50,9 @@ public class FactoryCollection {
 	
 	public EnemyFactory getENEMY_FACTORY() {
 		return this.ENEMY_FACTORY;
+	}
+	
+	public CutSceneFactory getCUTSCENE_FACTORY() {
+		return this.CUTSCENE_FACTORY;
 	}
 }
