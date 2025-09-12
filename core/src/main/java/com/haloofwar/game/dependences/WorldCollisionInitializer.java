@@ -11,7 +11,7 @@ import com.haloofwar.components.Entity;
 import com.haloofwar.components.TransformComponent;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.enumerators.LayerType;
-import com.haloofwar.enumerators.PowerUpType;
+import com.haloofwar.enumerators.ObjectType;
 import com.haloofwar.events.NewEntityEvent;
 import com.haloofwar.factories.ObjectFactory;
 import com.haloofwar.factories.ObstacleFactory;
@@ -46,11 +46,8 @@ import com.haloofwar.factories.PortalFactory;
 	                        entity = ObstacleFactory.createObstacle(rect);
 	                        break;
 	                    case ITEM:
-	                    	entity = ObjectFactory.createPowerUp (
-	                                rect,
-	                                PowerUpType.INVISIBILIDAD,
-	                                context.getTexture()
-	                        );
+	                    	entity = ObjectFactory.createItem(rect, ObjectType.POSION_SIN_EFECTOS, context.getTexture());
+	                    
 	                        break;
 	                    case PORTAL:
 	                    	String teleportationTarget = object.getProperties().get("teleportation", String.class);
@@ -65,7 +62,7 @@ import com.haloofwar.factories.PortalFactory;
 	                        break;
 	                }
 	
-	                context.getBus().publish(new NewEntityEvent(entity));
+	                context.getGameplay().getBus().publish(new NewEntityEvent(entity));
 	            }
 	        }
 	    }
@@ -102,7 +99,7 @@ import com.haloofwar.factories.PortalFactory;
 	
 	                            // Crear obstáculo genérico
 	                            Entity entity = ObstacleFactory.createObstacle(worldRect);
-	                            context.getBus().publish(new NewEntityEvent(entity));
+	                            context.getGameplay().getBus().publish(new NewEntityEvent(entity));
 	                        }
 	                    }
 	                }

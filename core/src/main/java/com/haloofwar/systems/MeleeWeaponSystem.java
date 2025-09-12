@@ -35,18 +35,12 @@ public class MeleeWeaponSystem extends BaseSystem implements Updatable {
                 float centerX = transform.x + transform.width / 2;	
                 float centerY = transform.y + transform.height / 2;
 
-                System.out.println("Atacando con arma cuerpo a cuerpo");
-                System.out.println("Centro del atacante: (" + centerX + ", " + centerY + ")");
-                System.out.println("Rango de ataque: " + weapon.range);
-
                 // ✅ Calcular coordenadas máximas de alcance
                 float minX = centerX - weapon.range;
                 float maxX = centerX + weapon.range;
                 float minY = centerY - weapon.range;
                 float maxY = centerY + weapon.range;
-
-                System.out.println("Área de ataque desde (" + minX + ", " + minY + ") hasta (" + maxX + ", " + maxY + ")");
-
+                
                 // Aquí podrías iterar sobre todos los enemigos/jugadores y aplicar daño si están dentro de estas coordenadas
                 // por ejemplo:
                 // for(Entity target : allEntities) { ... calcular distancia ... if(dist <= weapon.range) { aplicar daño } }

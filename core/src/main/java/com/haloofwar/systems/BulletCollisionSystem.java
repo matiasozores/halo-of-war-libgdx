@@ -3,10 +3,10 @@ package com.haloofwar.systems;
 import com.haloofwar.components.BulletComponent;
 import com.haloofwar.components.Entity;
 import com.haloofwar.components.HealthComponent;
-import com.haloofwar.events.BulletHitEvent;
 import com.haloofwar.events.CollisionEvent;
 import com.haloofwar.events.DamageEvent;
 import com.haloofwar.events.EventBus;
+import com.haloofwar.events.RemoveEntityEvent;
 import com.haloofwar.interfaces.Registrable;
 
 public class BulletCollisionSystem implements Registrable {
@@ -37,7 +37,7 @@ public class BulletCollisionSystem implements Registrable {
         BulletComponent bulletComp = bulletEntity.getComponent(BulletComponent.class);
         bulletComp.active = false;
 
-        this.bus.publish(new BulletHitEvent(bulletEntity, targetEntity));
+        this.bus.publish(new RemoveEntityEvent(bulletEntity));
 
         if (targetEntity.hasComponent(HealthComponent.class)) {
             this.bus.publish(new DamageEvent(targetEntity, bulletComp.damage, bulletEntity)); 

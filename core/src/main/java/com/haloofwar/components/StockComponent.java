@@ -1,10 +1,16 @@
 package com.haloofwar.components;
 
+import com.haloofwar.enumerators.ObjectType;
 import com.haloofwar.interfaces.Component;
 
 public class StockComponent implements Component{
 	private int stock = 1;
+	private ObjectType type;
 	
+	public StockComponent(ObjectType type) {
+		this.type = type;
+	}
+
 	public void affectStock(final int MOUNT_AFFECT) {
 		if(this.stock + MOUNT_AFFECT < 0) {
 			System.out.println("Error, no se puede restar el stock porque da negativo...");
@@ -15,5 +21,13 @@ public class StockComponent implements Component{
 	
 	public int getStock() {
 		return this.stock;
+	}
+	
+	public void setStock(final int STOCK) {
+		this.stock = STOCK;
+	}
+	
+	public ObjectType getType() {
+		return this.type;
 	}
 }

@@ -2,19 +2,22 @@ package com.haloofwar.game.cutscenes;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.events.EventBus;
-import com.haloofwar.events.NextEvent;
+import com.haloofwar.enumerators.GameState;
 import com.haloofwar.events.ChangeSceneEvent;
+import com.haloofwar.events.EventBus;
+import com.haloofwar.events.GameStateEvent;
+import com.haloofwar.events.NextEvent;
 import com.haloofwar.interfaces.Scene;
 
 public class CutScene implements Scene {
-
+	
     private Texture[] images;
     private SpriteBatch batch;
     private EventBus bus;
     private Scene nextScene;
     private int currentIndex = 0; // para saber qué imagen mostrar
-
+    private boolean finished = false;
+    
     public CutScene(CutSceneData data) {
         this.images = data.images;
         this.batch = data.batch;
@@ -25,13 +28,17 @@ public class CutScene implements Scene {
     }
 
     private void onNext(NextEvent event) {
-    	if(event.isPressed()) {
-            this.currentIndex++; 
-            if (this.currentIndex >= this.images.length) {
-                this.bus.publish(new ChangeSceneEvent(this.nextScene));
-            }
-    	}
+        if (!event.isPressed() || finished) return;
+
+        if (currentIndex >= images.length - 1) {
+            finished = true; // marcamos que ya terminamos
+            this.bus.publish(new GameStateEvent(GameState.PLAYING));
+            this.bus.publish(new ChangeSceneEvent(this.nextScene));
+        } else {
+            currentIndex++;
+        }
     }
+
 
     @Override
     public void update(float delta) {
@@ -50,10 +57,15 @@ public class CutScene implements Scene {
     public void resize(int width, int height) {}
 
     @Override
-    public void show() {}
+    public void show() {
+        this.currentIndex = 0;
+        this.finished = false;
+    }
+
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
     public void pause() {}

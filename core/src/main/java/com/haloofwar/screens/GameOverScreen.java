@@ -16,7 +16,7 @@ public class GameOverScreen extends Menu{
 	protected void processOption(int optionIndex) {
 		switch (optionIndex) {
 			case 0: 
-				this.context.disposeScene();
+				this.context.resetGameplay();
 				this.context.getGame().setScreen(new MainMenuScreen(this.context));
 				break;
 			case 1: 

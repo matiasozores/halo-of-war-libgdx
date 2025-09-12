@@ -19,6 +19,6 @@ public final class CutSceneFactory {
 			images[i] = this.context.getTexture().get(type.getImages()[i]);
 		}
 		
-		return new CutSceneData(images, this.context.getRender().getBatch(), this.context.getBus(), nextScene);
+		return new CutSceneData(images, this.context.getRender().getBatch(), this.context.getGameplay().getBus(), nextScene);
 	}
 }

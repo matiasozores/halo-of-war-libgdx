@@ -49,5 +49,9 @@ public class SceneManager {
     	
 		return this.scenes.get(sceneType.getScene());
 	}   
+    
+    public void clear() {
+		this.scenes.clear();
+	}
 }
 	

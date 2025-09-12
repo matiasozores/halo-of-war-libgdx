@@ -1,11 +1,11 @@
 package com.haloofwar.events;
 
-import com.haloofwar.components.Entity;
+import com.haloofwar.enumerators.LevelType;
 
 public class EnterLevelEvent {
-	public final Entity portal;
+	public final LevelType type;
 	
-	public EnterLevelEvent(Entity portal) {
-		this.portal = portal;
+	public EnterLevelEvent(LevelType type) {
+		this.type = type;
 	}
 }

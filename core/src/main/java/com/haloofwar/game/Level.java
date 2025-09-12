@@ -6,8 +6,11 @@ import com.haloofwar.components.Entity;
 import com.haloofwar.components.HealthComponent;
 import com.haloofwar.enumerators.CutSceneDataType;
 import com.haloofwar.enumerators.EnemyType;
+import com.haloofwar.enumerators.GameState;
+import com.haloofwar.enumerators.LevelType;
 import com.haloofwar.events.ChangeSceneEvent;
 import com.haloofwar.events.EventBus;
+import com.haloofwar.events.GameStateEvent;
 import com.haloofwar.events.LevelCompletedEvent;
 import com.haloofwar.events.NewEntityEvent;
 import com.haloofwar.events.RemoveEntityEvent;
@@ -76,6 +79,7 @@ public class Level extends GameScene {
 
     private void playCutscene() {
         CutSceneData cutSceneData = cutSceneFactory.create(this.cutSceneType, this);
+        this.bus.publish(new GameStateEvent(GameState.CUTSCENE));
         this.bus.publish(new ChangeSceneEvent(new CutScene(cutSceneData)));
     }
 
@@ -138,11 +142,11 @@ public class Level extends GameScene {
             this.currentWave >= this.data.getWaveCount()) {
 
             this.levelCompleted = true;
-            this.bus.publish(new LevelCompletedEvent());
+            this.bus.publish(new LevelCompletedEvent(this.data.getType()));
         }
     }
     
-    public boolean isLevelCompleted() {
-		return this.levelCompleted;
-	}
+    public LevelType getType() {
+    	return this.data.getType();
+    }
 }

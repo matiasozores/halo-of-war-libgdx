@@ -1,9 +1,10 @@
 package com.haloofwar.game.dependences;
 
+import com.haloofwar.enumerators.LevelType;
+
 public class LevelData {
 
-    private int levelNumber;        // número del nivel
-    private int sublevelNumber;     // número del subnivel (si aplica)
+	private LevelType type;
 
     // --- ENEMIGOS ---
     private int enemySpawnRate;     // segundos entre spawns
@@ -18,16 +19,14 @@ public class LevelData {
 
     
     public LevelData(
-        int levelNumber,
-        int sublevelNumber,
+        LevelType type,
         int enemySpawnRate,
         int maxEnemies,
         int waveCount,
         float spawnAcceleration,
         int enemiesToDefeat
     ) {
-        this.levelNumber = levelNumber;
-        this.sublevelNumber = sublevelNumber;
+        this.type = type;
         this.enemySpawnRate = enemySpawnRate;
         this.maxEnemies = maxEnemies;
         this.waveCount = waveCount;
@@ -36,8 +35,7 @@ public class LevelData {
     }
 
     // --- Getters ---
-    public int getLevelNumber() { return levelNumber; }
-    public int getSublevelNumber() { return sublevelNumber; }
+    public LevelType getType() { return type; }
     public int getEnemySpawnRate() { return enemySpawnRate; }
     public int getMaxEnemies() { return maxEnemies; }
     public int getWaveCount() { return waveCount; }

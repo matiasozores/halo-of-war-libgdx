@@ -8,8 +8,8 @@ import com.haloofwar.components.TransformComponent;
 import com.haloofwar.dependences.TextureManager;
 import com.haloofwar.enumerators.ProjectileType;
 import com.haloofwar.events.EventBus;
+import com.haloofwar.events.NewEntityEvent;
 import com.haloofwar.events.ShootBulletEvent;
-import com.haloofwar.events.SpawnBulletEvent;
 import com.haloofwar.interfaces.Updatable;
 
 public class BulletSystem extends BaseSystem implements Updatable {
@@ -58,7 +58,7 @@ public class BulletSystem extends BaseSystem implements Updatable {
         bullet.addComponent(new CollisionComponent(transform.width, transform.height));
 
         // --- Notificar creación ---
-        this.bus.publish(new SpawnBulletEvent(bullet));
+        this.bus.publish(new NewEntityEvent(bullet));
     }
 
     @Override

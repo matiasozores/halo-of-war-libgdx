@@ -9,15 +9,22 @@ import com.haloofwar.events.EventBus;
 import com.haloofwar.events.GameStateEvent;
 import com.haloofwar.events.InteractEvent;
 import com.haloofwar.events.MoveEvent;
+import com.haloofwar.events.NavigationEvent;
 import com.haloofwar.events.NextEvent;
+import com.haloofwar.events.SelectOptionEvent;
 
 public class InputManager implements InputProcessor {
 
-	private final EventBus bus;
+	private final EventBus globalBus;
+	private EventBus gameplayBus;
 
-	public InputManager(EventBus bus) {
-		this.bus = bus;
-	}
+    public InputManager(EventBus globalBus) {
+        this.globalBus = globalBus;
+    }
+
+    public void setGameplayBus(EventBus gameplayBus) {
+        this.gameplayBus = gameplayBus;
+    }
 	
 	private boolean arrowUp, arrowDown, arrowLeft, arrowRight;
 	private boolean enter, escape;
@@ -25,22 +32,28 @@ public class InputManager implements InputProcessor {
 	private int mouseX, mouseY;
     private boolean attack, interact, openInventory;
 	
+    private void publishGameplay(Object event) {
+        if (this.gameplayBus != null) {
+            this.gameplayBus.publish(event);
+        }
+    }
+    
 	@Override
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
-			case Input.Keys.W: this.bus.publish(new MoveEvent(Direction.UP, true)); break;
-			case Input.Keys.S: this.bus.publish(new MoveEvent(Direction.DOWN, true)); break;
-			case Input.Keys.A: this.bus.publish(new MoveEvent(Direction.LEFT, true)); break;
-			case Input.Keys.D: this.bus.publish(new MoveEvent(Direction.RIGHT, true)); break;
-	        case Input.Keys.E: this.bus.publish(new InteractEvent(true)); break;
+			case Input.Keys.W: publishGameplay(new MoveEvent(Direction.UP, true)); break;
+		    case Input.Keys.S: publishGameplay(new MoveEvent(Direction.DOWN, true)); break;
+		    case Input.Keys.A: publishGameplay(new MoveEvent(Direction.LEFT, true)); break;
+		    case Input.Keys.D: publishGameplay(new MoveEvent(Direction.RIGHT, true)); break;
+		    case Input.Keys.E: publishGameplay(new InteractEvent(true)); break;
 	        case Input.Keys.I: this.openInventory = true; break;
-	        case Input.Keys.ESCAPE: bus.publish(new GameStateEvent(GameState.PAUSED)); break;
-	        case Input.Keys.UP: this.arrowUp = true; break;
-	        case Input.Keys.DOWN: this.arrowDown = true; break;
+	        case Input.Keys.ESCAPE: publishGameplay(new GameStateEvent(GameState.PAUSED)); this.escape = true; break;
+	        case Input.Keys.UP: this.globalBus.publish(new NavigationEvent(Direction.UP, true)); break;
+	        case Input.Keys.DOWN: this.globalBus.publish(new NavigationEvent(Direction.DOWN, true)); break;
 	        case Input.Keys.LEFT: this.arrowLeft = true; break;
 	        case Input.Keys.RIGHT: this.arrowRight = true; break;
-	        case Input.Keys.ENTER: this.enter = true; break;
-	        case Input.Keys.SPACE: this.bus.publish(new NextEvent(true)); break;
+	        case Input.Keys.ENTER: this.globalBus.publish(new SelectOptionEvent(true)); break;
+		    case Input.Keys.SPACE: publishGameplay(new NextEvent(true)); break;
 		}
 		
 		return true;
@@ -49,19 +62,19 @@ public class InputManager implements InputProcessor {
 	@Override
 	public boolean keyUp(int keycode) {
 		switch (keycode) {
-			case Input.Keys.W: this.bus.publish(new MoveEvent(Direction.UP, false)); break;
-			case Input.Keys.S: this.bus.publish(new MoveEvent(Direction.DOWN, false)); break;
-			case Input.Keys.A: this.bus.publish(new MoveEvent(Direction.LEFT, false)); break;
-			case Input.Keys.D: this.bus.publish(new MoveEvent(Direction.RIGHT, false)); break;
-	        case Input.Keys.E: this.bus.publish(new InteractEvent(false)); break;
+			case Input.Keys.W: publishGameplay(new MoveEvent(Direction.UP, false)); break;
+		    case Input.Keys.S: publishGameplay(new MoveEvent(Direction.DOWN, false)); break;
+		    case Input.Keys.A: publishGameplay(new MoveEvent(Direction.LEFT, false)); break;
+		    case Input.Keys.D: publishGameplay(new MoveEvent(Direction.RIGHT, false)); break;
+		    case Input.Keys.E: publishGameplay(new InteractEvent(false)); break;
 	        case Input.Keys.I: this.openInventory = false; break;
 	        case Input.Keys.ESCAPE: this.escape = false; break;
-	        case Input.Keys.UP: this.arrowUp = false; break;
-	        case Input.Keys.DOWN: this.arrowDown = false; break;
+	        case Input.Keys.UP: this.globalBus.publish(new NavigationEvent(Direction.UP, false)); break;
+	        case Input.Keys.DOWN: this.globalBus.publish(new NavigationEvent(Direction.DOWN, false)); break;
 	        case Input.Keys.LEFT: this.arrowLeft = false; break;
 	        case Input.Keys.RIGHT: this.arrowRight = false; break;
-	        case Input.Keys.ENTER: this.enter = false; break;
-	        case Input.Keys.SPACE: this.bus.publish(new NextEvent(false)); break;
+	        case Input.Keys.ENTER: this.globalBus.publish(new SelectOptionEvent(false)); break;
+		    case Input.Keys.SPACE: publishGameplay(new NextEvent(false)); break;
 		}
 		
 		return true;
@@ -70,7 +83,7 @@ public class InputManager implements InputProcessor {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		 if (button == Input.Buttons.LEFT) {
-			 this.bus.publish(new AttackEvent(true));
+			 this.publishGameplay(new AttackEvent(true));
 	     }
 		 
 		return true;
@@ -79,7 +92,7 @@ public class InputManager implements InputProcessor {
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if (button == Input.Buttons.LEFT) {
-			this.bus.publish(new AttackEvent(false));
+			this.publishGameplay(new AttackEvent(false));
 		}
 		
 		return true;

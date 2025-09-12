@@ -1,7 +1,6 @@
 package com.haloofwar.systems;
 
 import com.haloofwar.components.Entity;
-import com.haloofwar.components.InventoryComponent;
 import com.haloofwar.components.PlayerComponent;
 import com.haloofwar.components.PortalComponent;
 import com.haloofwar.events.CollisionEvent;
@@ -20,10 +19,9 @@ public class PortalSystem implements Registrable {
 	private void onCollision(CollisionEvent event) {
 	    if(event.a.hasComponent(PlayerComponent.class) && event.b.hasComponent(PortalComponent.class)) {
 	        PlayerComponent player = event.a.getComponent(PlayerComponent.class);
+	        PortalComponent portal = event.b.getComponent(PortalComponent.class);
 	        if(player.isInteracting) { 
-	            InventoryComponent inventory = event.a.getComponent(InventoryComponent.class);
-	            inventory.add(event.b);
-	            this.bus.publish(new EnterLevelEvent(event.b));
+	            this.bus.publish(new EnterLevelEvent(portal.targetScene));
 	        }
 	    }
 	}

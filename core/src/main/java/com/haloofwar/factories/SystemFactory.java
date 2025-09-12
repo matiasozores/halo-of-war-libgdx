@@ -1,7 +1,6 @@
 package com.haloofwar.factories;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.dependences.SoundManager;
 import com.haloofwar.dependences.TextureManager;
 import com.haloofwar.events.EventBus;
 import com.haloofwar.interfaces.Disposable;
@@ -26,7 +25,6 @@ import com.haloofwar.systems.PlayerWeaponInputSystem;
 import com.haloofwar.systems.PortalSystem;
 import com.haloofwar.systems.PowerUpSystem;
 import com.haloofwar.systems.RenderSystem;
-import com.haloofwar.systems.SoundSystem;
 import com.haloofwar.systems.TalkSystem;
 import com.haloofwar.systems.VisibilitySystem;
 import com.haloofwar.systems.dependences.SystemCollection;
@@ -35,10 +33,9 @@ public final class SystemFactory {
 	private SystemFactory() {}
 	
     public static SystemCollection createGameplaySystems(
-        SpriteBatch batch, SoundManager sound, 
-        TextureManager texture, EventBus bus) {
+        SpriteBatch batch, TextureManager texture, EventBus bus) {
 
-        SystemCollection systems = new SystemCollection(bus);
+        SystemCollection systems = new SystemCollection();
 
         // array que me sirve para almacenar todo los diferentes sistemas
         Object[] allSystems = {
@@ -55,7 +52,6 @@ public final class SystemFactory {
             new TalkSystem(bus),
             new BulletCollisionSystem(bus),
             new DamageSystem(bus),
-            new SoundSystem(sound, bus),
             new DialogueSystem(bus),
             new PortalSystem(bus),
             new PlayerWeaponInputSystem(bus),

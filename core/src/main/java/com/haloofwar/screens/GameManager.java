@@ -1,8 +1,11 @@
 package com.haloofwar.screens;
 
+import java.util.Set;
+
 import com.badlogic.gdx.Screen;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.enumerators.GameState;
+import com.haloofwar.enumerators.LevelType;
 import com.haloofwar.enumerators.SceneType;
 import com.haloofwar.enumerators.SoundType;
 import com.haloofwar.game.GameFlowManager;
@@ -18,7 +21,16 @@ public class GameManager implements Screen {
 		this.context = context;
 
 		this.flowManager = new GameFlowManager(context);
-		this.flowManager.startGame(context.getScene().get(SceneType.MAIN));
+		this.flowManager.changeScene(context.getScene().get(SceneType.MAIN));
+	
+		this.pauseMenu = new PauseMenuScreen(context, this);
+	}
+	
+	public GameManager(GameContext context, Set<LevelType> completedLevelset) {
+		this.context = context;
+
+		this.flowManager = new GameFlowManager(context, completedLevelset);
+		this.flowManager.changeScene(context.getScene().get(SceneType.MAIN));
 	
 		this.pauseMenu = new PauseMenuScreen(context, this);
 	}
@@ -54,7 +66,7 @@ public class GameManager implements Screen {
 	}
 
 	public void reset() {
-		this.context.disposeScene();
+		this.context.resetGameplay();
 	}
 
 	@Override

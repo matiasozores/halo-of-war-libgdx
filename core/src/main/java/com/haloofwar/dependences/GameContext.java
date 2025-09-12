@@ -5,6 +5,7 @@ import com.haloofwar.cameras.GameWorldCamera;
 import com.haloofwar.core.HaloOfWarPrincipal;
 import com.haloofwar.events.EventBus;
 import com.haloofwar.factories.components.FactoryCollection;
+import com.haloofwar.systems.SoundSystem;
 
 public class GameContext {
 	private final HaloOfWarPrincipal game;
@@ -19,9 +20,11 @@ public class GameContext {
 	private final GameStaticCamera staticCamera;
 	private final GameWorldCamera worldCamera;
 
-	private final GameplayContext gameplay;
+	private GameplayContext gameplay;
 	private final FactoryCollection factories;
 	private final SceneManager scene;
+	
+	private final SoundSystem soundSystem;
 	
 	public GameContext(HaloOfWarPrincipal game) {
 		this.game = game;
@@ -37,16 +40,19 @@ public class GameContext {
 		
 		this.factories = new FactoryCollection(this);
 		
-		this.gameplay = new GameplayContext(
-				this.render.getBatch(),
-				this.audio.getSound(),
-				this.texture,
-				this.bus
-			);
-		
+
 		this.input = new InputManager(this.bus);
 		
+		this.gameplay = new GameplayContext(
+				this.render.getBatch(),
+				this.texture,
+				this.input
+		);
+
 		this.scene = new SceneManager(this.factories.getSCENE_FACTORY());
+	
+		this.soundSystem = new SoundSystem(this.audio.getSound(), this.bus);
+		this.soundSystem.setGameplayBus(this.gameplay.getBus());
 	}
 
 	public HaloOfWarPrincipal getGame() {
@@ -77,10 +83,6 @@ public class GameContext {
 		return this.worldCamera;
 	}
 	
-	public EventBus getBus() {
-		return this.bus;
-	}
-	
 	public GameplayContext getGameplay() {
 		return this.gameplay;
 	}
@@ -93,6 +95,10 @@ public class GameContext {
 		return this.scene;
 	}
 	
+	public EventBus getBus() {
+		return this.bus;
+	}
+	
 	public void dispose() {
 		this.disposeScene();
 		this.render.dispose();
@@ -100,7 +106,21 @@ public class GameContext {
 		this.audio.dispose();
 	}
 
-	public void disposeScene() {
+	private void disposeScene() {
 		this.gameplay.dispose();
+		this.scene.clear();
+		this.texture.dispose();
 	}
+	
+	public void resetGameplay() {
+		this.disposeScene();
+		this.gameplay = new GameplayContext(
+				this.render.getBatch(),
+				this.texture,
+				this.input
+		);
+		this.soundSystem.setGameplayBus(this.gameplay.getBus());
+	}
+	
+	
 }

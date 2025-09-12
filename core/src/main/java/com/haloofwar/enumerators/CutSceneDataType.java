@@ -1,7 +1,7 @@
 package com.haloofwar.enumerators;
 
 public enum CutSceneDataType {
-	INTRO(new CutSceneType[] {CutSceneType.PLAYA_PERDIDA, CutSceneType.PLAYA_PERDIDA});
+	INTRO(new CutSceneType[] {CutSceneType.PLAYA_PERDIDA, CutSceneType.CASTILLO});
 
 	private CutSceneType[] images;
 	

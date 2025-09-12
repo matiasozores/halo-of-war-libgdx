@@ -18,20 +18,18 @@ public class MainMenuScreen extends Menu{
 
 	@Override
 	protected void processOption(int optionIndex) {
-		switch (optionIndex) {
-			case 0: 
-				this.context.getGame().setScreen(new PlayerSelectionScreen(this.context, this));
-				break;
-			case 1: 
-				this.context.getGame().setScreen(new SettingsScreen(this.context, this));
-				break;
-			case 2: 
-				Gdx.app.exit();
-				break;
-			default:
-				break;
-		}
-		
-
+	    switch (optionIndex) {
+	        case 0: 
+	            this.context.getGame().setScreen(new PlayMenuScreen(this.context, this));
+	            break;
+	        case 1: 
+	            this.context.getGame().setScreen(new SettingsScreen(this.context, this));
+	            break;
+	        case 2: 
+	            Gdx.app.exit();
+	            break;
+	        default:
+	            break;
+	    }
 	}
 }

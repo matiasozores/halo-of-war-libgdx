@@ -4,9 +4,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.enumerators.Background;
+import com.haloofwar.enumerators.Direction;
 import com.haloofwar.events.EventBus;
 import com.haloofwar.events.NavigationEvent;
+import com.haloofwar.events.NavigationSoundEvent;
 import com.haloofwar.events.SelectOptionEvent;
+import com.haloofwar.events.SelectOptionSoundEvent;
 import com.haloofwar.screens.dependences.MenuNavigator;
 import com.haloofwar.screens.dependences.MenuRenderer;
 import com.haloofwar.utilities.Text;
@@ -31,6 +34,10 @@ public abstract class Menu implements Screen {
     
     private final EventBus BUS;
 
+    private boolean upFlag = false;
+    private boolean downFlag = false;
+    private boolean enterFlag = false;
+    
     public Menu(GameContext context, String title, String[] optionTexts, Screen previousScreen) {
         this.context = context;
         this.previousScreen = previousScreen;
@@ -49,11 +56,27 @@ public abstract class Menu implements Screen {
         this.BACKGROUND = context.getTexture().get(Background.MAIN_MENU);
         
         this.BUS = context.getBus();
+        this.BUS.subscribe(NavigationEvent.class, this::onNavigationEvent);
+        this.BUS.subscribe(SelectOptionEvent.class, this::onSelectOptionEvent);
+        
     }
     
     public Menu(GameContext gameContext, String title, String[] options) {
     	this(gameContext, title, options, null); 
     }
+    
+    private void onNavigationEvent(NavigationEvent event) {
+    	if(event.direction.equals(Direction.UP)) {
+    		this.upFlag = event.isPressed;
+    	} else if(event.direction.equals(Direction.DOWN)) {
+    		this.downFlag = event.isPressed;
+    	}	
+    }
+    
+    private void onSelectOptionEvent(SelectOptionEvent event) {
+    	this.enterFlag = event.isPressed;
+    }
+    
 
     @Override
     public void render(float delta) {
@@ -77,21 +100,21 @@ public abstract class Menu implements Screen {
 
     private void handleNavigation() {
         this.navigator.updateCooldown();
-
+        
         boolean moved = false;
 
         if (this.navigator.canMove()) {
-            if (this.context.getInput().isArrowDown()) {
+            if (this.downFlag) {
                 this.navigator.moveDown();
                 moved = true;
-            } else if (this.context.getInput().isArrowUp()) {
+            } else if (this.upFlag) {
                 this.navigator.moveUp();
                 moved = true;
             }
         }
-
-        if (moved) {
-        	this.BUS.publish(new NavigationEvent());
+        
+        if(moved) {
+       		this.BUS.publish(new NavigationSoundEvent());
         }
     }
 
@@ -101,8 +124,8 @@ public abstract class Menu implements Screen {
             return;
         }
 
-        if (this.context.getInput().isEnter()) {
-        	this.BUS.publish(new SelectOptionEvent());
+        if (this.enterFlag) {
+        	this.BUS.publish(new SelectOptionSoundEvent());
         	this.actionCooldown = this.ACTION_COOLDOWN;
         	processOption(this.navigator.getSelectedIndex());
         }

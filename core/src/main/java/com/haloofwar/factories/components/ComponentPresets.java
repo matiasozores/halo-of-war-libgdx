@@ -27,6 +27,7 @@ import com.haloofwar.components.TransformComponent;
 import com.haloofwar.components.VillagerComponent;
 import com.haloofwar.components.VisibilityComponent;
 import com.haloofwar.dependences.TextureManager;
+import com.haloofwar.enumerators.ObjectType;
 import com.haloofwar.enumerators.PlayerType;
 import com.haloofwar.enumerators.PowerUpType;
 import com.haloofwar.events.EventBus;
@@ -104,12 +105,12 @@ public class ComponentPresets {
         return new RenderComponent(texture);
     }
 
-    public static StockComponent defaultPickup() {
-        return new StockComponent();
+    public static StockComponent defaultPickup(ObjectType type) {
+        return new StockComponent(type);
     }
     
-    public static PlayerComponent defaultPlayer() {
-    	return new PlayerComponent();
+    public static PlayerComponent defaultPlayer(PlayerType type) {
+    	return new PlayerComponent(type);
     }
     
     public static PromptComponent defaultPrompt(float offset) {

@@ -3,7 +3,8 @@ package com.haloofwar.enumerators;
 import com.haloofwar.interfaces.EntityDescriptor;
 
 public enum CutSceneType implements EntityDescriptor {
-	PLAYA_PERDIDA("Playa Perdida", "images/cutscenes/playa_perdida.png"),;
+	PLAYA_PERDIDA("Playa Perdida", "images/background/main_menu.png"),
+	CASTILLO("Playa Perdida", "ui/hud/jefeHUD.png");
 
 	private final String name;
 	private final String path;

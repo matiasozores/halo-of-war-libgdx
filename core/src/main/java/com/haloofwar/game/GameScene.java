@@ -34,8 +34,15 @@ public class GameScene implements Scene {
 		this.world.reconfigureCamera();
 	}
 	
+	public World getWorld() {
+		return this.world;
+	}
+	
     @Override
-    public void show() {}
+    public void show() {
+
+    }
+    
 	@Override
 	public void pause() {}
 	@Override

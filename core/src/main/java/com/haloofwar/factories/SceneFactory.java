@@ -1,6 +1,5 @@
 package com.haloofwar.factories;
 
-import com.haloofwar.components.TransformComponent;
 import com.haloofwar.dependences.GameContext;
 import com.haloofwar.enumerators.LevelType;
 import com.haloofwar.enumerators.SceneType;
@@ -21,23 +20,19 @@ public final class SceneFactory {
 	
     public GameScene create(SceneType type) {
     	World world = this.build(type);
-    	this.playerReposition(world);
-    	
     	HUD hud = this.context.getFactories().getHUD_FACTORY().create();
     	return new GameScene(world, hud);
     }
     
     public GameScene create(LevelType type) {
         World world = this.build(type.getScene());
-        this.playerReposition(world);
-
         HUD hud = this.context.getFactories().getHUD_FACTORY().create();
         
         if(type.getCutSceneType() != null) {
-			return new Level(world, hud, type.getData(), this.context.getBus(), this.context.getFactories().getENEMY_FACTORY(), this.context.getFactories().getCUTSCENE_FACTORY(), type.getCutSceneType());
+			return new Level(world, hud, type.getData(), this.context.getGameplay().getBus(), this.context.getFactories().getENEMY_FACTORY(), this.context.getFactories().getCUTSCENE_FACTORY(), type.getCutSceneType());
         }
         
-        return new Level(world, hud, type.getData(), this.context.getBus(), this.context.getFactories().getENEMY_FACTORY(), this.context.getFactories().getCUTSCENE_FACTORY());
+        return new Level(world, hud, type.getData(), this.context.getGameplay().getBus(), this.context.getFactories().getENEMY_FACTORY(), this.context.getFactories().getCUTSCENE_FACTORY());
     }
 
 	private World build(SceneType type) {
@@ -46,12 +41,5 @@ public final class SceneFactory {
 	
 		WorldCollisionInitializer.initializeMapColliders(map, this.context);
 		return new World(map, worldContext);
-	}
-	
-	private void playerReposition(World world) {
-		float x = world.getMap().getMetaData().getxSpawnPoint();
-		float y = world.getMap().getMetaData().getySpawnPoint();
-		
-		this.context.getGameplay().getPlayer().getComponent(TransformComponent.class).setPosition(x, y);
 	}
 }

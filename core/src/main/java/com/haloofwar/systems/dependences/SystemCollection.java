@@ -3,10 +3,6 @@ package com.haloofwar.systems.dependences;
 import java.util.ArrayList;
 
 import com.haloofwar.components.Entity;
-import com.haloofwar.events.BulletHitEvent;
-import com.haloofwar.events.EventBus;
-import com.haloofwar.events.ItemPickedUpEvent;
-import com.haloofwar.events.SpawnBulletEvent;
 import com.haloofwar.interfaces.Disposable;
 import com.haloofwar.interfaces.Registrable;
 import com.haloofwar.interfaces.Renderable;
@@ -17,20 +13,6 @@ public class SystemCollection {
     private final ArrayList<Renderable> RENDER_SYSTEMS = new ArrayList<>();
     private final ArrayList<Registrable> REGISTRY_SYSTEMS = new ArrayList<>();
     private final ArrayList<Disposable> DISPOSABLE_SYSTEMS = new ArrayList<>();
-    
-    private final EventBus bus; 
-    
-    public SystemCollection(EventBus bus) {
-        this.bus = bus;
-        this.configureEvents();
-    }
-    
-    // Por ahora asi, es tedioso tener que agregar uno por uno pero es la mejor opcion por ahora
-    private void configureEvents() {
-        this.bus.subscribe(SpawnBulletEvent.class, event -> addEntity(event.bullet));
-        this.bus.subscribe(ItemPickedUpEvent.class, event -> removeEntity(event.item));
-        this.bus.subscribe(BulletHitEvent.class, event -> removeEntity(event.bullet));
-    }
     
     public void addEntity(Entity entity) {
         for (Registrable system : this.REGISTRY_SYSTEMS) {

@@ -61,8 +61,6 @@ public class RenderSystem extends BaseSystem implements Renderable {
                     }
                 }
             }
-
- 
         }
     }
 }

@@ -19,7 +19,7 @@ public final class ObjectFactory {
                 .withComponent(ComponentPresets.defaultCollision(rect.width, rect.height))
                 .withComponent(ComponentPresets.defaultName(type))
                 .withComponent(ComponentPresets.defaultRender(type, manager))
-                .withComponent(ComponentPresets.defaultPickup())
+                .withComponent(ComponentPresets.defaultPickup(type))
                 .build();
     }
 
@@ -29,7 +29,6 @@ public final class ObjectFactory {
                 .withComponent(ComponentPresets.defaultCollision(rect.width, rect.height))
                 .withComponent(ComponentPresets.defaultName(type))
                 .withComponent(ComponentPresets.defaultRender(type, manager))
-                .withComponent(ComponentPresets.defaultPickup())
                 .withComponent(ComponentPresets.defaultShield())
                 .withComponent(ComponentPresets.defaultCollectible())
                 .withComponent(ComponentPresets.defaultPowerUp(type))

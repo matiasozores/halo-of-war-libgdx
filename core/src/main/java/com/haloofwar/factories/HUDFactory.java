@@ -64,6 +64,6 @@ public final class HUDFactory {
         );
 
         // Construcción final del HUD
-        return new HUD(context.getStaticCamera(), context.getRender().getBatch(), health, info, inventory, dialogue, context.getBus());
+        return new HUD(context.getStaticCamera(), context.getRender().getBatch(), health, info, inventory, dialogue, context.getGameplay().getBus());
     }
 }
