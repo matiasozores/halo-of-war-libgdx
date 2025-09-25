@@ -3,7 +3,7 @@ package com.haloofwar.ui.components;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.utilities.GameConfig;
+import com.haloofwar.utils.GameConfig;
 
 public class DialogueBox {
     private final SpriteBatch batch;
@@ -15,7 +15,7 @@ public class DialogueBox {
 
     private final float x, y, width, height;
     
-    private final int offsetX = 25;
+    private final int offsetX = 20;
     private final int offsetY = 10;
     
     private Texture characterTexture;  

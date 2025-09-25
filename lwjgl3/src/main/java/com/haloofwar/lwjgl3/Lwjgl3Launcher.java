@@ -2,8 +2,8 @@ package com.haloofwar.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.haloofwar.core.HaloOfWarPrincipal;
-import com.haloofwar.utilities.GameConfig;
+import com.haloofwar.launcher.HaloOfWarPrincipal;
+import com.haloofwar.utils.GameConfig;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {

@@ -2,80 +2,82 @@ package com.haloofwar.game.cutscenes;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.enumerators.GameState;
-import com.haloofwar.events.ChangeSceneEvent;
-import com.haloofwar.events.EventBus;
-import com.haloofwar.events.GameStateEvent;
-import com.haloofwar.events.NextEvent;
-import com.haloofwar.interfaces.Scene;
+import com.haloofwar.common.enums.GameState;
+import com.haloofwar.common.enums.MusicTrack;
+import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.engine.cameras.GameStaticCamera;
+import com.haloofwar.engine.events.EventBus;
+import com.haloofwar.engine.events.GameStateEvent;
+import com.haloofwar.engine.events.NextEvent;
+import com.haloofwar.engine.events.PeacefulEvent;
+import com.haloofwar.engine.events.PlayMusicEvent;
+import com.haloofwar.engine.events.PlaySoundEvent;
+import com.haloofwar.engine.events.StopMusicEvent;
+import com.haloofwar.engine.events.StopSoundsEvent;
 
-public class CutScene implements Scene {
+public class CutScene {
+	private final Texture[] images;
+	private final SoundType[] SOUNDS;
+	private final SpriteBatch batch;
+	private final EventBus bus;
+	private final GameStaticCamera camera; // nueva cámara para cutscene
+	private int currentIndex = 0;
+	private boolean finished = false;
+	private boolean started = false;
+	private MusicTrack previousMusic;
 	
-    private Texture[] images;
-    private SpriteBatch batch;
-    private EventBus bus;
-    private Scene nextScene;
-    private int currentIndex = 0; // para saber qué imagen mostrar
-    private boolean finished = false;
-    
-    public CutScene(CutSceneData data) {
-        this.images = data.images;
-        this.batch = data.batch;
-        this.bus = data.bus;
-        this.nextScene = data.nextScene;
+	public CutScene(final CutSceneData DATA, GameStaticCamera camera, MusicTrack previousMusic) {
+		this.images = DATA.images;
+		this.SOUNDS = DATA.sounds;
+		this.batch = DATA.batch;
+		this.bus = DATA.bus;
+		this.camera = camera;
+		this.previousMusic = previousMusic;
+		
+		this.bus.subscribe(NextEvent.class, this::onNext);
+		this.bus.publish(new PeacefulEvent(true));
+		this.bus.publish(new GameStateEvent(GameState.WAITING));
+	}
 
-        this.bus.subscribe(NextEvent.class, this::onNext);
-    }
+	private void onNext(NextEvent event) {
+		
+		if (!event.isPressed() || this.finished) {
+			return;
+		}
 
-    private void onNext(NextEvent event) {
-        if (!event.isPressed() || finished) return;
+		if (this.currentIndex >= this.images.length - 1) {
+			this.finished = true;
+			this.bus.publish(new GameStateEvent(GameState.PLAYING));
+			this.bus.publish(new PeacefulEvent(false));
+			this.bus.publish(new StopMusicEvent());
+			this.bus.publish(new StopSoundsEvent());
+			this.bus.publish(new PlayMusicEvent(this.previousMusic));
+		} else {
+			currentIndex++;
+			this.bus.publish(new StopSoundsEvent());
+			this.bus.publish(new PlaySoundEvent(this.SOUNDS[this.currentIndex]));
+		}
+	}
 
-        if (currentIndex >= images.length - 1) {
-            finished = true; // marcamos que ya terminamos
-            this.bus.publish(new GameStateEvent(GameState.PLAYING));
-            this.bus.publish(new ChangeSceneEvent(this.nextScene));
-        } else {
-            currentIndex++;
-        }
-    }
+	public void render(float delta) {
+		batch.setProjectionMatrix(camera.getOrthographic().combined);
+		batch.begin();
+		if (currentIndex < images.length) {
+			batch.draw(images[currentIndex], 0, 0);
+		}
+		batch.end();
+	}
 
+	public void update(float delta) {
+		if(!this.started) {
+			this.started = true;
+			this.bus.publish(new StopMusicEvent());
+			this.bus.publish(new PlayMusicEvent(MusicTrack.CUTSCENE));
+			this.bus.publish(new PlaySoundEvent(this.SOUNDS[0]));
+		}
+	}
 
-    @Override
-    public void update(float delta) {
-    }
-
-    @Override
-    public void render(float delta) {
-        if (this.currentIndex < this.images.length) {
-        	this.batch.begin();
-            this.batch.draw(this.images[this.currentIndex], 0, 0); 
-            this.batch.end();
-        }
-    }
-
-    @Override
-    public void resize(int width, int height) {}
-
-    @Override
-    public void show() {
-        this.currentIndex = 0;
-        this.finished = false;
-    }
-
-
-    @Override
-    public void hide() {
-    }
-
-    @Override
-    public void pause() {}
-
-    @Override
-    public void resume() {}
-
-    @Override
-    public void dispose() {}
-
-    @Override
-    public void reconfigureCamera() {}
+	public boolean isFinished() {
+		return finished;
+	}
 }

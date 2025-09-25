@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="1">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="10">
  <properties>
   <property name="xSpawnPoint" type="int" value="500"/>
   <property name="ySpawnPoint" type="int" value="300"/>
@@ -53,4 +53,6 @@
 43,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,47
 </data>
  </layer>
+ <objectgroup id="3" name="spawn_area"/>
+ <objectgroup id="4" name="items"/>
 </map>

@@ -2,8 +2,8 @@ package com.haloofwar.ui.components;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.haloofwar.cameras.GameStaticCamera;
-import com.haloofwar.components.HealthComponent;
+import com.haloofwar.engine.cameras.GameStaticCamera;
+import com.haloofwar.game.components.HealthComponent;
 
 public class HealthBar {
 	
@@ -12,10 +12,10 @@ public class HealthBar {
     private final GameStaticCamera camera;
     
     // Componentes
-    HealthComponent health;
+    public HealthComponent health;
     
-    private final float x = 100;
-    private final float y = 640;
+    private final float x = 20;
+    private final float y = 580;
     private final float width = 200;
     private final float height = 25;
 
@@ -42,4 +42,6 @@ public class HealthBar {
         this.shape.rect(this.x, this.y, this.width * HP_PERCENTAGE, this.height);
         this.shape.end();
     }
+    
+    
 }

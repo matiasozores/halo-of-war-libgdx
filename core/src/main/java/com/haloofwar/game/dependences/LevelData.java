@@ -1,10 +1,10 @@
 package com.haloofwar.game.dependences;
 
-import com.haloofwar.enumerators.LevelType;
+import com.haloofwar.common.enums.LevelSceneType;
 
 public class LevelData {
 
-	private LevelType type;
+    private LevelSceneType type;
 
     // --- ENEMIGOS ---
     private int enemySpawnRate;     // segundos entre spawns
@@ -12,33 +12,60 @@ public class LevelData {
 
     // --- OLEADAS ---
     private int waveCount;          // cantidad de oleadas en el nivel
-    private float spawnAcceleration;// reducción progresiva del spawnRate
+    private int enemiesToDefeatPerWave;
 
     // --- CONDICIONES DE VICTORIA ---
     private int enemiesToDefeat;    // cantidad total de enemigos que el jugador debe eliminar
+    private int enemiesDefeated = 0;
+    private int wavesPassed = 1;
 
-    
     public LevelData(
-        LevelType type,
+        LevelSceneType type,
         int enemySpawnRate,
         int maxEnemies,
         int waveCount,
-        float spawnAcceleration,
-        int enemiesToDefeat
+        int enemiesToDefeatPerWave
     ) {
         this.type = type;
         this.enemySpawnRate = enemySpawnRate;
         this.maxEnemies = maxEnemies;
         this.waveCount = waveCount;
-        this.spawnAcceleration = spawnAcceleration;
-        this.enemiesToDefeat = enemiesToDefeat;
+        this.enemiesToDefeatPerWave = enemiesToDefeatPerWave;
+        this.enemiesToDefeat = this.enemiesToDefeatPerWave * this.waveCount;
+    }
+
+    public LevelData copy() {
+        LevelData clone = new LevelData(
+            this.type,
+            this.enemySpawnRate,
+            this.maxEnemies,
+            this.waveCount,
+            this.enemiesToDefeatPerWave
+        );
+        clone.enemiesDefeated = this.enemiesDefeated;
+        clone.wavesPassed = this.wavesPassed;
+        return clone;
+    }
+    
+    public void incrementEnemiesDefeated() {
+        enemiesDefeated++;
+    }
+
+    public void incrementWave() {
+        wavesPassed++;
+    }
+
+    public boolean allEnemiesDefeated() {
+        return enemiesDefeated >= enemiesToDefeat;
     }
 
     // --- Getters ---
-    public LevelType getType() { return type; }
+    public LevelSceneType getType() { return type; }
     public int getEnemySpawnRate() { return enemySpawnRate; }
     public int getMaxEnemies() { return maxEnemies; }
     public int getWaveCount() { return waveCount; }
-    public float getSpawnAcceleration() { return spawnAcceleration; }
     public int getEnemiesToDefeat() { return enemiesToDefeat; }
+    public int getEnemiesDefeated() { return enemiesDefeated; }
+    public int getWavesPassed() { return wavesPassed; }
+    public int getEnemiesToDefeatPerWave() { return enemiesToDefeatPerWave; }
 }
