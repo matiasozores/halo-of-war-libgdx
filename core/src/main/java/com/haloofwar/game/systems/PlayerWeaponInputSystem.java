@@ -4,7 +4,7 @@ import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.AttackEvent;
 import com.haloofwar.engine.events.EventBus;
-import com.haloofwar.engine.systems.BaseSystem;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.CrosshairComponent;
 import com.haloofwar.game.components.EquipmentComponent;
 import com.haloofwar.game.components.FireArmComponent;
@@ -12,13 +12,10 @@ import com.haloofwar.game.components.MeleeWeaponComponent;
 import com.haloofwar.game.components.PlayerComponent;
 import com.haloofwar.interfaces.Updatable;
 
-public class PlayerWeaponInputSystem extends BaseSystem implements Updatable {
-
-    private final EventBus bus;
-
-    public PlayerWeaponInputSystem(EventBus bus) {
-        this.bus = bus;
-        this.bus.subscribe(AttackEvent.class, this::onAttack);
+public class PlayerWeaponInputSystem extends EventSystem implements Updatable {
+    
+	public PlayerWeaponInputSystem(EventBus bus) {
+        this.listenerManager.add(bus, AttackEvent.class, this::onAttack);
     }
 
     private void onAttack(AttackEvent event) {

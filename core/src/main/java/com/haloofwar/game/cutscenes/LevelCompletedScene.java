@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.common.enums.GameState;
 import com.haloofwar.common.enums.MusicTrack;
 import com.haloofwar.common.enums.SceneType;
+import com.haloofwar.engine.cameras.GameStaticCamera;
 import com.haloofwar.engine.events.ChangeSceneEvent;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.GameStateEvent;
@@ -19,13 +20,16 @@ public class LevelCompletedScene implements Scene {
 
     private boolean finished = false;
     private float timer = 0f;
-    private final float DISPLAY_TIME = 2f; // segundos antes de pasar automáticamente
+    private final float DISPLAY_TIME = 10f; // segundos antes de pasar automáticamente
 
-    public LevelCompletedScene(SpriteBatch batch, Texture levelCompletedTexture, EventBus bus, SceneType type) {
+    private GameStaticCamera camera;
+    
+    public LevelCompletedScene(GameStaticCamera camera, SpriteBatch batch, Texture levelCompletedTexture, EventBus bus, SceneType type) {
         this.batch = batch;
         this.levelCompletedTexture = levelCompletedTexture;
         this.bus = bus;
         this.type = type;
+        this.camera = camera;
     }
 
     private void finishScene() {
@@ -46,8 +50,9 @@ public class LevelCompletedScene implements Scene {
 
     @Override
     public void render(float delta) {
+    	batch.setProjectionMatrix(this.camera.getOrthographic().combined);
         batch.begin();
-        batch.draw(levelCompletedTexture, 0, 0); // dibujar la pantalla completa
+        batch.draw(this.levelCompletedTexture, 0, 0, this.camera.getViewportWidth(), this.camera.getViewportHeight());
         batch.end();
     }
 
@@ -71,8 +76,6 @@ public class LevelCompletedScene implements Scene {
 
     @Override
     public void dispose() {
-        // opcional: liberar la textura si no se va a reutilizar
-        // levelCompletedTexture.dispose();
     }
 
     @Override

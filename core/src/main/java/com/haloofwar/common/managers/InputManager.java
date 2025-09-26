@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.haloofwar.common.enums.Direction;
 import com.haloofwar.common.enums.GameState;
+import com.haloofwar.common.enums.UIState;
 import com.haloofwar.engine.events.AttackEvent;
 import com.haloofwar.engine.events.ChangeCurrentPlayerEvent;
 import com.haloofwar.engine.events.EventBus;
@@ -13,9 +14,7 @@ import com.haloofwar.engine.events.MoveEvent;
 import com.haloofwar.engine.events.NavigationEvent;
 import com.haloofwar.engine.events.NextEvent;
 import com.haloofwar.engine.events.SelectOptionEvent;
-import com.haloofwar.engine.events.ToggleEquipmentEvent;
-import com.haloofwar.engine.events.ToggleInventoryEvent;
-import com.haloofwar.engine.events.ToggleShopEvent;
+import com.haloofwar.engine.events.TogglePopupEvent;
 
 public class InputManager implements InputProcessor {
 
@@ -45,9 +44,9 @@ public class InputManager implements InputProcessor {
 		    case Input.Keys.A: this.publish(this.gameplayBus, new MoveEvent(Direction.LEFT, true)); break;
 		    case Input.Keys.D: this.publish(this.gameplayBus, new MoveEvent(Direction.RIGHT, true)); break;
 		    case Input.Keys.E: this.publish(this.gameplayBus, new InteractEvent(true)); break;
-	        case Input.Keys.I: this.publish(this.gameplayBus,new ToggleInventoryEvent()); break;
-	        case Input.Keys.U: this.publish(this.gameplayBus,new ToggleShopEvent()); break;
-	        case Input.Keys.O: this.publish(this.gameplayBus,new ToggleEquipmentEvent()); break;
+	        case Input.Keys.I: this.publish(this.gameplayBus,new TogglePopupEvent(UIState.INVENTORY)); break;
+	        case Input.Keys.U: this.publish(this.gameplayBus,new TogglePopupEvent(UIState.SHOP)); break;
+	        case Input.Keys.O: this.publish(this.gameplayBus,new TogglePopupEvent(UIState.EQUIPMENT)); break;
 	        case Input.Keys.C: this.publish(this.gameplayBus, new ChangeCurrentPlayerEvent()); break;
 	        case Input.Keys.ESCAPE: this.publish(this.gameplayBus, new GameStateEvent(GameState.PAUSED)); break;        
 		    case Input.Keys.SPACE: this.publish(this.gameplayBus, new NextEvent(true)); break;

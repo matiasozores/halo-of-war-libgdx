@@ -13,8 +13,9 @@ import com.haloofwar.engine.events.NextEvent;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.ShowDialogueEvent;
 import com.haloofwar.engine.events.TalkEvent;
+import com.haloofwar.engine.systems.EventSystem;
 
-public class DialogueSystem {
+public class DialogueSystem extends EventSystem{
     private final EventBus bus;
 
     private boolean active = false;
@@ -24,9 +25,8 @@ public class DialogueSystem {
 
     public DialogueSystem(EventBus bus) {
         this.bus = bus;
-
-        bus.subscribe(TalkEvent.class, this::onTalk);
-        bus.subscribe(NextEvent.class, this::onNext);
+        this.listenerManager.add(bus, TalkEvent.class, this::onTalk);
+        this.listenerManager.add(bus, NextEvent.class, this::onNext);
     }
 
     private void onTalk(TalkEvent event) {

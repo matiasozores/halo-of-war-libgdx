@@ -8,15 +8,17 @@ import java.io.ObjectOutputStream;
 
 import com.haloofwar.common.enums.LevelSceneType;
 import com.haloofwar.engine.events.EventBus;
+import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.LevelCompletedEvent;
 import com.haloofwar.game.data.SaveGameData;
 
 public class SaveManager {
 	private final SaveGameData DATA;
-
+	private final EventListenerManager listenerManager = new EventListenerManager();
+	
 	public SaveManager(final EventBus GAMEPLAY_BUS) {
 		this.DATA = new SaveGameData();
-		GAMEPLAY_BUS.subscribe(LevelCompletedEvent.class, this::onLevelCompleted);
+		this.listenerManager.add(GAMEPLAY_BUS, LevelCompletedEvent.class, this::onLevelCompleted);
 	}
 	
 	private void onLevelCompleted(LevelCompletedEvent event) {
@@ -25,7 +27,6 @@ public class SaveManager {
 	        this.saveToFile();
 	    } 
 	}
-
 	
     public void saveToFile() {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("savegame.dat"))) {
@@ -47,4 +48,8 @@ public class SaveManager {
     public SaveGameData getDATA() {
 		return this.DATA;
 	}
+    
+    public void dispose() {
+    	this.listenerManager.clear();
+    }
 }

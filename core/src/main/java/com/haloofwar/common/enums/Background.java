@@ -7,6 +7,7 @@ public enum Background implements EntityDescriptor{
 	PORTAL_MENU("Fondo portal", "images/background/main_menu2.png"),
 	PLAYER_SELECTION("Fondo de seleccion", "images/background/player_selection.png"),
 	GAME_OVER("Fondo de game over", "images/background/game_over.png"),
+	VICTORY("Fondo de victoria", "images/background/victory.png"),
 	
 	INVENTORY("Fondo del inventario", "images/background/fullinventory.png"),
 	EQUIPMENT("Fondo del equipamiento", "images/background/fullequipment.png"),

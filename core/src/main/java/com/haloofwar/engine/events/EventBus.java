@@ -57,6 +57,30 @@ public class EventBus {
         }
     }
 
+    public int getCount() {
+    	return this.listeners.size();
+    }
+    
+    public void printActiveListeners() {
+        if (this.listeners.isEmpty()) {
+            System.out.println("No hay listeners activos.");
+            return;
+        }
+
+        System.out.println("Listeners activos:");
+        for (Map.Entry<Class<?>, List<Consumer<?>>> entry : this.listeners.entrySet()) {
+            Class<?> eventType = entry.getKey();
+            List<Consumer<?>> eventListeners = entry.getValue();
+            System.out.println("- " + eventType.getSimpleName() + " -> " + eventListeners.size() + " listener(s)");
+            
+            // Opcional: listar la clase del listener (si querés ver más detalle)
+            for (Consumer<?> listener : eventListeners) {
+                System.out.println("    Listener clase: " + listener.getClass().getName());
+            }
+        }
+    }
+
+    
     public void clear() {
         this.listeners.clear();
     }

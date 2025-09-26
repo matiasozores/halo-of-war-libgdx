@@ -39,7 +39,7 @@ public class PlayerSelectionScreen extends Menu {
 
         PlayerType selectedPlayer = this.PLAYER_OPTIONS[optionIndex];
         PlayerType otherPlayer = this.chooseOtherPlayer(selectedPlayer);
-        
+
         GameInitializer.initializeGameplay(this.context, this.createPlayer(selectedPlayer), this.createPlayer(otherPlayer), null);
     }
     

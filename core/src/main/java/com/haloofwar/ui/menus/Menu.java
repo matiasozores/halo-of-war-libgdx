@@ -7,6 +7,7 @@ import com.haloofwar.common.enums.Background;
 import com.haloofwar.common.enums.Direction;
 import com.haloofwar.common.enums.SoundType;
 import com.haloofwar.engine.events.EventBus;
+import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.NavigationEvent;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.SelectOptionEvent;
@@ -33,6 +34,7 @@ public abstract class Menu implements Screen {
     private boolean enterFlag = false;
     
     private final EventBus globalBus;
+	private final EventListenerManager listenerManager = new EventListenerManager();
     
     public Menu(
 		final GameContext context, 
@@ -57,7 +59,6 @@ public abstract class Menu implements Screen {
         this.background = context.getTEXTURE().get(background);
         
         this.globalBus = context.getGLOBAL_BUS();
-        this.subscribeEvents();
     }
     
     public Menu(GameContext gameContext, String title, String[] options, final Background BACKGROUND) {
@@ -65,10 +66,10 @@ public abstract class Menu implements Screen {
     }
     
     private void subscribeEvents() {
-    	 this.globalBus.subscribe(NavigationEvent.class, this::onNavigationEvent);
-         this.globalBus.subscribe(SelectOptionEvent.class, this::onSelectOptionEvent);
+    	this.listenerManager.add(this.globalBus, NavigationEvent.class, this::onNavigationEvent);
+        this.listenerManager.add(this.globalBus, SelectOptionEvent.class, this::onSelectOptionEvent);
     }
-    
+
     protected void onNavigationEvent(NavigationEvent event) {
     	if(event.direction.equals(Direction.UP)) {
     		this.upFlag = event.isPressed;
@@ -152,9 +153,21 @@ public abstract class Menu implements Screen {
         this.renderer.resize(width, height);
     }
 
-    @Override public void show() {}
+    @Override public void show() {
+        this.subscribeEvents();
+        this.enterFlag = false;
+        this.upFlag = false;
+        this.downFlag = false;
+        this.actionCooldown = DEFAULT_ACTION_COOLDOWN;
+    }
+    
+    @Override public void hide() {
+    	this.listenerManager.clear();
+    }
+    @Override public void dispose() {
+    	this.listenerManager.clear();
+    }
+    
     @Override public void pause() {}
     @Override public void resume() {}
-    @Override public void hide() {}
-    @Override public void dispose() {}
 }

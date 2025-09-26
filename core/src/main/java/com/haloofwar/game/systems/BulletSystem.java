@@ -8,12 +8,12 @@ import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.NewEntityEvent;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.ShootBulletEvent;
-import com.haloofwar.engine.systems.BaseSystem;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.BulletComponent;
 import com.haloofwar.game.components.CollisionComponent;
 import com.haloofwar.interfaces.Updatable;
 
-public class BulletSystem extends BaseSystem implements Updatable {
+public class BulletSystem extends EventSystem implements Updatable {
 
     private static final int SPEED_MULTIPLIER = 10; // temporal
     private final TextureManager texture;
@@ -23,7 +23,7 @@ public class BulletSystem extends BaseSystem implements Updatable {
         this.texture = texture;
         this.bus = bus;
 
-        bus.subscribe(ShootBulletEvent.class, this::spawnBullet);
+        this.listenerManager.add(bus, ShootBulletEvent.class, this::spawnBullet);
     }
 
     @Override

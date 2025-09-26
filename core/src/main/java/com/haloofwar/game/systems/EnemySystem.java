@@ -5,16 +5,16 @@ import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.DropItemEvent;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.RemoveEntityEvent;
-import com.haloofwar.engine.interfaces.Registrable;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.EnemyComponent;
 
-public class EnemySystem implements Registrable {
+public class EnemySystem extends EventSystem {
 
 	private final EventBus bus;
 	
     public EnemySystem(EventBus bus) {
         this.bus = bus;
-    	this.bus.subscribe(RemoveEntityEvent.class, this::onRemoveEntity);
+        this.listenerManager.add(bus, RemoveEntityEvent.class, this::onRemoveEntity);
     }
 	
     private void onRemoveEntity(RemoveEntityEvent event) {

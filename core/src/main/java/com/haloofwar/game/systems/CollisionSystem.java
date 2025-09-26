@@ -15,7 +15,7 @@ import com.haloofwar.interfaces.Updatable;
 public class CollisionSystem extends BaseSystem implements Updatable {
 
 	private final EventBus bus;
-	
+
 	public CollisionSystem(EventBus bus) {
 		this.bus = bus;
 	}

@@ -7,18 +7,18 @@ import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.PeacefulEvent;
 import com.haloofwar.engine.events.ShootBulletEvent;
-import com.haloofwar.engine.systems.BaseSystem;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.EquipmentComponent;
 import com.haloofwar.game.components.FireArmComponent;
 import com.haloofwar.interfaces.Updatable;
 
-public class FireArmSystem extends BaseSystem implements Updatable {
+public class FireArmSystem extends EventSystem implements Updatable {
     private final EventBus bus;
     private boolean peaceful = false;
     
     public FireArmSystem(EventBus bus) {
         this.bus = bus;
-        this.bus.subscribe(PeacefulEvent.class, this::onPeace);
+        this.listenerManager.add(bus, PeacefulEvent.class, this::onPeace);
     }
 
     @Override

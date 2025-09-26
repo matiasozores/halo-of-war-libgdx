@@ -13,7 +13,7 @@ public class Crosshair {
     private Texture crosshairImage;
     private int width = 16, height = 16;
     
-    GameWorldCamera camera;
+    private GameWorldCamera camera;
     
     public Crosshair(CrosshairType type, TextureManager texture, GameWorldCamera camera) {
         this.crosshairImage = texture.get(type);

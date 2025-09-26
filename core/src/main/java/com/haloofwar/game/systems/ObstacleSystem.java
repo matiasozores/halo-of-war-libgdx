@@ -4,15 +4,15 @@ import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.CollisionEvent;
 import com.haloofwar.engine.events.EventBus;
-import com.haloofwar.engine.interfaces.Registrable;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.MovementComponent;
 import com.haloofwar.game.components.ObstacleComponent;
 import com.haloofwar.game.components.PlayerComponent;
 
-public class ObstacleSystem implements Registrable {
+public class ObstacleSystem extends EventSystem {
 
     public ObstacleSystem(EventBus bus) {
-        bus.subscribe(CollisionEvent.class, this::onCollision);
+    	this.listenerManager.add(bus, CollisionEvent.class, this::onCollision);
     }
 
     private void onCollision(CollisionEvent event) {
@@ -55,7 +55,6 @@ public class ObstacleSystem implements Registrable {
         }
     }
 
-    
     private boolean collides(Entity a, Entity b) {
         TransformComponent transformA = a.getComponent(TransformComponent.class);
         TransformComponent transformB = b.getComponent(TransformComponent.class);
@@ -69,18 +68,4 @@ public class ObstacleSystem implements Registrable {
 
         return overlapX && overlapY;
     }
-
-	@Override
-	public void register(Entity entity) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void unregister(Entity entity) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 }

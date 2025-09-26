@@ -4,10 +4,10 @@ import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.InteractEvent;
 import com.haloofwar.engine.events.NewPlayerEvent;
-import com.haloofwar.engine.interfaces.Registrable;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.PlayerComponent;
 
-public class PlayerSystem implements Registrable {
+public class PlayerSystem extends EventSystem {
 	private Entity player;
 	
 	public PlayerSystem(Entity player, EventBus bus) {
@@ -18,8 +18,8 @@ public class PlayerSystem implements Registrable {
 			this.player = player;
 		}
 		
-		bus.subscribe(NewPlayerEvent.class, this::onNewPlayer);
-		bus.subscribe(InteractEvent.class, this::onInteract);
+		this.listenerManager.add(bus, NewPlayerEvent.class, this::onNewPlayer);
+		this.listenerManager.add(bus, InteractEvent.class, this::onInteract);
 	}
 	
 	private void onInteract(InteractEvent event) {
@@ -35,10 +35,4 @@ public class PlayerSystem implements Registrable {
 			System.out.println("No se puede asignar nuevo jugador porque no lo es... | PlayerSystem");
 		}
 	}
-	
-	@Override
-	public void register(Entity entity) {}
-
-	@Override
-	public void unregister(Entity entity) {}
 }

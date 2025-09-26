@@ -6,12 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.common.enums.Background;
 import com.haloofwar.common.enums.ObjectType;
 import com.haloofwar.common.managers.TextureManager;
+import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.game.components.InventoryComponent;
 
-/**
- * Componente de lobby que muestra dos imágenes y la cantidad de monedas.
- */
-public class InterfaceLobby {
+public class InterfaceLobby implements HUDComponent {
 
     private final SpriteBatch batch;
 
@@ -42,6 +40,7 @@ public class InterfaceLobby {
         this.font = font;
     }
 
+    @Override
     public void render() {
     	if(!this.visible) {
     		return;
@@ -75,5 +74,17 @@ public class InterfaceLobby {
     
     public void setVisible(final boolean VISIBLE) {
 		this.visible = VISIBLE;
+	}
+
+	@Override
+	public void refresh(Entity player) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -7,7 +7,7 @@ import com.haloofwar.interfaces.SceneKey;
 
 public enum SceneType implements SceneDescriptor, SceneKey {
     MAIN("Main", "maps/main.tmx", MusicTrack.TUTORIAL),
-    CAVE("Cave", "maps/cave.tmx", MusicTrack.VICTORY),;
+    CAVE("Cave", "maps/cave.tmx", MusicTrack.TUTORIAL),;
   
 	private final String name;
     private final String path;

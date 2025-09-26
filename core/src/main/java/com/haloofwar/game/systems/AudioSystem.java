@@ -5,6 +5,7 @@ import com.haloofwar.common.managers.MusicManager;
 import com.haloofwar.common.managers.SoundManager;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
+import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.PlayMusicEvent;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.StopMusicEvent;
@@ -15,21 +16,27 @@ public class AudioSystem implements Registrable {
 
     private final SoundManager soundManager;
     private final MusicManager musicManager;
-
+    private final EventListenerManager listenerGlobalManager = new EventListenerManager();
+    private final EventListenerManager listenerGameplayManager = new EventListenerManager();
+    
     public AudioSystem(final AudioManager audio, EventBus globalBus, EventBus gameplayBus) {
         this.soundManager = audio.getSound();
-        this.musicManager = audio.getMusic();
-        
-        this.subscribeEvents(globalBus);
-        this.subscribeEvents(gameplayBus);
+        this.musicManager = audio.getMusic();       
+        this.subscribeEvents(globalBus, gameplayBus);
     }
     
-    public void subscribeEvents(EventBus bus) {
-        bus.subscribe(PlaySoundEvent.class, this::onPlaySound);
-        bus.subscribe(StopSoundsEvent.class, this::onStopSounds);
+    public void subscribeEvents(EventBus globalBus, EventBus gameplayBus) {
+    	this.listenerGlobalManager.add(globalBus, PlaySoundEvent.class, this::onPlaySound);
+    	this.listenerGlobalManager.add(globalBus, StopSoundsEvent.class, this::onStopSounds);
 
-        bus.subscribe(PlayMusicEvent.class, this::onPlayMusic);
-        bus.subscribe(StopMusicEvent.class, this::onStopMusic);
+    	this.listenerGlobalManager.add(globalBus, PlayMusicEvent.class, this::onPlayMusic);
+    	this.listenerGlobalManager.add(globalBus, StopMusicEvent.class, this::onStopMusic);
+    	
+    	this.listenerGameplayManager.add(gameplayBus, PlaySoundEvent.class, this::onPlaySound);
+    	this.listenerGameplayManager.add(gameplayBus, StopSoundsEvent.class, this::onStopSounds);
+
+    	this.listenerGameplayManager.add(gameplayBus, PlayMusicEvent.class, this::onPlayMusic);
+    	this.listenerGameplayManager.add(gameplayBus, StopMusicEvent.class, this::onStopMusic);
     }
 
     // -------------------- Sonidos --------------------
@@ -76,5 +83,7 @@ public class AudioSystem implements Registrable {
     public void dispose() {
         this.soundManager.dispose();
         this.musicManager.dispose();
+        this.listenerGlobalManager.clear();
+        this.listenerGameplayManager.clear();
     }
 }

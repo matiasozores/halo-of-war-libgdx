@@ -8,12 +8,12 @@ import com.haloofwar.engine.events.GameStateEvent;
 import com.haloofwar.game.components.MovementComponent;
 import com.haloofwar.interfaces.Updatable;
 
-public class MovementSystem extends BaseSystem implements Updatable {
+public class MovementSystem extends EventSystem implements Updatable {
 
 	private boolean canMove = true;
-
+	
     public MovementSystem(EventBus bus) {
-        bus.subscribe(GameStateEvent.class, this::onGameState);
+    	this.listenerManager.add(bus, GameStateEvent.class, this::onGameState);
     }
 	
     @Override

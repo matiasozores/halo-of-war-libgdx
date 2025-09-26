@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.common.managers.TextureManager;
+import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.game.components.EquipmentComponent;
 import com.haloofwar.game.components.HealthComponent;
 import com.haloofwar.game.components.NameComponent;
 import com.haloofwar.game.components.PlayerComponent;
 
-public class PlayerInfoRenderer {
+public class PlayerInfoRenderer implements HUDComponent {
     
     // Dependencias
     private final SpriteBatch batch;
@@ -62,6 +63,7 @@ public class PlayerInfoRenderer {
         this.weapon = weapon;
     }
     
+    @Override
     public void render() {
         // Dibuja retrato del jugador
         if (portrait != null) {
@@ -106,17 +108,29 @@ public class PlayerInfoRenderer {
         }
     }
     
-    public void setPortrait(PlayerComponent playerComp) {
+	@Override
+	public void refresh(Entity player) {
+		this.setPortrait(player.getComponent(PlayerComponent.class));
+		this.setWeapon(player.getComponent(EquipmentComponent.class));
+		this.setName(player.getComponent(NameComponent.class));
+	}
+	
+	private void setPortrait(PlayerComponent playerComp) {
     	this.portrait = this.texture.get(playerComp.type.getHead());
     }
     
-    public void setWeapon(EquipmentComponent equipmentComp) {
+    private void setWeapon(EquipmentComponent equipmentComp) {
     	this.weapon = this.texture.get(equipmentComp.getCurrentWeapon());
     }
-    
-    public void dispose() {
-        if (portrait != null) portrait.dispose();
-        if (weapon != null) weapon.dispose();
-        if (background != null) background.dispose();
+
+    private void setName(NameComponent nameComponent) {
+    	this.nameComponent = nameComponent;
     }
+    
+	@Override
+	public void dispose() {
+	}
+
+
+
 }

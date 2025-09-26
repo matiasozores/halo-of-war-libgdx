@@ -5,7 +5,7 @@ import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.NewPlayerEvent;
 import com.haloofwar.engine.interfaces.MovementController;
-import com.haloofwar.engine.systems.BaseSystem;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.EnemyWeaponAIComponent;
 import com.haloofwar.game.components.EquipmentComponent;
 import com.haloofwar.game.components.FireArmComponent;
@@ -14,12 +14,12 @@ import com.haloofwar.game.components.MovementComponent;
 import com.haloofwar.game.components.TargetComponent;
 import com.haloofwar.interfaces.Updatable;
 
-public class EnemyWeaponAISystem extends BaseSystem implements Updatable {
+public class EnemyWeaponAISystem extends EventSystem implements Updatable {
 
-    private float shootInterval = 0.2f; // tiempo mínimo entre ataques
+    private float shootInterval = 0.2f;
 
-    public EnemyWeaponAISystem(final EventBus GAMEPLAY_BUS) {
-    	GAMEPLAY_BUS.subscribe(NewPlayerEvent.class, this::onNewPlayer);
+    public EnemyWeaponAISystem(final EventBus gameplayBus) {
+    	this.listenerManager.add(gameplayBus, NewPlayerEvent.class, this::onNewPlayer);
     }
     
     private void onNewPlayer(NewPlayerEvent event) {

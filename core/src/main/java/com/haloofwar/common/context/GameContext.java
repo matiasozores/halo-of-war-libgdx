@@ -117,9 +117,11 @@ public class GameContext {
 
     public void resetGameplay() {
         if (this.GAMEPLAY != null) {
-            this.GAMEPLAY.dispose(); 
+            this.SAVE.dispose();
             this.SCENE.clear();
-            this.AUDIO_SYSTEM.subscribeEvents(this.GAMEPLAY_BUS);
+            this.GAMEPLAY.dispose(); 
+            this.AUDIO_SYSTEM.dispose();
+            this.AUDIO_SYSTEM.subscribeEvents(this.GLOBAL_BUS, this.GAMEPLAY_BUS);
         }
     }
     
@@ -128,5 +130,6 @@ public class GameContext {
         this.RENDER.dispose();
         this.TEXTURE.dispose();
         this.AUDIO.dispose();
+        this.AUDIO_SYSTEM.dispose();
     }
 }

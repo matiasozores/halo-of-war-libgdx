@@ -1,22 +1,21 @@
 package com.haloofwar.game.systems;
 
 import com.haloofwar.common.enums.SoundType;
-import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.CollisionEvent;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.RemoveEntityEvent;
-import com.haloofwar.engine.interfaces.Registrable;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.InventoryComponent;
 import com.haloofwar.game.components.PlayerComponent;
 import com.haloofwar.game.components.StockComponent;
 
-public class PickupSystem implements Registrable {
+public class PickupSystem extends EventSystem {
 	private final EventBus bus;
 	
 	public PickupSystem(EventBus bus) {
 		this.bus = bus;		
-		this.bus.subscribe(CollisionEvent.class, this::onCollision);
+		this.listenerManager.add(bus, CollisionEvent.class, this::onCollision);
 	}
 	
 	private void onCollision(CollisionEvent event) {
@@ -37,13 +36,5 @@ public class PickupSystem implements Registrable {
 	            this.bus.publish(new PlaySoundEvent(SoundType.ITEM_PICKUP));
 	        }
 	    }
-	}
-	
-	@Override
-	public void register(Entity entity) {
-	}
-
-	@Override
-	public void unregister(Entity entity) {
 	}
 }

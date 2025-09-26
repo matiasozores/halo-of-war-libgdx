@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import com.haloofwar.common.enums.Background;
 import com.haloofwar.common.enums.ObjectType;
 import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enums.UIState;
 import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
@@ -25,16 +26,22 @@ import com.haloofwar.interfaces.Weapon;
 
 public class ShopPopup extends Popup {
 
-    public final EquipmentComponent EQUIPMENT;
-    private final InventoryComponent INVENTORY;
+	private EquipmentComponent EQUIPMENT;
+    private InventoryComponent INVENTORY;
     private final Texture BUY_BUTTON;
     private final Texture GOLD_COIN;
     private final TextureManager TEXTURE;
     	
-    public ShopPopup(final EventBus GAMEPLAY_BUS, TextureManager textureManager, BitmapFont font,
-                     ArrayList<Entity> shopItems, EquipmentComponent equipment,
-                     InventoryComponent inventory) {
-        super(GAMEPLAY_BUS, font, textureManager.get(Background.SHOP), shopItems);
+    public ShopPopup(
+		final EventBus GAMEPLAY_BUS, 
+		TextureManager textureManager, 
+		BitmapFont font,
+		ArrayList<Entity> shopItems, 
+		EquipmentComponent equipment,
+		InventoryComponent inventory,
+		final SpriteBatch batch
+	) {
+        super(GAMEPLAY_BUS, font, textureManager.get(Background.SHOP), shopItems, UIState.SHOP, batch);
 
         this.BUY_BUTTON = textureManager.get(Background.BUY);
         this.GOLD_COIN = textureManager.get(ObjectType.MONEDA_DE_ORO);
@@ -90,12 +97,12 @@ public class ShopPopup extends Popup {
         // Precio u Obtenido
         float textX = nameX + nameLayout.width + 10;
         if (owned) {
-            FONT.setColor(0.5f, 0.5f, 0.5f, 1f);
-            FONT.draw(batch, "Obtenido", textX, nameY);
+        	FONT.setColor(0.5f, 0.5f, 0.5f, 1f);
+        	FONT.draw(batch, "Obtenido", textX, nameY);
         } else {
-            if (GOLD_COIN != null) batch.draw(GOLD_COIN, textX, nameY - 25, 24, 24);
+            if (GOLD_COIN != null) {batch.draw(GOLD_COIN, textX, nameY - 25, 24, 24);
             FONT.setColor(1f, 1f, 0f, 1f);
-            FONT.draw(batch, String.valueOf(price), textX + 30, nameY);
+            FONT.draw(batch, String.valueOf(price), textX + 30, nameY);}
         }
 
         // Descripción
@@ -107,11 +114,11 @@ public class ShopPopup extends Popup {
 
         // Botón comprar
         if (isSelected && !owned) {
-            batch.draw(BUY_BUTTON, nameX + 700, y - 100, 128, 128);
+        	batch.draw(BUY_BUTTON, nameX + 700, y - 100, 128, 128);
         }
     }
 
-    public void buyCurrent() {
+    private void buyCurrent() {
         Entity selected = getSelectedEntity();
         if (selected == null) return;
 
@@ -145,6 +152,10 @@ public class ShopPopup extends Popup {
         this.GAMEPLAY_BUS.publish(new PlaySoundEvent(SoundType.PURCHASE));
     }
 
+    @Override
+    public void onSelectOption() {
+        this.buyCurrent();
+    }
     
     private Weapon getWeapon(Entity entity) {
     	if(entity.hasComponent(FireArmComponent.class)) {
@@ -157,4 +168,15 @@ public class ShopPopup extends Popup {
         	}
     	}
     }
+
+    @Override
+    public void refresh(Entity player) {
+        if (player == null) {
+        	return;
+        }
+
+        // agregar logica de cambio de tienda dependiendo del jugador
+    }
+
+
 }

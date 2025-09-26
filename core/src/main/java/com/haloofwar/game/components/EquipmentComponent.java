@@ -9,8 +9,12 @@ import com.haloofwar.interfaces.Weapon;
 
 public class EquipmentComponent implements Component {
 	public Entity currentWeapon;
-	public ArrayList<Entity> weaponInventory = new ArrayList<>();
+	public ArrayList<Entity> weaponInventory;
 	
+	public EquipmentComponent() {
+		this.weaponInventory = new ArrayList<Entity>();
+	}
+
 	public boolean isInInventory(final String NAME) {
 		boolean found = false;
 		int i = 0;
@@ -31,6 +35,17 @@ public class EquipmentComponent implements Component {
 		return found;
 	}
 	
+	public void printInventory() {
+		if(this.weaponInventory.size() == 0) {
+			System.out.println("No hay armas :(");
+		}
+		
+		for (int i = 0; i < this.weaponInventory.size(); i++) {
+			System.out.println(this.weaponInventory.get(i).getComponent(NameComponent.class).name + " ");
+		}
+	}
+	
+	
 	public Weapon getCurrentWeapon() {
 		if(this.currentWeapon.hasComponent(FireArmComponent.class)) {
 			return this.currentWeapon.getComponent(FireArmComponent.class).getWeapon();
@@ -47,14 +62,28 @@ public class EquipmentComponent implements Component {
 	public EquipmentData toData() {
 	    EquipmentData data = new EquipmentData();
 
-	    data.currentWeaponName = this.currentWeapon.getComponent(NameComponent.class).name;
+	    if(currentWeapon != null) {
+	        data.currentWeaponName = currentWeapon.getComponent(NameComponent.class).name;
+	        // aseguramos que el arma actual esté en el inventario
+	        boolean hasCurrent = false;
+	        for(Entity w : weaponInventory) {
+	            if(w.getComponent(NameComponent.class).name.equals(currentWeapon.getComponent(NameComponent.class).name)) {
+	                hasCurrent = true;
+	                break;
+	            }
+	        }
+	        if(!hasCurrent) weaponInventory.add(currentWeapon);
+	    }
 
-	    for (Entity e : this.weaponInventory) {
-	        data.weaponInventoryNames.add(e.getComponent(NameComponent.class).name);
+	    data.weaponInventoryNames = new ArrayList<>(); // NUEVA LISTA INDEPENDIENTE
+	    for(Entity w : weaponInventory) {
+	        data.weaponInventoryNames.add(w.getComponent(NameComponent.class).name);
 	    }
 
 	    return data;
 	}
+
+
 	
     public void setCurrentWeapon(Entity weapon) {
         this.currentWeapon = weapon;

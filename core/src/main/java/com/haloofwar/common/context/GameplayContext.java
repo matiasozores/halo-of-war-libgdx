@@ -8,6 +8,7 @@ import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.ChangeCurrentPlayerEvent;
 import com.haloofwar.engine.events.EventBus;
+import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.NewEntityEvent;
 import com.haloofwar.engine.events.NewPlayerEvent;
 import com.haloofwar.engine.events.RemoveEntityEvent;
@@ -21,6 +22,7 @@ import com.haloofwar.interfaces.Updatable;
 
 public class GameplayContext {
     private SystemCollection systems;
+    private final EventListenerManager listenerManager = new EventListenerManager();
     
     private Entity currentPlayer;
     private Entity kratos;
@@ -42,14 +44,14 @@ public class GameplayContext {
 
     private void initializeEvents() {
         if (this.gameplayBus != null) {
-            this.gameplayBus.subscribe(NewEntityEvent.class, this::addEntity);
-            this.gameplayBus.subscribe(RemoveEntityEvent.class, this::removeEntity);
-            this.gameplayBus.subscribe(ChangeCurrentPlayerEvent.class, this::onChangeCurrentPlayer);
+            this.listenerManager.add(this.gameplayBus, NewEntityEvent.class, this::addEntity);
+            this.listenerManager.add(this.gameplayBus, RemoveEntityEvent.class, this::removeEntity);
+            this.listenerManager.add(this.gameplayBus, ChangeCurrentPlayerEvent.class, this::onChangeCurrentPlayer);
         } else {
             System.out.println("No se pueden inicializar los eventos porque el GameplayBus es nulo... | GameplayContext");
         }
     }
-    
+
     private void onChangeCurrentPlayer(ChangeCurrentPlayerEvent event) {
         if (this.masterchief == null || this.kratos == null) {
             System.out.println("No se puede cambiar de jugador porque Kratos o Master Chief es nulo... | GameplayContext");
@@ -110,6 +112,28 @@ public class GameplayContext {
         }
     }
     
+//    public void printPlayers() {
+//    	EquipmentComponent eM = this.masterchief.getComponent(EquipmentComponent.class);
+//    	EquipmentComponent eK = this.kratos.getComponent(EquipmentComponent.class);
+//       	EquipmentComponent current = this.currentPlayer.getComponent(EquipmentComponent.class);
+//    	
+//    	System.out.println();
+//    	System.out.println("---------------------------------------------");
+//    	System.out.println("------- Masterchief -------");
+//    	System.out.println("Current Weapon: " + eM.currentWeapon.getComponent(NameComponent.class).name);
+//    	System.out.print("Inventario armas: ");
+//    	eM.printInventory();
+//    	System.out.println("------- Kratos -------");
+//    	System.out.println("Current Weapon: " + eK.currentWeapon.getComponent(NameComponent.class).name);
+//    	System.out.print("Inventario armas: ");
+//    	eK.printInventory();
+//    	System.out.println("------- Current (" + this.currentPlayer.getComponent(NameComponent.class).name + ")"  +" -------");
+//    	System.out.println("Current Weapon: " + current.currentWeapon.getComponent(NameComponent.class).name);
+//    	System.out.print("Inventario armas: ");
+//    	current.printInventory();
+//    	System.out.println("---------------------------------------------");
+//    }
+    
     public void initializePlayers(Entity player1, Entity player2) {
     	this.initializePlayer(player1);
     	this.initializePlayer(player2);
@@ -152,18 +176,19 @@ public class GameplayContext {
     }
     
     public void dispose() {
+    	this.listenerManager.clear();
         for (Disposable system : this.systems.getDISPOSABLE_SYSTEMS()) {
             system.dispose();
-        }
-
-        if (this.gameplayBus != null) {
-            this.gameplayBus.clear();
-            this.systems = SystemFactory.createGameplaySystems(this.batch, this.texture, this.gameplayBus);
-            this.initializeEvents();
         }
         
         this.currentPlayer = null;
         this.kratos = null;
         this.masterchief = null;
+        
+        if (this.gameplayBus != null) {
+            this.gameplayBus.clear();
+            this.systems = SystemFactory.createGameplaySystems(this.batch, this.texture, this.gameplayBus);
+            this.initializeEvents();
+        }
     }
 }

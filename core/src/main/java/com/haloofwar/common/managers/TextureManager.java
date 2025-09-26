@@ -52,7 +52,7 @@ public class TextureManager {
     }
     
     public void dispose() {
-        for (Texture texture : this.textureMap.values()) {
+    	for (Texture texture : this.textureMap.values()) {
         	texture.dispose();
         }
         

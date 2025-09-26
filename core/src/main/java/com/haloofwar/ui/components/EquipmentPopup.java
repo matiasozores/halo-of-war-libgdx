@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 import com.haloofwar.common.enums.Background;
 import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enums.UIState;
 import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
@@ -20,17 +21,37 @@ import com.haloofwar.interfaces.Weapon;
 
 public class EquipmentPopup extends Popup {
 
-    private final EquipmentComponent EQUIPMENT;
+    private EquipmentComponent EQUIPMENT;
     private final Texture SELECT_BUTTON; // resalta arma seleccionada
     private final TextureManager TEXTURE;
     
-    public EquipmentPopup(final EventBus GAMEPLAY_BUS, final TextureManager TEXTURE, final BitmapFont FONT, final EquipmentComponent EQUIPMENT) {
-        super(GAMEPLAY_BUS, FONT, TEXTURE.get(Background.EQUIPMENT), EQUIPMENT.weaponInventory);
+    public EquipmentPopup(
+		final EventBus GAMEPLAY_BUS, 
+		final TextureManager TEXTURE, 
+		final BitmapFont FONT, 
+		final EquipmentComponent EQUIPMENT,
+		final SpriteBatch batch
+    ) {
+        super(GAMEPLAY_BUS, FONT, TEXTURE.get(Background.EQUIPMENT), EQUIPMENT.weaponInventory, UIState.EQUIPMENT, batch);
         this.EQUIPMENT = EQUIPMENT;
         this.SELECT_BUTTON = TEXTURE.get(Background.SELECT); 
         this.TEXTURE = TEXTURE;
-        
     }
+    
+    @Override
+    public void refresh(Entity player) {
+        EquipmentComponent eq = player.getComponent(EquipmentComponent.class);
+        if (eq != null) {
+            this.EQUIPMENT = eq;
+            this.ENTITIES = eq.weaponInventory;
+
+            this.selectedIndex = 0;
+            this.scrollIndex = 0;
+        }
+    }
+
+
+
 
     @Override
     protected void drawEntity(final SpriteBatch batch, final Entity entity, final float x, final float y, final boolean isSelected) {
@@ -96,18 +117,22 @@ public class EquipmentPopup extends Popup {
     }
 
 
-    /** Equipar el arma actualmente seleccionada */
-    public void equipSelected() {
-        if (this.EQUIPMENT.weaponInventory.isEmpty()) {
-        	return;
-        }
-        
-        if(this.getSelectedEntity().equals(this.EQUIPMENT.currentWeapon)) {
-        	return;
-        }
-        
-        this.EQUIPMENT.currentWeapon = this.getSelectedEntity();
+    private void equipSelected() {
+        if (this.EQUIPMENT.weaponInventory.isEmpty()) return;
+
+        Entity selected = this.getSelectedEntity();
+        if (selected == null || selected.equals(this.EQUIPMENT.currentWeapon)) return;
+
+        // Equipar en el componente del jugador real
+        this.EQUIPMENT.currentWeapon = selected;
         this.GAMEPLAY_BUS.publish(new PlaySoundEvent(SoundType.SELECT_WEAPON));
-        System.out.println("Equipaste: " + EQUIPMENT.currentWeapon.getComponent(NameComponent.class).name);
     }
+
+    
+    @Override
+    public void onSelectOption() {
+        this.equipSelected();
+    }
+    
+
 }

@@ -5,6 +5,7 @@ import com.haloofwar.game.components.VisibilityComponent;
 import com.haloofwar.interfaces.Updatable;
 
 public class VisibilitySystem extends BaseSystem implements Updatable {
+	
 	@Override
 	public void register(Entity entity) {
 		if(entity.hasComponent(VisibilityComponent.class)) {

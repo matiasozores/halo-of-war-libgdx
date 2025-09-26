@@ -7,16 +7,16 @@ import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.PlayerDiedEvent;
 import com.haloofwar.engine.events.RemoveEntityEvent;
-import com.haloofwar.engine.interfaces.Registrable;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.HealthComponent;
 import com.haloofwar.game.components.PlayerComponent;
 
-public class DamageSystem implements Registrable{
+public class DamageSystem extends EventSystem {
 	private final EventBus bus;
 
     public DamageSystem(EventBus bus) {
         this.bus = bus;
-        this.bus.subscribe(DamageEvent.class, this::onDamage);
+        this.listenerManager.add(bus, DamageEvent.class, this::onDamage);
     }
 
     private void onDamage(DamageEvent event) {
@@ -39,18 +39,4 @@ public class DamageSystem implements Registrable{
             } 
         }
     }
-
-    // Se implementa a Registrable aunque no requiera sus metodos para que sea tratado como un sistema
-    
-	@Override
-	public void register(Entity entity) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void unregister(Entity entity) {
-		// TODO Auto-generated method stub
-		
-	}
 }

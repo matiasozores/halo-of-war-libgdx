@@ -35,11 +35,6 @@ public class World {
 		this.context.reconfigureCamera();
 	}
 
-    public void dispose() {
-        this.map.dispose();
-        this.batch.dispose();
-    }
-
     public GameWorldCamera getCamera() {
         return this.context.getCamera();
     }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 import com.haloofwar.common.enums.Background;
+import com.haloofwar.common.enums.UIState;
 import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
@@ -16,9 +17,25 @@ import com.haloofwar.game.components.StockComponent;
 public class InventoryPopup extends Popup {
     private final TextureManager TEXTURE;
 
-    public InventoryPopup(final EventBus GAMEPLAY_BUS, final TextureManager TEXTURE, final BitmapFont FONT, final InventoryComponent INVENTORY) {
-        super(GAMEPLAY_BUS, FONT, TEXTURE.get(Background.INVENTORY), INVENTORY.getObjects());	
+    public InventoryPopup(
+    	final EventBus GAMEPLAY_BUS, 
+		final TextureManager TEXTURE, 
+		final BitmapFont FONT, 
+		final InventoryComponent INVENTORY,
+		final SpriteBatch batch
+	) {
+        super(GAMEPLAY_BUS, FONT, TEXTURE.get(Background.INVENTORY), INVENTORY.getObjects(), UIState.INVENTORY, batch);	
         this.TEXTURE = TEXTURE;
+    }
+    
+    @Override
+    public void refresh(Entity player) {
+        if (player == null) return;
+
+        if (player.hasComponent(InventoryComponent.class)) {
+            InventoryComponent inv = player.getComponent(InventoryComponent.class);
+            this.ENTITIES = inv.getObjects();
+        }
     }
 
     @Override
@@ -56,4 +73,7 @@ public class InventoryPopup extends Popup {
         this.FONT.draw(BATCH, descLayout, nameX, nameY - 30);
         this.FONT.getData().setScale(1f);
     }
+
+	@Override
+	public void onSelectOption() {}
 }

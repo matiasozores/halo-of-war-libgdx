@@ -3,17 +3,15 @@ package com.haloofwar.game.systems;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.PowerUpCollectedEvent;
-import com.haloofwar.engine.interfaces.Registrable;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.HealthComponent;
 import com.haloofwar.game.components.PowerUpComponent;
 import com.haloofwar.game.components.VisibilityComponent;
 
-public class PowerUpSystem implements Registrable {
-    private final EventBus bus;
-
+public class PowerUpSystem extends EventSystem {
+	
     public PowerUpSystem(EventBus bus) {
-        this.bus = bus;
-        this.bus.subscribe(PowerUpCollectedEvent.class, this::onPowerUpCollected);
+        this.listenerManager.add(bus, PowerUpCollectedEvent.class, this::onPowerUpCollected);
     }
 
     private void onPowerUpCollected(PowerUpCollectedEvent event) {
@@ -36,9 +34,4 @@ public class PowerUpSystem implements Registrable {
 			break;
 		}
     }
-
-    @Override
-    public void register(Entity entity) {}
-    @Override
-    public void unregister(Entity entity) {}
 }

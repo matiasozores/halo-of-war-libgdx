@@ -13,6 +13,7 @@ import com.haloofwar.engine.events.ChangeCurrentPlayerEvent;
 import com.haloofwar.engine.events.ChangeSceneEvent;
 import com.haloofwar.engine.events.EnterLevelEvent;
 import com.haloofwar.engine.events.EventBus;
+import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.GameStateEvent;
 import com.haloofwar.engine.events.LevelCompletedEvent;
 import com.haloofwar.engine.events.NewPlayerEvent;
@@ -22,10 +23,12 @@ import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.PlayerDiedEvent;
 import com.haloofwar.engine.events.StopMusicEvent;
 import com.haloofwar.engine.events.StopSoundsEvent;
+import com.haloofwar.engine.interfaces.Disposable;
 import com.haloofwar.game.cutscenes.LevelCompletedScene;
 import com.haloofwar.interfaces.Scene;
 
-public class GameEventSubscriber {
+public class GameEventSubscriber implements Disposable {
+	private final EventListenerManager listenerManager = new EventListenerManager();
     private final EventBus bus;
     private final GameFlowManager flowManager;
     private TransformComponent playerTransform;
@@ -50,15 +53,15 @@ public class GameEventSubscriber {
     }
 
     private void subscribeEvents() {
-        this.bus.subscribe(PlayerDiedEvent.class, this::onPlayerDied);
-        this.bus.subscribe(EnterLevelEvent.class, this::onEnterLevel);
-        this.bus.subscribe(LevelCompletedEvent.class, this::onLevelCompleted);
-        this.bus.subscribe(ChangeSceneEvent.class, this::onChangeScene);
-        this.bus.subscribe(NewPlayerEvent.class, this::onNewPlayer);
-        this.bus.subscribe(GameStateEvent.class, this::onNewGameState);
+        this.listenerManager.add(this.bus, PlayerDiedEvent.class, this::onPlayerDied);
+        this.listenerManager.add(this.bus, EnterLevelEvent.class, this::onEnterLevel);
+        this.listenerManager.add(this.bus, LevelCompletedEvent.class, this::onLevelCompleted);
+        this.listenerManager.add(this.bus, ChangeSceneEvent.class, this::onChangeScene);
+        this.listenerManager.add(this.bus, NewPlayerEvent.class, this::onNewPlayer);
+        this.listenerManager.add(this.bus, GameStateEvent.class, this::onNewGameState);
         this.bus.publish(new GameStateEvent(this.flowManager.getCurrentState()));
     }
-    
+
     private void onNewPlayer(NewPlayerEvent event) {
     	this.flowManager.changePlayer(event);
     	this.playerTransform = event.player.getComponent(TransformComponent.class);
@@ -73,7 +76,9 @@ public class GameEventSubscriber {
     }
 
     private void onPlayerDied(PlayerDiedEvent event) {
-        if (ignoreIfPaused(event)) return;
+        if (ignoreIfPaused(event)) {
+        	return;
+        }
         
         this.bus.publish(new StopSoundsEvent());
         this.bus.publish(new StopMusicEvent());
@@ -139,4 +144,9 @@ public class GameEventSubscriber {
     public Set<LevelSceneType> getCompletedLevels() {
         return this.completedLevels;
     }
+
+	@Override
+	public void dispose() {
+		this.listenerManager.clear();
+	}
 }

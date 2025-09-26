@@ -7,6 +7,7 @@ import com.haloofwar.common.enums.MusicTrack;
 import com.haloofwar.common.enums.SoundType;
 import com.haloofwar.engine.cameras.GameStaticCamera;
 import com.haloofwar.engine.events.EventBus;
+import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.GameStateEvent;
 import com.haloofwar.engine.events.NextEvent;
 import com.haloofwar.engine.events.PeacefulEvent;
@@ -20,7 +21,8 @@ public class CutScene {
 	private final SoundType[] SOUNDS;
 	private final SpriteBatch batch;
 	private final EventBus bus;
-	private final GameStaticCamera camera; // nueva cámara para cutscene
+	private final EventListenerManager listenerManager = new EventListenerManager();	
+	private final GameStaticCamera camera;
 	private int currentIndex = 0;
 	private boolean finished = false;
 	private boolean started = false;
@@ -34,7 +36,7 @@ public class CutScene {
 		this.camera = camera;
 		this.previousMusic = previousMusic;
 		
-		this.bus.subscribe(NextEvent.class, this::onNext);
+		this.listenerManager.add(bus, NextEvent.class, this::onNext);
 		this.bus.publish(new PeacefulEvent(true));
 		this.bus.publish(new GameStateEvent(GameState.WAITING));
 	}
@@ -79,5 +81,9 @@ public class CutScene {
 
 	public boolean isFinished() {
 		return finished;
+	}
+	
+	public void dispose() {
+		this.listenerManager.clear();
 	}
 }

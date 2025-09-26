@@ -4,17 +4,17 @@ import com.haloofwar.common.enums.GameState;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.GameStateEvent;
-import com.haloofwar.engine.systems.BaseSystem;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.AnimationComponent;
 import com.haloofwar.game.components.MovementComponent;
 import com.haloofwar.interfaces.Updatable;
 
-public class AnimationSystem extends BaseSystem implements Updatable {
+public class AnimationSystem extends EventSystem implements Updatable {
 
 	private boolean canMove = true;
 	
 	public AnimationSystem(EventBus bus) {
-		bus.subscribe(GameStateEvent.class, this::onGameState);
+		this.listenerManager.add(bus, GameStateEvent.class, this::onGameState);
 	}
 	
     @Override
@@ -26,7 +26,6 @@ public class AnimationSystem extends BaseSystem implements Updatable {
 
     @Override
     public void update(float delta) {
- 
         for (Entity entity : this.ENTITIES) {
             AnimationComponent animation = entity.getComponent(AnimationComponent.class);
             if (animation == null) continue;

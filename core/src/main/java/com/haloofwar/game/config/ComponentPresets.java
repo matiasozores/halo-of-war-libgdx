@@ -165,13 +165,15 @@ public class ComponentPresets {
 	}
 
     public static EquipmentComponent defaultEquipment(Weapon type) {
-    	Entity weapon = WeaponFactory.createWeapon(type);
-    	EquipmentComponent equipment = new EquipmentComponent();
-    	equipment.currentWeapon = weapon;
-    	equipment.weaponInventory.add(weapon);
-    	return equipment;
-    }
+        Entity weapon = WeaponFactory.createWeapon(type);
+        EquipmentComponent equipment = new EquipmentComponent();
 
+        equipment.currentWeapon = weapon;
+        equipment.weaponInventory.add(weapon);
+        
+        return equipment;
+    }
+    
     public static InventoryComponent inventoryFromData(InventoryData data, final TextureManager TEXTURE) {
         InventoryComponent inventory = new InventoryComponent();
 
@@ -197,34 +199,51 @@ public class ComponentPresets {
         EquipmentComponent equipment = new EquipmentComponent();
 
         if (data == null) {
-        	return equipment;
+            System.out.println("Ha ocurrido un problema al cargar el equipamiento... | ComponentPresets");
+            return equipment;
         }
 
         ArrayList<Entity> weapons = new ArrayList<>();
 
+        // 1. Cargar todas las armas del inventario
         for (String weaponName : data.weaponInventoryNames) {
             Entity weaponEntity = WeaponFactory.createWeaponFromName(weaponName);
             if (weaponEntity != null) {
                 weapons.add(weaponEntity);
+            } else {
+                System.out.println("No se pudo crear arma del inventario: " + weaponName);
             }
         }
 
+        // 2. Intentar asignar el arma actual
+        if (data.currentWeaponName != null) {
+            Entity currentWeapon = weapons.stream()
+                .filter(w -> w.getComponent(NameComponent.class).name.equals(data.currentWeaponName))
+                .findFirst()
+                .orElse(null);
+
+            if (currentWeapon == null) {
+                // No estaba en inventario: creamos el arma y la agregamos
+                currentWeapon = WeaponFactory.createWeaponFromName(data.currentWeaponName);
+                if (currentWeapon != null) {
+                    weapons.add(currentWeapon);
+                }
+            }
+
+            equipment.setCurrentWeapon(currentWeapon);
+        }
         equipment.setWeaponInventory(weapons);
 
-        if (data.currentWeaponName != null) {
-            Entity currentWeapon = WeaponFactory.createWeaponFromName(data.currentWeaponName);
-            if (currentWeapon != null) {
-                equipment.setCurrentWeapon(currentWeapon);
-            } else if (!weapons.isEmpty()) {
-                equipment.setCurrentWeapon(weapons.get(0));
-            }
-        } else if (!weapons.isEmpty()) {
-            equipment.setCurrentWeapon(weapons.get(0));
-        }
+
+        // 3. Asignar inventario y currentWeapon
+        equipment.setWeaponInventory(weapons);
 
         return equipment;
     }
 
 
+
+
+    
 }
 

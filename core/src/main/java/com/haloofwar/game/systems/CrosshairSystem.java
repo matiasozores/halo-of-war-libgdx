@@ -7,18 +7,18 @@ import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.PeacefulEvent;
 import com.haloofwar.engine.interfaces.Renderable;
-import com.haloofwar.engine.systems.BaseSystem;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.CrosshairComponent;
 import com.haloofwar.interfaces.Updatable;
 
-public class CrosshairSystem extends BaseSystem implements Updatable, Renderable {
-
+public class CrosshairSystem extends EventSystem implements Updatable, Renderable {
+	
     private final SpriteBatch batch;
     private boolean peaceful = false;
     
     public CrosshairSystem(EventBus bus, SpriteBatch batch) {
         this.batch = batch;
-        bus.subscribe(PeacefulEvent.class, this::onPeace);
+        this.listenerManager.add(bus, PeacefulEvent.class, this::onPeace);
     }
 
     private void onPeace(PeacefulEvent event) {

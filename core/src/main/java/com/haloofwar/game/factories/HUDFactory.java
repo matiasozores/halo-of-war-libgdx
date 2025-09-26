@@ -20,37 +20,40 @@ import com.haloofwar.game.components.PlayerComponent;
 import com.haloofwar.game.dependences.LevelData;
 import com.haloofwar.ui.components.DialogueBox;
 import com.haloofwar.ui.components.EquipmentPopup;
-import com.haloofwar.ui.components.HealthBar;
+import com.haloofwar.ui.components.HUDComponent;
 import com.haloofwar.ui.components.InterfaceLevel;
 import com.haloofwar.ui.components.InterfaceLobby;
 import com.haloofwar.ui.components.InventoryPopup;
 import com.haloofwar.ui.components.PlayerInfoRenderer;
+import com.haloofwar.ui.components.Popup;
 import com.haloofwar.ui.components.ShopPopup;
 import com.haloofwar.ui.hud.HUD;
+import com.haloofwar.ui.hud.LevelHUD;
+import com.haloofwar.ui.hud.LobbyHUD;
 
 public final class HUDFactory {
 
     private final GameContext context;
-
+    private final GameStaticCamera camera;
+    private final SpriteBatch batch;
+    private final EventBus gameplayBus;
+    
     public HUDFactory(GameContext context) {
         this.context = context;
+        this.camera = context.getSTATIC_CAMERA();
+        this.batch = context.getRENDER().getBatch();
+        this.gameplayBus = context.getGAMEPLAY().getBus();
     }
 
     public HUD createLevelHUD(final LevelData DATA) {
-        Entity player = context.getGAMEPLAY().getCurrentPlayer();
+        final Entity player = context.getGAMEPLAY().getCurrentPlayer();
 
-        HealthComponent healthComp = player.getComponent(HealthComponent.class);
-        NameComponent nameComp = player.getComponent(NameComponent.class);
-        PlayerComponent playerComp = player.getComponent(PlayerComponent.class);
+        final HealthComponent healthComp = player.getComponent(HealthComponent.class);
+        final NameComponent nameComp = player.getComponent(NameComponent.class);
+        final PlayerComponent playerComp = player.getComponent(PlayerComponent.class);
         final EquipmentComponent EQUIPMENT = player.getComponent(EquipmentComponent.class);
         
-        HealthBar health = new HealthBar(
-                context.getRENDER().getShape(),
-                context.getSTATIC_CAMERA(),
-                healthComp
-        );
-
-        PlayerInfoRenderer info = new PlayerInfoRenderer(
+        final PlayerInfoRenderer info = new PlayerInfoRenderer(
                 context.getRENDER().getBatch(),
                 context.getRENDER().getFont().getSmallFont(),
                 context.getRENDER().getFont().getTitleFont(),
@@ -62,66 +65,34 @@ public final class HUDFactory {
                 healthComp
         );
 
-        DialogueBox dialogue = new DialogueBox(
-                context.getRENDER().getBatch(),
-                context.getTEXTURE().get(UIAsset.DIALOGUE_BOX),
-                context.getRENDER().getFont().getDefaultFont()
-        );
         
-        InterfaceLevel level = new InterfaceLevel(DATA, context.getRENDER().getBatch(), context.getRENDER().getFont().getDefaultFont());
+        final InterfaceLevel level = new InterfaceLevel(DATA, context.getRENDER().getBatch(), context.getRENDER().getFont().getDefaultFont());
 
-        return new HUD(
-                context.getSTATIC_CAMERA(),
-                context.getRENDER().getBatch(),
-                health,
-                info,
-                dialogue,
-                null,
-                null,
-                null,
-                null,
-                level,
-                context.getGAMEPLAY().getBus()
-        );
+        final HUDComponent[] components = {info, level};
+        
+        return new LevelHUD(components, this.camera, this.batch, this.gameplayBus);
     }
 
-    /**
-     * HUD simplificado para el lobby
-     */
     public HUD createLobbyHUD() {
-    	final SpriteBatch BATCH = this.context.getRENDER().getBatch();
     	final TextureManager TEXTURE = this.context.getTEXTURE();
     	final BitmapFont FONT = this.context.getRENDER().getFont().getDefaultFont();
     	final InventoryComponent INVENTORY = this.context.getGAMEPLAY().getCurrentPlayer().getComponent(InventoryComponent.class);
     	final EquipmentComponent EQUIPMENT = this.context.getGAMEPLAY().getCurrentPlayer().getComponent(EquipmentComponent.class);
-    	final GameStaticCamera STATIC_CAMERA = this.context.getSTATIC_CAMERA();
-    	final EventBus GAMEPLAY_BUS = this.context.getGAMEPLAY().getBus();
     	
-        DialogueBox dialogue = new DialogueBox(BATCH, TEXTURE.get(UIAsset.DIALOGUE_BOX), FONT);
+    	final InterfaceLobby lobby = new InterfaceLobby(this.batch, TEXTURE, FONT, INVENTORY);
+    	
+        final DialogueBox dialogue = new DialogueBox(this.batch, TEXTURE.get(UIAsset.DIALOGUE_BOX), FONT, this.gameplayBus);
         
-        InventoryPopup inventoryPopup = new InventoryPopup(GAMEPLAY_BUS, TEXTURE, FONT, INVENTORY);
+        final InventoryPopup inventory = new InventoryPopup(this.gameplayBus, TEXTURE, FONT, INVENTORY, this.batch);
+   
+        final ShopPopup shop = new ShopPopup(this.gameplayBus, TEXTURE, FONT, this.shopInitializer(), EQUIPMENT, INVENTORY, this.batch);
+
+        final EquipmentPopup equipment = new EquipmentPopup(this.gameplayBus, TEXTURE, FONT, EQUIPMENT, this.batch);
         
-        ShopPopup shopPopup = new ShopPopup(GAMEPLAY_BUS, TEXTURE, FONT, this.shopInitializer(), EQUIPMENT, INVENTORY);
+        final Popup[] popups = {shop, inventory, equipment};
+        final HUDComponent[] components = {lobby, dialogue};
         
-        EquipmentPopup equipmentPopup = new EquipmentPopup(GAMEPLAY_BUS, TEXTURE, FONT, EQUIPMENT);
-        
-        InterfaceLobby lobby = new InterfaceLobby(BATCH, TEXTURE, FONT, INVENTORY);
-        
-        
-        // Los demás componentes se pasan como null
-        return new HUD(
-                STATIC_CAMERA,
-                BATCH,
-                null,
-                null,
-                dialogue,
-                inventoryPopup,
-                shopPopup,
-                equipmentPopup,
-                lobby,
-                null,
-                context.getGAMEPLAY().getBus()
-        );
+        return new LobbyHUD(components, popups, this.camera, this.batch, this.gameplayBus);
     }
     
     private ArrayList<Entity> shopInitializer() {

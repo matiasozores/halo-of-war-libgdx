@@ -9,6 +9,8 @@ import com.haloofwar.common.enums.LevelSceneType;
 import com.haloofwar.common.enums.SceneType;
 import com.haloofwar.engine.events.ChangeSceneEvent;
 import com.haloofwar.engine.events.EventBus;
+import com.haloofwar.engine.events.EventListenerManager;
+import com.haloofwar.engine.events.GameStateEvent;
 import com.haloofwar.game.cutscenes.LevelCompletedScene;
 import com.haloofwar.ui.screens.GameOverScreen;
 import com.haloofwar.ui.screens.PauseMenuScreen;
@@ -19,7 +21,8 @@ public class GameManager implements Screen {
     private final GameEventSubscriber subscriber;
     private final PauseMenuScreen pauseMenu;
     private final GameOverScreen gameOver;
-
+    private final EventListenerManager listenerManager = new EventListenerManager();
+    
     public GameManager(
 		final GameFlowManager flow,
 		final LevelCompletedScene completedScene,
@@ -34,6 +37,7 @@ public class GameManager implements Screen {
     	
         final EventBus gameplayBus = context.getGAMEPLAY().getBus();
         this.initializeScene(gameplayBus, completedLevels);
+        this.listenerManager.add(gameplayBus, GameStateEvent.class, this::onGameStateEvent);
     }
     
     private void initializeScene(final EventBus gameplayBus, final Set<LevelSceneType> completedLevels) {
@@ -51,6 +55,17 @@ public class GameManager implements Screen {
     	}
     }
 
+    public void onGameStateEvent(GameStateEvent event) {
+    	if(event.getState().equals(GameState.PAUSED)) {
+    		this.pauseMenu.show();
+    	} else if(event.getState().equals(GameState.GAME_OVER)) {
+    		this.gameOver.show();
+    	} else {
+    		this.pauseMenu.dispose();
+    		this.gameOver.dispose();
+    	}
+    }
+    
     @Override
     public void render(float delta) {
         this.flow.update(delta);
@@ -74,8 +89,12 @@ public class GameManager implements Screen {
     public void hide() { if(flow.getCurrentScene()!=null) flow.getCurrentScene().hide(); }
     @Override
     public void dispose() { 
-    	if(flow.getCurrentScene()!=null) {
-    		flow.getCurrentScene().dispose();
+    	if(this.flow.getCurrentScene()!=null) {
+    		this.flow.getCurrentScene().dispose();
+    	
     	}
+    	this.flow.dispose();
+    	this.subscriber.dispose();
+    	this.listenerManager.clear();
     }
 }

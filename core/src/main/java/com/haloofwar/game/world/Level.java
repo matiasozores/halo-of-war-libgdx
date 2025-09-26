@@ -29,4 +29,10 @@ public class Level extends GameScene {
 	public boolean isLevel() {
 		return true;
 	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+		this.CONTROLLER.dispose();
+	}
 }

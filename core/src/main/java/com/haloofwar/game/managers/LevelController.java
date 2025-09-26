@@ -6,6 +6,7 @@ import com.haloofwar.common.enums.EnemyType;
 import com.haloofwar.common.enums.LevelSceneType;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
+import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.LevelCompletedEvent;
 import com.haloofwar.engine.events.NewEntityEvent;
 import com.haloofwar.engine.events.RemoveEntityEvent;
@@ -21,6 +22,7 @@ public class LevelController {
     private final LevelData DATA;
     private final EnemyFactory ENEMY_FACTORY;
     private final EventBus GAMEPLAY_BUS;
+    private final EventListenerManager listenerManager = new EventListenerManager();
     private final World WORLD;
     private final HUD HUD;
     private final CutScene CUTSCENE; 
@@ -44,6 +46,10 @@ public class LevelController {
         this.CUTSCENE = CUTSCENE;
 
         this.subscribeEvents();
+    }
+    
+    private void subscribeEvents() {
+        this.listenerManager.add(this.GAMEPLAY_BUS, RemoveEntityEvent.class, this::updateEnemiesDefeated);
     }
 
     public void update(float delta) {
@@ -69,9 +75,7 @@ public class LevelController {
         }
     }
 
-    private void subscribeEvents() {
-        this.GAMEPLAY_BUS.subscribe(RemoveEntityEvent.class, this::updateEnemiesDefeated);
-    }
+ 
 
     private void initialWait(float delta) {
         spawnTimer += delta;
@@ -133,6 +137,11 @@ public class LevelController {
                 spawnEnemy();
             }
         }
+    }
+    
+    public void dispose() {
+    	this.CUTSCENE.dispose();
+    	this.listenerManager.clear();
     }
 
 }

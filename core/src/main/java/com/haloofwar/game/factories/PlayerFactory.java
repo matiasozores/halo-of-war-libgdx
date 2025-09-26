@@ -55,13 +55,10 @@ public final class PlayerFactory {
 		ENTITY.addComponent(ComponentPresets.defaultName(TYPE));
 		ENTITY.addComponent(ComponentPresets.defaultPlayer(TYPE));
 		ENTITY.addComponent(ComponentPresets.defaultVisibility());
-
 		ENTITY.addComponent(ComponentPresets.inventoryFromData(inventoryData, this.TEXTURE));
 		ENTITY.addComponent(ComponentPresets.equipmentFromData(equipmentData));
-		
 		return ENTITY;
 	}
-    
     
     public Entity create(PlayerType type) {
     	return this.create(type, 0, 0);

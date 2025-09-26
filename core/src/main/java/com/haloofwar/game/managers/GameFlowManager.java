@@ -3,6 +3,7 @@ package com.haloofwar.game.managers;
 import com.haloofwar.common.context.GameplayContext;
 import com.haloofwar.common.enums.GameState;
 import com.haloofwar.engine.components.TransformComponent;
+import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.GameStateEvent;
 import com.haloofwar.engine.events.NewPlayerEvent;
 import com.haloofwar.game.world.World;
@@ -14,12 +15,13 @@ public class GameFlowManager {
     private GameState currentState;
     private final GameplayContext GAMEPLAY_CONTEXT;
     private TransformComponent playerTransform;
+    private final EventListenerManager listenerManager = new EventListenerManager();
     
     public GameFlowManager(GameplayContext GAMEPLAY_CONTEXT) {
     	this.GAMEPLAY_CONTEXT = GAMEPLAY_CONTEXT;
         this.playerTransform = this.GAMEPLAY_CONTEXT.getCurrentPlayer().getComponent(TransformComponent.class);
         this.currentState = GameState.PLAYING;
-        GAMEPLAY_CONTEXT.getBus().subscribe(GameStateEvent.class, this::onGameStateChange);
+        this.listenerManager.add(GAMEPLAY_CONTEXT.getBus(), GameStateEvent.class, this::onGameStateChange);
     }
 
     private void onGameStateChange(GameStateEvent event) {
@@ -79,4 +81,8 @@ public class GameFlowManager {
     public Scene getCurrentScene() {
 		return this.currentScene;
 	}
+    
+    public void dispose() {
+    	this.listenerManager.clear();
+    }
 }

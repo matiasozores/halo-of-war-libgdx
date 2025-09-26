@@ -8,7 +8,7 @@ import com.haloofwar.interfaces.SceneKey;
 public enum LevelSceneType implements SceneDescriptor, SceneKey {
 
 	INTRO("intro", SceneType.CAVE, 0, 0, 1, 0, CutSceneDataType.INTRO),
-    TUTORIAL("cave", SceneType.CAVE, 1, 2, 2, 2, CutSceneDataType.INTRO),
+    TUTORIAL("cave", SceneType.CAVE, 1, 1, 1, 1, CutSceneDataType.INTRO),
     INFINITY("infinity", SceneType.CAVE, 1, 2, Integer.MAX_VALUE, Integer.MAX_VALUE);
 
     private final String name;

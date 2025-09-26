@@ -4,9 +4,7 @@ import com.haloofwar.common.context.GameContext;
 import com.haloofwar.common.enums.Background;
 import com.haloofwar.common.enums.GameState;
 import com.haloofwar.common.enums.PlayerType;
-import com.haloofwar.common.enums.SceneType;
 import com.haloofwar.engine.entity.Entity;
-import com.haloofwar.engine.events.ChangeSceneEvent;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.GameStateEvent;
 import com.haloofwar.game.components.EquipmentComponent;
@@ -46,10 +44,9 @@ public class PauseMenuScreen extends Menu {
                 this.saveData(this.context.getGAMEPLAY().getMasterchief());
                 this.context.getAUDIO().getMusic().stop();
                 this.context.getAUDIO().getSound().stopAll();
-                this.gameplayBus.publish(new ChangeSceneEvent(SceneType.MAIN)); // no se porque pero esta linea es importante
-                this.context.getGAME().setScreen(new MainMenuScreen(this.context));
                 this.manager.dispose();
                 this.context.resetGameplay();
+                this.context.getGAME().setScreen(new MainMenuScreen(this.context));
                 break;
         }
     }
@@ -78,6 +75,4 @@ public class PauseMenuScreen extends Menu {
             System.out.println("No se puede realizar el guardado porque la entidad no es un Jugador... | PauseMenuScreen");
         }
     }
-
-
 }

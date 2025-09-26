@@ -1,4 +1,3 @@
-// MeleeWeaponSystem.java
 package com.haloofwar.game.systems;
 
 import java.util.ArrayList;
@@ -11,14 +10,14 @@ import com.haloofwar.engine.events.DamageEvent;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.NewEntityEvent;
 import com.haloofwar.engine.events.PeacefulEvent;
-import com.haloofwar.engine.systems.BaseSystem;
+import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.CollisionComponent;
 import com.haloofwar.game.components.EquipmentComponent;
 import com.haloofwar.game.components.MeleeAttackComponent;
 import com.haloofwar.game.components.MeleeWeaponComponent;
 import com.haloofwar.interfaces.Updatable;
 
-public class MeleeWeaponSystem extends BaseSystem implements Updatable {
+public class MeleeWeaponSystem extends EventSystem implements Updatable {
 
     private final EventBus bus;
     private final List<Entity> tempHitboxes = new ArrayList<>();
@@ -26,8 +25,8 @@ public class MeleeWeaponSystem extends BaseSystem implements Updatable {
     
     public MeleeWeaponSystem(EventBus bus) {
         this.bus = bus;
-        this.bus.subscribe(CollisionEvent.class, this::onCollision);
-        this.bus.subscribe(PeacefulEvent.class, this::onPeace);
+        this.listenerManager.add(bus, CollisionEvent.class, this::onCollision);
+        this.listenerManager.add(bus, PeacefulEvent.class, this::onPeace);
     }
 
     @Override
