@@ -11,13 +11,25 @@ public class Text {
     private final GlyphLayout layout;
     private Color color;
 
+    // Posición del texto
+    private float x;
+    private float y;
+
     public Text(String text, BitmapFont font) {
         this.text = text;
         this.font = font;
         this.layout = new GlyphLayout();
         this.color = Color.WHITE; 
+        this.x = 0;
+        this.y = 0;
     }
 
+    // Dibuja usando la posición guardada
+    public void draw(SpriteBatch batch) {
+        draw(batch, this.x, this.y);
+    }
+
+    // Dibuja en coordenadas específicas
     public void draw(SpriteBatch batch, float x, float y) {
         Color oldColor = font.getColor();
         font.setColor(color);
@@ -28,6 +40,10 @@ public class Text {
     public void setText(String text) {
         this.text = text;
     }
+    
+    public String getText() {
+		return text;
+	}
 
     public float getWidth() {
         layout.setText(font, text);
@@ -49,4 +65,13 @@ public class Text {
     public Color getColor() {
         return color;
     }
+
+    // Nueva función para posicionar el texto
+    public void setPosition(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public float getX() { return x; }
+    public float getY() { return y; }
 }

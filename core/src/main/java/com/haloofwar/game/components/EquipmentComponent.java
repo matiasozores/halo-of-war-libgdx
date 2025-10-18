@@ -2,7 +2,6 @@ package com.haloofwar.game.components;
 
 import java.util.ArrayList;
 
-import com.haloofwar.engine.components.Component;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.game.data.EquipmentData;
 import com.haloofwar.interfaces.Weapon;
@@ -59,6 +58,40 @@ public class EquipmentComponent implements Component {
 		}
 	}
 	
+	public Entity getEntityCurrentWeapon() {
+		return this.getEntityByWeapon(this.getCurrentWeapon());
+	}
+	
+	public Entity getEntityByWeapon(final Weapon weaponType) {
+	    if (weaponType == null) {
+	        System.out.println("Error: weaponType es null | EquipmentComponent");
+	        return null;
+	    }
+
+	    final String NAME = weaponType.getName();
+
+	    // primero, revisar el arma actual
+	    if (this.currentWeapon != null) {
+	        NameComponent currentName = this.currentWeapon.getComponent(NameComponent.class);
+	        if (currentName != null && currentName.name.equals(NAME)) {
+	            return this.currentWeapon;
+	        }
+	    }
+
+	    // luego revisar el inventario
+	    for (Entity weapon : this.weaponInventory) {
+	        NameComponent nameComp = weapon.getComponent(NameComponent.class);
+	        if (nameComp != null && nameComp.name.equals(NAME)) {
+	            return weapon;
+	        }
+	    }
+
+	    // si no se encontró
+	    System.out.println("No se encontró el arma con nombre: " + NAME + " | EquipmentComponent");
+	    return null;
+	}
+
+
 	public EquipmentData toData() {
 	    EquipmentData data = new EquipmentData();
 

@@ -1,7 +1,6 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.common.enums.FireArmType;
-import com.haloofwar.engine.components.Component;
+import com.haloofwar.common.enumerators.FireArmType;
 import com.haloofwar.interfaces.Weapon;
 import com.haloofwar.interfaces.WeaponComponent;
 

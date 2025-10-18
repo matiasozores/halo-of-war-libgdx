@@ -1,6 +1,6 @@
 package com.haloofwar.interfaces;
 
-import com.haloofwar.common.enums.SceneType;
+import com.haloofwar.common.enumerators.SceneType;
 
 public interface SceneKey {
 	SceneType getScene();

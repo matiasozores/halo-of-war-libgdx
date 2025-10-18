@@ -1,12 +1,16 @@
 package com.haloofwar.game.managers;
 
+import java.util.Set;
+
 import com.haloofwar.common.context.GameplayContext;
-import com.haloofwar.common.enums.GameState;
-import com.haloofwar.engine.components.TransformComponent;
+import com.haloofwar.common.enumerators.GameState;
+import com.haloofwar.common.enumerators.LevelSceneType;
+import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.GameStateEvent;
-import com.haloofwar.engine.events.NewPlayerEvent;
+import com.haloofwar.game.components.TransformComponent;
 import com.haloofwar.game.world.World;
+import com.haloofwar.game.world.WorldCollisionInitializer;
 import com.haloofwar.interfaces.Scene;
 
 public class GameFlowManager {
@@ -14,14 +18,22 @@ public class GameFlowManager {
     private Scene currentScene;
     private GameState currentState;
     private final GameplayContext GAMEPLAY_CONTEXT;
-    private TransformComponent playerTransform;
+    private final TextureManager texture;
+    private TransformComponent kratosTransform;
+    private TransformComponent masterchiefTransform;
     private final EventListenerManager listenerManager = new EventListenerManager();
+    private final Set<LevelSceneType> lockedLevels;
     
-    public GameFlowManager(GameplayContext GAMEPLAY_CONTEXT) {
+    public GameFlowManager(TextureManager texture, GameplayContext GAMEPLAY_CONTEXT, Set<LevelSceneType> lockedLevels) {
     	this.GAMEPLAY_CONTEXT = GAMEPLAY_CONTEXT;
-        this.playerTransform = this.GAMEPLAY_CONTEXT.getCurrentPlayer().getComponent(TransformComponent.class);
+        this.kratosTransform = this.GAMEPLAY_CONTEXT.getKratos().getComponent(TransformComponent.class);
+        this.masterchiefTransform = this.GAMEPLAY_CONTEXT.getMasterchief().getComponent(TransformComponent.class);
+        
         this.currentState = GameState.PLAYING;
         this.listenerManager.add(GAMEPLAY_CONTEXT.getBus(), GameStateEvent.class, this::onGameStateChange);
+        
+        this.texture = texture;
+        this.lockedLevels = lockedLevels;
     }
 
     private void onGameStateChange(GameStateEvent event) {
@@ -50,24 +62,25 @@ public class GameFlowManager {
             currentScene.reconfigureCamera();
             if (currentScene.getWorld() != null) {
             	// por las dudas
-            	this.playerTransform = this.GAMEPLAY_CONTEXT.getCurrentPlayer().getComponent(TransformComponent.class);
+            	this.kratosTransform = this.GAMEPLAY_CONTEXT.getKratos().getComponent(TransformComponent.class);
+            	this.masterchiefTransform = this.GAMEPLAY_CONTEXT.getMasterchief().getComponent(TransformComponent.class);
             	this.playerReposition(currentScene.getWorld());
+            	WorldCollisionInitializer.initializeMapColliders(this.lockedLevels, this.currentScene.getWorld().getMap(), this.texture, this.GAMEPLAY_CONTEXT.getBus());
             }
         }
 
         this.currentState = GameState.PLAYING;
-    }
-    
-    public void changePlayer(NewPlayerEvent event) {
-    	this.playerTransform = event.player.getComponent(TransformComponent.class);
     }
 
     public void playerReposition(World world) {
         float x = world.getMap().getMetaData().getxSpawnPoint();
         float y = world.getMap().getMetaData().getySpawnPoint();
         
-        this.playerTransform.x = x;
-        this.playerTransform.y = y;
+        this.kratosTransform.x = x;
+        this.kratosTransform.y = y;
+        
+        this.masterchiefTransform.x = x + 60; 
+        this.masterchiefTransform.y = y;
     }
     
     public void setGameState(GameState state) {

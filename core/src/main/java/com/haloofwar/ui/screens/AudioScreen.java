@@ -3,12 +3,12 @@ package com.haloofwar.ui.screens;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.MathUtils;
 import com.haloofwar.common.context.GameContext;
-import com.haloofwar.common.enums.Background;
-import com.haloofwar.common.enums.Direction;
-import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enumerators.Background;
+import com.haloofwar.common.enumerators.Direction;
+import com.haloofwar.common.enumerators.SoundType;
 import com.haloofwar.engine.events.NavigationEvent;
 import com.haloofwar.engine.events.PlaySoundEvent;
-import com.haloofwar.ui.menus.Menu;
+import com.haloofwar.ui.Menu;
 
 public class AudioScreen extends Menu {
 
@@ -37,10 +37,10 @@ public class AudioScreen extends Menu {
     protected void processOption(int optionIndex) {
         switch (optionIndex) {
             case MUSIC_MUTE_OPTION:
-                this.context.getAUDIO().getMusic().toggleMute();
+                this.context.getAudio().getMusic().toggleMute();
                 break;
             case SOUND_MUTE_OPTION:
-                this.context.getAUDIO().getSound().toggleMute();
+                this.context.getAudio().getSound().toggleMute();
                 break;
             case BACK_OPTION:
                 this.goBack();
@@ -83,7 +83,7 @@ public class AudioScreen extends Menu {
         }
         
         if(moved) {
-        	this.context.getGLOBAL_BUS().publish(new PlaySoundEvent(SoundType.NAVIGATE_MENU));
+        	this.context.getGlobalBus().publish(new PlaySoundEvent(SoundType.NAVIGATE_MENU));
         }
     }
 
@@ -91,19 +91,19 @@ public class AudioScreen extends Menu {
         boolean changed = false;
 
         if (this.navigator.isSelectedIndex(this.MUSIC_VOLUME_OPTION)) {
-            float current = this.context.getAUDIO().getMusic().getVolume();
+            float current = this.context.getAudio().getMusic().getVolume();
             float newVolume = MathUtils.clamp(current + delta, 0f, 1f);
             if (newVolume != current) {
-                this.context.getAUDIO().getMusic().setVolume(newVolume);
+                this.context.getAudio().getMusic().setVolume(newVolume);
                 changed = true;
             }
         }
 
         if (this.navigator.isSelectedIndex(this.SOUND_VOLUME_OPTION)) {
-            float current = this.context.getAUDIO().getSound().getVolume();
+            float current = this.context.getAudio().getSound().getVolume();
             float newVolume = MathUtils.clamp(current + delta, 0f, 1f);
             if (newVolume != current) {
-                this.context.getAUDIO().getSound().setVolume(newVolume);
+                this.context.getAudio().getSound().setVolume(newVolume);
                 changed = true;
             }
         }
@@ -115,12 +115,12 @@ public class AudioScreen extends Menu {
 
     private void updateAllTexts() {
         updateText(this.MUSIC_VOLUME_OPTION,
-            "Volumen de la musica: " + this.context.getAUDIO().getMusic().getVolumeText());
+            "Volumen de la musica: " + this.context.getAudio().getMusic().getVolumeText());
         updateText(this.MUSIC_MUTE_OPTION,
-            "Musica muteada: " + (this.context.getAUDIO().getMusic().isMuted() ? "Si" : "No"));
+            "Musica muteada: " + (this.context.getAudio().getMusic().isMuted() ? "Si" : "No"));
         updateText(this.SOUND_VOLUME_OPTION,
-            "Volumen de los sonidos: " + this.context.getAUDIO().getSound().getVolumeText());
+            "Volumen de los sonidos: " + this.context.getAudio().getSound().getVolumeText());
         updateText(this.SOUND_MUTE_OPTION,
-            "Sonido muteado: " + (this.context.getAUDIO().getSound().isMuted() ? "Si" : "No"));
+            "Sonido muteado: " + (this.context.getAudio().getSound().isMuted() ? "Si" : "No"));
     }
 }

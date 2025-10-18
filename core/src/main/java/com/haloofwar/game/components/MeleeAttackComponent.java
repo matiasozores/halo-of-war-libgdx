@@ -1,6 +1,5 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.engine.components.Component;
 import com.haloofwar.engine.entity.Entity;
 
 public class MeleeAttackComponent implements Component{

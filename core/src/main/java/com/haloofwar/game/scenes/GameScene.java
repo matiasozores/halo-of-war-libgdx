@@ -1,10 +1,10 @@
 package com.haloofwar.game.scenes;
 
-import com.haloofwar.common.enums.MusicTrack;
+import com.haloofwar.common.enumerators.MusicTrack;
 import com.haloofwar.game.world.World;
 import com.haloofwar.interfaces.Scene;
 import com.haloofwar.interfaces.SceneDescriptor;
-import com.haloofwar.ui.hud.HUD;
+import com.haloofwar.ui.HUD;
 
 public abstract class GameScene implements Scene {
     protected final World WORLD;
@@ -43,6 +43,7 @@ public abstract class GameScene implements Scene {
 	public void dispose() {
 		this.HUD.dispose();
 	}
+	
 	@Override
 	public void reset() {
 		this.HUD.reset();

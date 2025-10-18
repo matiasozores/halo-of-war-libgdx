@@ -3,18 +3,22 @@ package com.haloofwar.game.components;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.haloofwar.common.managers.TextureManager;
-import com.haloofwar.engine.components.Component;
 import com.haloofwar.engine.entity.AnimatedEntityDescriptor;
+import com.haloofwar.interfaces.StateController;
 
 public class AnimationComponent implements Component {
     private final AnimationSet animationSet;
-    private final AnimationStateController stateController;
+    private final StateController stateController;
     private final Texture spritesheet;
 
-    public AnimationComponent(AnimatedEntityDescriptor descriptor, TextureManager textureManager) {
+    public AnimationComponent(AnimatedEntityDescriptor descriptor, TextureManager textureManager, boolean isObject, boolean isLastState) {
         this.spritesheet = textureManager.get(descriptor);
         this.animationSet = new AnimationSet(this.spritesheet, descriptor);
-        this.stateController = new AnimationStateController(this.animationSet);
+        if(!isObject) {
+        	this.stateController = new AnimationStateController(this.animationSet);
+        } else {
+        	this.stateController = new ObjectAnimationStateController(this.animationSet, isLastState);
+        }
     }
 
     public void update(float delta, float dirX, float dirY, boolean canMove) {
@@ -28,4 +32,8 @@ public class AnimationComponent implements Component {
     public boolean isFacingLeft() {
         return this.stateController.isFacingLeft();
     }
+    
+    public StateController getStateController() {
+		return this.stateController;
+	}
 }

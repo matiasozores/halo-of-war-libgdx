@@ -2,19 +2,20 @@ package com.haloofwar.common.managers;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.haloofwar.common.enums.Direction;
-import com.haloofwar.common.enums.GameState;
-import com.haloofwar.common.enums.UIState;
+import com.haloofwar.common.enumerators.Direction;
+import com.haloofwar.common.enumerators.GameState;
+import com.haloofwar.common.enumerators.UIState;
 import com.haloofwar.engine.events.AttackEvent;
 import com.haloofwar.engine.events.ChangeCurrentPlayerEvent;
+import com.haloofwar.engine.events.CharacterTypedEvent;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.GameStateEvent;
 import com.haloofwar.engine.events.InteractEvent;
-import com.haloofwar.engine.events.MoveEvent;
 import com.haloofwar.engine.events.NavigationEvent;
 import com.haloofwar.engine.events.NextEvent;
 import com.haloofwar.engine.events.SelectOptionEvent;
 import com.haloofwar.engine.events.TogglePopupEvent;
+import com.haloofwar.engine.events.online.EntityMoveEventOnline;
 
 public class InputManager implements InputProcessor {
 
@@ -39,10 +40,10 @@ public class InputManager implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		switch (keycode) {
-			case Input.Keys.W: this.publish(this.gameplayBus, new MoveEvent(Direction.UP, true)); break;
-		    case Input.Keys.S: this.publish(this.gameplayBus, new MoveEvent(Direction.DOWN, true)); break;
-		    case Input.Keys.A: this.publish(this.gameplayBus, new MoveEvent(Direction.LEFT, true)); break;
-		    case Input.Keys.D: this.publish(this.gameplayBus, new MoveEvent(Direction.RIGHT, true)); break;
+			case Input.Keys.W: this.publish(this.gameplayBus, new EntityMoveEventOnline(Direction.UP, true)); break;
+		    case Input.Keys.S: this.publish(this.gameplayBus, new EntityMoveEventOnline(Direction.DOWN, true)); break;
+		    case Input.Keys.A: this.publish(this.gameplayBus, new EntityMoveEventOnline(Direction.LEFT, true)); break;
+		    case Input.Keys.D: this.publish(this.gameplayBus, new EntityMoveEventOnline(Direction.RIGHT, true)); break;
 		    case Input.Keys.E: this.publish(this.gameplayBus, new InteractEvent(true)); break;
 	        case Input.Keys.I: this.publish(this.gameplayBus,new TogglePopupEvent(UIState.INVENTORY)); break;
 	        case Input.Keys.U: this.publish(this.gameplayBus,new TogglePopupEvent(UIState.SHOP)); break;
@@ -82,10 +83,10 @@ public class InputManager implements InputProcessor {
 	@Override
 	public boolean keyUp(int keycode) {
 		switch (keycode) {
-			case Input.Keys.W: this.publish(this.gameplayBus,new MoveEvent(Direction.UP, false)); break;
-		    case Input.Keys.S: this.publish(this.gameplayBus,new MoveEvent(Direction.DOWN, false)); break;
-		    case Input.Keys.A: this.publish(this.gameplayBus,new MoveEvent(Direction.LEFT, false)); break;
-		    case Input.Keys.D: this.publish(this.gameplayBus,new MoveEvent(Direction.RIGHT, false)); break;
+			case Input.Keys.W: this.publish(this.gameplayBus,new EntityMoveEventOnline(Direction.UP, false)); break;
+		    case Input.Keys.S: this.publish(this.gameplayBus,new EntityMoveEventOnline(Direction.DOWN, false)); break;
+		    case Input.Keys.A: this.publish(this.gameplayBus,new EntityMoveEventOnline(Direction.LEFT, false)); break;
+		    case Input.Keys.D: this.publish(this.gameplayBus,new EntityMoveEventOnline(Direction.RIGHT, false)); break;
 		    case Input.Keys.E: this.publish(this.gameplayBus,new InteractEvent(false)); break;
 		    case Input.Keys.SPACE: this.publish(this.gameplayBus,new NextEvent(false)); break;
 		    
@@ -149,5 +150,9 @@ public class InputManager implements InputProcessor {
 	@Override
 	public boolean touchCancelled(int screenX, int screenY, int pointer, int button) { return false; }
 	@Override
-	public boolean keyTyped(char character) { return false; }
+	public boolean keyTyped(char character) {
+	    this.publish(this.globalBus, new CharacterTypedEvent(character));
+	    this.publish(this.gameplayBus, new CharacterTypedEvent(character));
+	    return true;
+	}
 }

@@ -1,7 +1,7 @@
 package com.haloofwar.game.factories;
 
 import com.haloofwar.common.context.GameContext;
-import com.haloofwar.common.enums.Key;
+import com.haloofwar.common.enumerators.Key;
 import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.game.config.ComponentPresets;
@@ -13,9 +13,9 @@ public final class PromptFactory {
         this.TEXTURE = CONTEXT.getTEXTURE();
     }
 
-	public Entity create(final Key KEY, final float X, final float Y, final float OFFSET) {
+	public Entity create(final int identifier, final Key KEY, final float X, final float Y, final float OFFSET) {
         final Entity ENTITY = new Entity();
-        ENTITY.addComponent(ComponentPresets.defaultTransform(X, Y));
+        ENTITY.addComponent(ComponentPresets.defaultTransform(identifier, X, Y));
         ENTITY.addComponent(ComponentPresets.defaultRender(KEY, this.TEXTURE));
         ENTITY.addComponent(ComponentPresets.defaultPrompt(OFFSET));
         return ENTITY;

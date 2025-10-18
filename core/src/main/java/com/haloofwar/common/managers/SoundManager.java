@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enumerators.SoundType;
 
 public class SoundManager {
     private final HashMap<SoundType, Sound> soundMap = new HashMap<>();

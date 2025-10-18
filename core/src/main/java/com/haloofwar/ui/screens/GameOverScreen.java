@@ -2,9 +2,9 @@ package com.haloofwar.ui.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.haloofwar.common.context.GameContext;
-import com.haloofwar.common.enums.Background;
+import com.haloofwar.common.enumerators.Background;
 import com.haloofwar.game.managers.GameManager;
-import com.haloofwar.ui.menus.Menu;
+import com.haloofwar.ui.Menu;
 
 public class GameOverScreen extends Menu{
 
@@ -22,8 +22,8 @@ public class GameOverScreen extends Menu{
 	protected void processOption(int optionIndex) {
 		switch (optionIndex) {
 			case 0: 
-				this.context.getAUDIO().getMusic().stop();
-                this.context.getAUDIO().getSound().stopAll();
+				this.context.getAudio().getMusic().stop();
+                this.context.getAudio().getSound().stopAll();
                 this.context.getGAME().setScreen(new MainMenuScreen(this.context));
                 this.manager.dispose();
                 this.context.resetGameplay();

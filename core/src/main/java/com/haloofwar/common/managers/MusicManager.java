@@ -2,13 +2,13 @@ package com.haloofwar.common.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.haloofwar.common.enums.MusicTrack;
+import com.haloofwar.common.enumerators.MusicTrack;
 
 public class MusicManager {
 	private Music currentMusic;
 	private boolean musicMuted = false;
 	private boolean musicLooping = true;
-	private float musicVolume = 0.15f; 
+	private float musicVolume = 0.0f; 
 	private float lastMusicVolume = 0.0f;
 	
 	public void play(MusicTrack track) {

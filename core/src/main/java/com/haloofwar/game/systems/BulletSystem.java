@@ -1,19 +1,19 @@
 package com.haloofwar.game.systems;
 
 import com.haloofwar.common.managers.TextureManager;
-import com.haloofwar.engine.components.RenderComponent;
-import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.NewEntityEvent;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.ShootBulletEvent;
-import com.haloofwar.engine.systems.EventSystem;
+import com.haloofwar.engine.interfaces.MovementController;
 import com.haloofwar.game.components.BulletComponent;
-import com.haloofwar.game.components.CollisionComponent;
-import com.haloofwar.interfaces.Updatable;
+import com.haloofwar.game.components.BulletMovementController;
+import com.haloofwar.game.components.MovementComponent;
+import com.haloofwar.game.components.RenderComponent;
+import com.haloofwar.game.components.TransformComponent;
 
-public class BulletSystem extends EventSystem implements Updatable {
+public class BulletSystem extends EventSystem {
 
     private static final int SPEED_MULTIPLIER = 10; // temporal
     private final TextureManager texture;
@@ -47,7 +47,7 @@ public class BulletSystem extends EventSystem implements Updatable {
         bullet.addComponent(bulletComp);
 
         // --- Transform inicial ---
-        TransformComponent transform = new TransformComponent(event.x, event.y, 16, 16);
+        TransformComponent transform = new TransformComponent(event.identifier, event.x, event.y, 16, 16);
         bullet.addComponent(transform);
 
         // --- Render con rotación ---
@@ -56,23 +56,12 @@ public class BulletSystem extends EventSystem implements Updatable {
         RenderComponent render = new RenderComponent(this.texture.get(event.type), angle);
         bullet.addComponent(render);
 
-        // --- Colisión ---
-        bullet.addComponent(new CollisionComponent(transform.width, transform.height));
-
+        MovementController controller = new BulletMovementController(transform, event.dirX, event.dirY, event.speed * SPEED_MULTIPLIER);
+        MovementComponent mc = new MovementComponent(controller, event.speed);
+        bullet.addComponent(mc);
+        
         this.bus.publish(new NewEntityEvent(bullet));
         this.bus.publish(new PlaySoundEvent(event.type.getSound()));
-    }
-
-    @Override
-    public void update(float delta) {
-        for (Entity entity : this.ENTITIES) {
-            BulletComponent bullet = entity.getComponent(BulletComponent.class);
-            TransformComponent transform = entity.getComponent(TransformComponent.class);
-            if (!bullet.active) continue;
-
-            transform.x += bullet.dirX * bullet.speed * delta;
-            transform.y += bullet.dirY * bullet.speed * delta;
-        }
     }
 
     public void destroy(Entity entity) {

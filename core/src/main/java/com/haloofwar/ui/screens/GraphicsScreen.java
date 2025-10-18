@@ -2,8 +2,8 @@ package com.haloofwar.ui.screens;
 
 import com.badlogic.gdx.Screen;
 import com.haloofwar.common.context.GameContext;
-import com.haloofwar.common.enums.Background;
-import com.haloofwar.ui.menus.Menu;
+import com.haloofwar.common.enumerators.Background;
+import com.haloofwar.ui.Menu;
 
 public class GraphicsScreen extends Menu {
 

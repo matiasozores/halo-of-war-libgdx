@@ -1,12 +1,12 @@
 package com.haloofwar.engine.events;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.haloofwar.common.enumerators.HeadType;
 
 public class TalkEvent {
 	public String[] texts;
-	public Texture avatar;
+	public HeadType avatar;
 	
-	public TalkEvent(String[] texts, Texture avatar) {
+	public TalkEvent(String[] texts, HeadType avatar) {
 		this.texts = texts;
 		this.avatar = avatar;
 	}

@@ -2,9 +2,10 @@ package com.haloofwar.game.components;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.haloofwar.common.enums.SpriteState;
+import com.haloofwar.common.enumerators.SpriteState;
+import com.haloofwar.interfaces.StateController;
 
-public class AnimationStateController {
+public class AnimationStateController implements StateController {
     private final AnimationSet animationSet;
     private Animation<TextureRegion> currentAnimation;
     private float stateTime = 0f;
@@ -15,6 +16,7 @@ public class AnimationStateController {
         this.currentAnimation = animationSet.getAnimation(SpriteState.IDLE);
     }
 
+    @Override
     public void update(float delta, float dirX, float dirY, boolean canMove) {
         this.stateTime += delta;
 
@@ -34,7 +36,6 @@ public class AnimationStateController {
                 this.currentAnimation = this.animationSet.getAnimation(SpriteState.IDLE);
             } 
         } else {
-        	// si no se puede mover entonces le ponemos que esta quieto xd
         	this.currentAnimation = this.animationSet.getAnimation(SpriteState.IDLE); 
         }
 
@@ -48,4 +49,9 @@ public class AnimationStateController {
     public boolean isFacingLeft() {
         return this.facingLeft;
     }
+
+	@Override
+	public void changeState() {
+		
+	}
 }

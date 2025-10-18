@@ -1,7 +1,6 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.common.enums.ObjectType;
-import com.haloofwar.engine.components.Component;
+import com.haloofwar.common.enumerators.ObjectType;
 
 public class StockComponent implements Component{
 	private int stock = 1;

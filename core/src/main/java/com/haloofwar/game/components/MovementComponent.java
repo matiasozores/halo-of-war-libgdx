@@ -1,6 +1,5 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.engine.components.Component;
 import com.haloofwar.engine.interfaces.MovementController;
 
 public class MovementComponent implements Component {

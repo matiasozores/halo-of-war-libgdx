@@ -1,7 +1,7 @@
 package com.haloofwar.interfaces;
 
 import com.badlogic.gdx.Screen;
-import com.haloofwar.common.enums.MusicTrack;
+import com.haloofwar.common.enumerators.MusicTrack;
 import com.haloofwar.game.world.World;
 
 

@@ -8,26 +8,24 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
-import com.haloofwar.common.enums.Background;
-import com.haloofwar.common.enums.ObjectType;
-import com.haloofwar.common.enums.SoundType;
-import com.haloofwar.common.enums.UIState;
+import com.haloofwar.common.enumerators.Background;
+import com.haloofwar.common.enumerators.ObjectType;
+import com.haloofwar.common.enumerators.PlayerType;
+import com.haloofwar.common.enumerators.UIState;
 import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
-import com.haloofwar.engine.events.PlaySoundEvent;
+import com.haloofwar.engine.events.online.BuyWeaponEventOnline;
 import com.haloofwar.game.components.EquipmentComponent;
 import com.haloofwar.game.components.FireArmComponent;
-import com.haloofwar.game.components.InventoryComponent;
 import com.haloofwar.game.components.MeleeWeaponComponent;
 import com.haloofwar.game.components.NameComponent;
-import com.haloofwar.game.factories.WeaponFactory;
 import com.haloofwar.interfaces.Weapon;
 
 public class ShopPopup extends Popup {
 
 	private EquipmentComponent EQUIPMENT;
-    private InventoryComponent INVENTORY;
+    private PlayerType playerType;
     private final Texture BUY_BUTTON;
     private final Texture GOLD_COIN;
     private final TextureManager TEXTURE;
@@ -38,7 +36,7 @@ public class ShopPopup extends Popup {
 		BitmapFont font,
 		ArrayList<Entity> shopItems, 
 		EquipmentComponent equipment,
-		InventoryComponent inventory,
+		PlayerType playerType,
 		final SpriteBatch batch
 	) {
         super(GAMEPLAY_BUS, font, textureManager.get(Background.SHOP), shopItems, UIState.SHOP, batch);
@@ -46,8 +44,8 @@ public class ShopPopup extends Popup {
         this.BUY_BUTTON = textureManager.get(Background.BUY);
         this.GOLD_COIN = textureManager.get(ObjectType.MONEDA_DE_ORO);
         this.EQUIPMENT = equipment;
-        this.INVENTORY = inventory;
         this.TEXTURE = textureManager;
+        this.playerType = playerType;
     }
 
     @Override
@@ -130,26 +128,13 @@ public class ShopPopup extends Popup {
             System.out.println("Ya tienes este item: " + name);
             return;
         }
-
+        
         Weapon weapon = getWeapon(selected);
-        if (weapon == null) return;
-
-        final int price = weapon.getPrice();
-        final int playerGold = INVENTORY.getItemCount(ObjectType.MONEDA_DE_ORO);
-
-        if (playerGold < price) {
-            System.out.println("No tienes suficiente oro para comprar " + name + ". Necesitas " + price + ", tienes " + playerGold);
-            return;
+        if (weapon == null) {
+        	return;
         }
-
-        boolean removed = INVENTORY.remove(ObjectType.MONEDA_DE_ORO, price);
-        if (!removed) {
-            return;
-        }
-
-        Entity newWeapon = WeaponFactory.createWeapon(weapon);
-        this.EQUIPMENT.weaponInventory.add(newWeapon);
-        this.GAMEPLAY_BUS.publish(new PlaySoundEvent(SoundType.PURCHASE));
+        
+    	this.GAMEPLAY_BUS.publish(new BuyWeaponEventOnline(weapon, this.playerType));    	
     }
 
     @Override

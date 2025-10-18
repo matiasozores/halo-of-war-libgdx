@@ -2,9 +2,9 @@ package com.haloofwar.game.cutscenes;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.common.enums.GameState;
-import com.haloofwar.common.enums.MusicTrack;
-import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enumerators.GameState;
+import com.haloofwar.common.enumerators.MusicTrack;
+import com.haloofwar.common.enumerators.SoundType;
 import com.haloofwar.engine.cameras.GameStaticCamera;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.EventListenerManager;
@@ -15,6 +15,8 @@ import com.haloofwar.engine.events.PlayMusicEvent;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.StopMusicEvent;
 import com.haloofwar.engine.events.StopSoundsEvent;
+import com.haloofwar.engine.events.online.ConfirmationNextCutsceneEvent;
+import com.haloofwar.engine.events.online.NextCutsceneEventOnline;
 
 public class CutScene {
 	private final Texture[] images;
@@ -37,16 +39,18 @@ public class CutScene {
 		this.previousMusic = previousMusic;
 		
 		this.listenerManager.add(bus, NextEvent.class, this::onNext);
+		this.listenerManager.add(bus, ConfirmationNextCutsceneEvent.class, this::onConfirmation);
 		this.bus.publish(new PeacefulEvent(true));
 		this.bus.publish(new GameStateEvent(GameState.WAITING));
 	}
 
 	private void onNext(NextEvent event) {
-		
-		if (!event.isPressed() || this.finished) {
-			return;
+		if(event.isPressed()) {
+			this.bus.publish(new NextCutsceneEventOnline());
 		}
-
+	}
+	
+	private void onConfirmation(ConfirmationNextCutsceneEvent event) {
 		if (this.currentIndex >= this.images.length - 1) {
 			this.finished = true;
 			this.bus.publish(new GameStateEvent(GameState.PLAYING));
@@ -61,6 +65,7 @@ public class CutScene {
 		}
 	}
 
+	
 	public void render(float delta) {
 		batch.setProjectionMatrix(camera.getOrthographic().combined);
 		batch.begin();
@@ -84,6 +89,6 @@ public class CutScene {
 	}
 	
 	public void dispose() {
-		this.listenerManager.clear();
+		
 	}
 }

@@ -2,7 +2,7 @@ package com.haloofwar.game.components;
 
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
-import com.haloofwar.engine.events.MoveEvent;
+import com.haloofwar.engine.events.online.EntityMoveEventOnline;
 import com.haloofwar.engine.interfaces.MovementController;
 
 public class PlayerMovementController implements MovementController{
@@ -11,10 +11,10 @@ public class PlayerMovementController implements MovementController{
     private float dy = 0;
 	
     public PlayerMovementController(EventBus bus) {
-        bus.subscribe(MoveEvent.class, this::onMoveEvent);
+        bus.subscribe(EntityMoveEventOnline.class, this::onMoveEvent);
     }
     
-    private void onMoveEvent(MoveEvent event) {
+    private void onMoveEvent(EntityMoveEventOnline event) {
         switch (event.getDirection()) {
             case LEFT:
                 this.dx = event.isPressed() ? -1 : (this.dx == -1 ? 0 : this.dx);
@@ -43,6 +43,12 @@ public class PlayerMovementController implements MovementController{
 
 	@Override
 	public void changeTarget(Entity entity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDirection(float x, float y) {
 		// TODO Auto-generated method stub
 		
 	}

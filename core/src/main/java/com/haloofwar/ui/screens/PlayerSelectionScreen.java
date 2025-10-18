@@ -2,11 +2,9 @@ package com.haloofwar.ui.screens;
 
 import com.badlogic.gdx.Screen;
 import com.haloofwar.common.context.GameContext;
-import com.haloofwar.common.enums.Background;
-import com.haloofwar.common.enums.PlayerType;
-import com.haloofwar.engine.entity.Entity;
-import com.haloofwar.launcher.GameInitializer;
-import com.haloofwar.ui.menus.Menu;
+import com.haloofwar.common.enumerators.Background;
+import com.haloofwar.common.enumerators.PlayerType;
+import com.haloofwar.ui.Menu;
 
 public class PlayerSelectionScreen extends Menu {
 
@@ -37,26 +35,8 @@ public class PlayerSelectionScreen extends Menu {
             return;
         }
 
-        PlayerType selectedPlayer = this.PLAYER_OPTIONS[optionIndex];
-        PlayerType otherPlayer = this.chooseOtherPlayer(selectedPlayer);
 
-        GameInitializer.initializeGameplay(this.context, this.createPlayer(selectedPlayer), this.createPlayer(otherPlayer), null);
+       // GameInitializer.initializeGameplay(this.context, this.createPlayer(selectedPlayer), this.createPlayer(otherPlayer), null, false);
     }
     
-    private PlayerType chooseOtherPlayer(final PlayerType SELECTED_PLAYER) {
-    	switch (SELECTED_PLAYER) {
-		case KRATOS:
-			return PlayerType.MASTER_CHIEF;
-			
-		case MASTER_CHIEF:
-			return PlayerType.KRATOS;
-			
-		default:
-			return PlayerType.KRATOS;
-		}
-    }
-
-    private Entity createPlayer(PlayerType type) {
-    	return this.context.getFACTORIES().getPLAYER_FACTORY().create(type);
-    }
 }

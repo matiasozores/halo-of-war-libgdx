@@ -1,23 +1,23 @@
 package com.haloofwar.common.context;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.common.enums.PlayerType;
+import com.haloofwar.common.enumerators.PlayerType;
 import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.cameras.GameWorldCamera;
-import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.Entity;
-import com.haloofwar.engine.events.ChangeCurrentPlayerEvent;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.NewEntityEvent;
-import com.haloofwar.engine.events.NewPlayerEvent;
+import com.haloofwar.engine.events.RemoveEntityByIdentifierEvent;
 import com.haloofwar.engine.events.RemoveEntityEvent;
+import com.haloofwar.engine.events.RespawnPlayerEvent;
+import com.haloofwar.engine.events.SwitchToSpectatorEvent;
 import com.haloofwar.engine.interfaces.Disposable;
 import com.haloofwar.engine.interfaces.Renderable;
-import com.haloofwar.engine.systems.SystemCollection;
 import com.haloofwar.game.components.PlayerComponent;
 import com.haloofwar.game.factories.SystemFactory;
 import com.haloofwar.game.systems.PlayerSystem;
+import com.haloofwar.game.systems.SystemCollection;
 import com.haloofwar.interfaces.Updatable;
 
 public class GameplayContext {
@@ -37,8 +37,8 @@ public class GameplayContext {
         this.gameplayBus = gameplayBus;
         this.batch = batch;
         this.texture = texture;
+        this.systems = SystemFactory.createGameplaySystems(this.batch, this.texture, this.gameplayBus, this);
         this.camera = camera;
-        this.systems = SystemFactory.createGameplaySystems(this.batch, this.texture, this.gameplayBus);
         this.initializeEvents();
     }
 
@@ -46,49 +46,25 @@ public class GameplayContext {
         if (this.gameplayBus != null) {
             this.listenerManager.add(this.gameplayBus, NewEntityEvent.class, this::addEntity);
             this.listenerManager.add(this.gameplayBus, RemoveEntityEvent.class, this::removeEntity);
-            this.listenerManager.add(this.gameplayBus, ChangeCurrentPlayerEvent.class, this::onChangeCurrentPlayer);
+            this.listenerManager.add(this.gameplayBus, RemoveEntityByIdentifierEvent.class, this::removeEntityByIdentifier);
+            this.listenerManager.add(this.gameplayBus, SwitchToSpectatorEvent.class, this::switchToSpectator);
+            this.listenerManager.add(this.gameplayBus, RespawnPlayerEvent.class, this::respawnPlayer);
         } else {
             System.out.println("No se pueden inicializar los eventos porque el GameplayBus es nulo... | GameplayContext");
         }
     }
-
-    private void onChangeCurrentPlayer(ChangeCurrentPlayerEvent event) {
-        if (this.masterchief == null || this.kratos == null) {
-            System.out.println("No se puede cambiar de jugador porque Kratos o Master Chief es nulo... | GameplayContext");
-            return;
-        }
-
-        final PlayerComponent playerComp = this.currentPlayer.getComponent(PlayerComponent.class);
-
-        this.gameplayBus.publish(new RemoveEntityEvent(this.currentPlayer));
-
-        Entity nextPlayer;
-        switch (playerComp.type) {
-            case KRATOS -> nextPlayer = this.masterchief;
-            case MASTER_CHIEF -> nextPlayer = this.kratos;
-            default -> {
-                System.out.println("Ha ocurrido un problema al intentar cambiar de personaje... | GameplayContext");
-                nextPlayer = this.kratos;
-            }
-        }
-
-        this.repositionPlayer(nextPlayer);
-        this.currentPlayer = nextPlayer;
-
-        this.gameplayBus.publish(new NewPlayerEvent(this.currentPlayer));
-        this.gameplayBus.publish(new NewEntityEvent(this.currentPlayer));
-        this.camera.changeTarget(this.currentPlayer);
+    
+    private void respawnPlayer(RespawnPlayerEvent event) {
+    	Entity target = this.getPlayerByType(event.type);
+    	this.gameplayBus.publish(new NewEntityEvent(target));
     }
-
-
-    private void repositionPlayer(final Entity TARGET) {
-    	final TransformComponent TRANSFORM_TARGET = TARGET.getComponent(TransformComponent.class);
-    	final TransformComponent TRANSFORM_CURRENT = this.currentPlayer.getComponent(TransformComponent.class);
-    	TRANSFORM_TARGET.x = TRANSFORM_CURRENT.x;
-    	TRANSFORM_TARGET.y = TRANSFORM_CURRENT.y;
+    
+    private void switchToSpectator(SwitchToSpectatorEvent event) {
+    	Entity target = this.currentPlayer.equals(this.kratos) ? this.masterchief : this.kratos;
+    	this.camera.changeTarget(target);
     }
-
-    public void initializePlayer(Entity player) {
+    
+    public void initializePlayer(final Entity player) {
     	if(player == null) {
     		System.out.println("No se ha podido inicializar al jugador porque es nulo... | GameplayContext");
     		return;
@@ -97,8 +73,10 @@ public class GameplayContext {
         if (player.hasComponent(PlayerComponent.class)) {
         	if(this.currentPlayer == null) {
         		this.currentPlayer = player;
-        		this.addEntity(new NewEntityEvent(player));
+        		SystemFactory.registerSystem(this.systems, new PlayerSystem(player, this.gameplayBus, this.texture, this));
         	}
+        	
+        	this.addEntity(new NewEntityEvent(player));
         	
         	final PlayerType TYPE = player.getComponent(PlayerComponent.class).type;
         	
@@ -107,34 +85,10 @@ public class GameplayContext {
         	} else {
         		this.masterchief = player;
         	}
-        	
-        	SystemFactory.registerSystem(this.systems, new PlayerSystem(player, this.gameplayBus));
         }
     }
     
-//    public void printPlayers() {
-//    	EquipmentComponent eM = this.masterchief.getComponent(EquipmentComponent.class);
-//    	EquipmentComponent eK = this.kratos.getComponent(EquipmentComponent.class);
-//       	EquipmentComponent current = this.currentPlayer.getComponent(EquipmentComponent.class);
-//    	
-//    	System.out.println();
-//    	System.out.println("---------------------------------------------");
-//    	System.out.println("------- Masterchief -------");
-//    	System.out.println("Current Weapon: " + eM.currentWeapon.getComponent(NameComponent.class).name);
-//    	System.out.print("Inventario armas: ");
-//    	eM.printInventory();
-//    	System.out.println("------- Kratos -------");
-//    	System.out.println("Current Weapon: " + eK.currentWeapon.getComponent(NameComponent.class).name);
-//    	System.out.print("Inventario armas: ");
-//    	eK.printInventory();
-//    	System.out.println("------- Current (" + this.currentPlayer.getComponent(NameComponent.class).name + ")"  +" -------");
-//    	System.out.println("Current Weapon: " + current.currentWeapon.getComponent(NameComponent.class).name);
-//    	System.out.print("Inventario armas: ");
-//    	current.printInventory();
-//    	System.out.println("---------------------------------------------");
-//    }
-    
-    public void initializePlayers(Entity player1, Entity player2) {
+    public void initializePlayers(final Entity player1, final Entity player2) {
     	this.initializePlayer(player1);
     	this.initializePlayer(player2);
     }
@@ -151,12 +105,16 @@ public class GameplayContext {
         }
     }
 
-    public void addEntity(NewEntityEvent event) {
+    public void addEntity(final NewEntityEvent event) {
         this.systems.addEntity(event.entity);
     }
 
-    public void removeEntity(RemoveEntityEvent event) {
+    public void removeEntity(final RemoveEntityEvent event) {
         this.systems.removeEntity(event.entity);
+    }
+    
+    public void removeEntityByIdentifier(final RemoveEntityByIdentifierEvent event) {
+    	this.systems.removeEntityByIdentifier(event.identifier);
     }
 
     public Entity getCurrentPlayer() {
@@ -175,6 +133,14 @@ public class GameplayContext {
         return this.gameplayBus;
     }
     
+    public Entity getPlayerByType(PlayerType type) {
+    	if(type.equals(PlayerType.KRATOS)) {
+    		return this.kratos;
+    	} else {
+    		return this.masterchief;
+    	}
+    }
+    
     public void dispose() {
     	this.listenerManager.clear();
         for (Disposable system : this.systems.getDISPOSABLE_SYSTEMS()) {
@@ -187,7 +153,7 @@ public class GameplayContext {
         
         if (this.gameplayBus != null) {
             this.gameplayBus.clear();
-            this.systems = SystemFactory.createGameplaySystems(this.batch, this.texture, this.gameplayBus);
+            this.systems = SystemFactory.createGameplaySystems(this.batch, this.texture, this.gameplayBus, this);
             this.initializeEvents();
         }
     }

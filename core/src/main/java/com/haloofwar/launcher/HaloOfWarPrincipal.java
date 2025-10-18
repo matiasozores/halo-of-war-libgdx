@@ -27,6 +27,11 @@ public class HaloOfWarPrincipal extends Game {
 
     @Override
     public void dispose() {
+        if (getScreen() != null) {
+            getScreen().dispose();
+        }
+    	
+    	super.dispose();
     	if(this.context != null) {
     		this.context.dispose();
 		}
@@ -39,7 +44,7 @@ public class HaloOfWarPrincipal extends Game {
     }
     
     private void setInputManager() {
-    	Gdx.input.setInputProcessor(this.context.getINPUT());
+    	Gdx.input.setInputProcessor(this.context.getInput());
 		Gdx.input.setCursorCatched(true);
     }
     

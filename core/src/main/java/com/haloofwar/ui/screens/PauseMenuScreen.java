@@ -1,9 +1,9 @@
 package com.haloofwar.ui.screens;
 
 import com.haloofwar.common.context.GameContext;
-import com.haloofwar.common.enums.Background;
-import com.haloofwar.common.enums.GameState;
-import com.haloofwar.common.enums.PlayerType;
+import com.haloofwar.common.enumerators.Background;
+import com.haloofwar.common.enumerators.GameState;
+import com.haloofwar.common.enumerators.PlayerType;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.GameStateEvent;
@@ -13,7 +13,7 @@ import com.haloofwar.game.components.PlayerComponent;
 import com.haloofwar.game.data.PlayerData;
 import com.haloofwar.game.data.SaveGameData;
 import com.haloofwar.game.managers.GameManager;
-import com.haloofwar.ui.menus.Menu;
+import com.haloofwar.ui.Menu;
 
 public class PauseMenuScreen extends Menu {
 
@@ -25,9 +25,9 @@ public class PauseMenuScreen extends Menu {
         super(context, "Menu Pausa", new String[] {
                 "Reanudar", "Configuracion", "Guardar y volver al menu principal"
         }, null, Background.MAIN_MENU);
-        this.gameplayBus = context.getGAMEPLAY().getBus();
+        this.gameplayBus = context.getGameplay().getBus();
         this.manager = manager;
-        this.save = context.getSAVE().getDATA();
+        this.save = context.getSaveManager().getDATA();
     }
 
     @Override
@@ -40,10 +40,10 @@ public class PauseMenuScreen extends Menu {
                 this.context.getGAME().setScreen(new SettingsScreen(this.context, this));
                 break;
             case 2: 
-                this.saveData(this.context.getGAMEPLAY().getKratos());
-                this.saveData(this.context.getGAMEPLAY().getMasterchief());
-                this.context.getAUDIO().getMusic().stop();
-                this.context.getAUDIO().getSound().stopAll();
+                this.saveData(this.context.getGameplay().getKratos());
+                this.saveData(this.context.getGameplay().getMasterchief());
+                this.context.getAudio().getMusic().stop();
+                this.context.getAudio().getSound().stopAll();
                 this.manager.dispose();
                 this.context.resetGameplay();
                 this.context.getGAME().setScreen(new MainMenuScreen(this.context));
@@ -69,7 +69,7 @@ public class PauseMenuScreen extends Menu {
             data.type = type;
             
             this.save.saveData(data);
-            this.context.getSAVE().saveToFile();
+            this.context.getSaveManager().saveToFile();
 
         } else {
             System.out.println("No se puede realizar el guardado porque la entidad no es un Jugador... | PauseMenuScreen");

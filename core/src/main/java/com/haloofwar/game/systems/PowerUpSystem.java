@@ -3,7 +3,6 @@ package com.haloofwar.game.systems;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.PowerUpCollectedEvent;
-import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.HealthComponent;
 import com.haloofwar.game.components.PowerUpComponent;
 import com.haloofwar.game.components.VisibilityComponent;

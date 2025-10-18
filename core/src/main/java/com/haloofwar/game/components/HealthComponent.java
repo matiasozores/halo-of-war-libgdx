@@ -1,7 +1,5 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.engine.components.Component;
-
 public class HealthComponent implements Component{
     private int maxHealth;
     private int currentHealth;

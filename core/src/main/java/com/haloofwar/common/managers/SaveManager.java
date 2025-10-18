@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import com.haloofwar.common.enums.LevelSceneType;
+import com.haloofwar.common.enumerators.LevelSceneType;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.LevelCompletedEvent;

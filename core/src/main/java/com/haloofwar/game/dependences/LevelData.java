@@ -1,6 +1,6 @@
 package com.haloofwar.game.dependences;
 
-import com.haloofwar.common.enums.LevelSceneType;
+import com.haloofwar.common.enumerators.LevelSceneType;
 
 public class LevelData {
 

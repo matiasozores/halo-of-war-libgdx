@@ -14,122 +14,120 @@ import com.haloofwar.game.systems.AudioSystem;
 import com.haloofwar.launcher.HaloOfWarPrincipal;
 
 public class GameContext {
-    private final HaloOfWarPrincipal GAME;
+    private final HaloOfWarPrincipal game;
 
-    private final TextureManager TEXTURE;
-    private final AudioManager AUDIO;
-    private final RenderManager RENDER;
+    private final TextureManager texture;
+    private final AudioManager audio;
+    private final RenderManager render;
 
-    private final InputManager INPUT;
+    private final InputManager input;
 
-    private final GameStaticCamera STATIC_CAMERA;
-    private final GameWorldCamera WORLD_CAMERA;
+    private final GameStaticCamera staticCamera;
+    private final GameWorldCamera worldCamera;
 
-    private final GameplayContext GAMEPLAY;
-    private final FactoryCollection FACTORIES;
-    private final SceneManager SCENE;
+    private final GameplayContext gameplay;
+    private final FactoryCollection factories;
+    private final SceneManager scene;
 
-    private final AudioSystem AUDIO_SYSTEM;
+    private final AudioSystem audioSystem;
 
-    private final EventBus GLOBAL_BUS;
-    private final EventBus GAMEPLAY_BUS;
+    private final EventBus globalBus;
+    private final EventBus gameplayBus;
     
-    private final SaveManager SAVE;
+    private final SaveManager saveManager;
     
     public GameContext(final HaloOfWarPrincipal GAME) {
-        this.GAME = GAME;
+        this.game = GAME;
 
-        this.TEXTURE = new TextureManager();
-        this.AUDIO = new AudioManager();
-        this.RENDER = new RenderManager();
+        this.texture = new TextureManager();
+        this.audio = new AudioManager();
+        this.render = new RenderManager();
+        
+        this.globalBus = new EventBus();
+        this.gameplayBus = new EventBus();
+        
+        this.saveManager = new SaveManager(this.gameplayBus);
+        this.input = new InputManager(this.globalBus, this.gameplayBus);
+        
+        this.staticCamera = new GameStaticCamera();
+        this.worldCamera = new GameWorldCamera();
 
+        this.gameplay = new GameplayContext(this.render.getBatch(), this.texture, this.gameplayBus, this.worldCamera);
         
-        
-        this.GLOBAL_BUS = new EventBus();
-        this.GAMEPLAY_BUS = new EventBus();
-        
-        this.SAVE = new SaveManager(this.GAMEPLAY_BUS);
-        this.INPUT = new InputManager(this.GLOBAL_BUS, this.GAMEPLAY_BUS);
-        
-        this.STATIC_CAMERA = new GameStaticCamera();
-        this.WORLD_CAMERA = new GameWorldCamera();
+        this.audioSystem = new AudioSystem(this.audio, this.globalBus, this.gameplayBus);
 
-        this.GAMEPLAY = new GameplayContext(this.RENDER.getBatch(), this.TEXTURE, this.GAMEPLAY_BUS, this.WORLD_CAMERA);
-        
-        this.AUDIO_SYSTEM = new AudioSystem(this.AUDIO, this.GLOBAL_BUS, this.GAMEPLAY_BUS);
-
-        this.FACTORIES = new FactoryCollection(this);
-        this.SCENE = new SceneManager(this.FACTORIES.getSCENE_FACTORY());
+        this.factories = new FactoryCollection(this);
+        this.scene = new SceneManager(this.factories.getSCENE_FACTORY());
 
     }
 
     public HaloOfWarPrincipal getGAME() {
-        return this.GAME;
+        return this.game;
     }
 
     public TextureManager getTEXTURE() {
-        return this.TEXTURE;
+        return this.texture;
     }
 
-    public AudioManager getAUDIO() {
-        return this.AUDIO;
+    public AudioManager getAudio() {
+        return this.audio;
     }
 
-    public RenderManager getRENDER() {
-        return this.RENDER;
+    public RenderManager getRender() {
+        return this.render;
     }
 
-    public InputManager getINPUT() {
-        return this.INPUT;
+    public InputManager getInput() {
+        return this.input;
     }
 
-    public GameStaticCamera getSTATIC_CAMERA() {
-        return this.STATIC_CAMERA;
+    public GameStaticCamera getStaticCamera() {
+        return this.staticCamera;
     }
 
-    public GameWorldCamera getWORLD_CAMERA() {
-        return this.WORLD_CAMERA;
+    public GameWorldCamera getWorldCamera() {
+        return this.worldCamera;
     }
 
-    public GameplayContext getGAMEPLAY() {
-        return this.GAMEPLAY;
+    public GameplayContext getGameplay() {
+        return this.gameplay;
     }
 
-    public FactoryCollection getFACTORIES() {
-        return this.FACTORIES;
+    public FactoryCollection getFactories() {
+        return this.factories;
     }
 
-    public SceneManager getSCENE() {
-        return this.SCENE;
+    public SceneManager getScene() {
+        return this.scene;
     }
 
-    public EventBus getGLOBAL_BUS() {
-        return this.GLOBAL_BUS;
+    public EventBus getGlobalBus() {
+        return this.globalBus;
     }
 
-    public AudioSystem getAUDIO_SYSTEM() {
-        return this.AUDIO_SYSTEM;
+    public AudioSystem getAudioSystem() {
+        return this.audioSystem;
     }
     
-    public SaveManager getSAVE() {
-		return this.SAVE;
+    public SaveManager getSaveManager() {
+		return this.saveManager;
 	}
 
     public void resetGameplay() {
-        if (this.GAMEPLAY != null) {
-            this.SAVE.dispose();
-            this.SCENE.clear();
-            this.GAMEPLAY.dispose(); 
-            this.AUDIO_SYSTEM.dispose();
-            this.AUDIO_SYSTEM.subscribeEvents(this.GLOBAL_BUS, this.GAMEPLAY_BUS);
+        if (this.gameplay != null) {
+            this.saveManager.dispose();
+            this.scene.clear();
+            this.gameplay.dispose(); 
+            this.audioSystem.dispose();
+            this.audioSystem.subscribeEvents(this.globalBus, this.gameplayBus);
         }
     }
     
     public void dispose() {
         this.resetGameplay();
-        this.RENDER.dispose();
-        this.TEXTURE.dispose();
-        this.AUDIO.dispose();
-        this.AUDIO_SYSTEM.dispose();
+        this.render.dispose();
+        this.texture.dispose();
+        this.audio.dispose();
+        this.audioSystem.dispose();
     }
 }

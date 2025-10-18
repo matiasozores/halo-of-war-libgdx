@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.haloofwar.common.enums.LevelSceneType;
-import com.haloofwar.common.enums.PlayerType;
+import com.haloofwar.common.enumerators.LevelSceneType;
+import com.haloofwar.common.enumerators.PlayerType;
 
 public class SaveGameData implements Serializable {
 	private static final long serialVersionUID = 1L;

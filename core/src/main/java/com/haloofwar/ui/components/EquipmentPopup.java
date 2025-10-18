@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
-import com.haloofwar.common.enums.Background;
-import com.haloofwar.common.enums.SoundType;
-import com.haloofwar.common.enums.UIState;
+import com.haloofwar.common.enumerators.Background;
+import com.haloofwar.common.enumerators.PlayerType;
+import com.haloofwar.common.enumerators.UIState;
 import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
-import com.haloofwar.engine.events.PlaySoundEvent;
+import com.haloofwar.engine.events.online.ChangeWeaponEventOnline;
 import com.haloofwar.game.components.EquipmentComponent;
 import com.haloofwar.game.components.FireArmComponent;
 import com.haloofwar.game.components.MeleeWeaponComponent;
@@ -24,18 +24,21 @@ public class EquipmentPopup extends Popup {
     private EquipmentComponent EQUIPMENT;
     private final Texture SELECT_BUTTON; // resalta arma seleccionada
     private final TextureManager TEXTURE;
+    private final PlayerType playerType;
     
     public EquipmentPopup(
 		final EventBus GAMEPLAY_BUS, 
 		final TextureManager TEXTURE, 
 		final BitmapFont FONT, 
 		final EquipmentComponent EQUIPMENT,
+		final PlayerType playerType,
 		final SpriteBatch batch
     ) {
         super(GAMEPLAY_BUS, FONT, TEXTURE.get(Background.EQUIPMENT), EQUIPMENT.weaponInventory, UIState.EQUIPMENT, batch);
         this.EQUIPMENT = EQUIPMENT;
         this.SELECT_BUTTON = TEXTURE.get(Background.SELECT); 
         this.TEXTURE = TEXTURE;
+        this.playerType = playerType;
     }
     
     @Override
@@ -118,14 +121,33 @@ public class EquipmentPopup extends Popup {
 
 
     private void equipSelected() {
-        if (this.EQUIPMENT.weaponInventory.isEmpty()) return;
+        if (this.EQUIPMENT.weaponInventory.isEmpty()) {
+        	return;
+        }
 
         Entity selected = this.getSelectedEntity();
-        if (selected == null || selected.equals(this.EQUIPMENT.currentWeapon)) return;
+        if (selected == null || selected.equals(this.EQUIPMENT.currentWeapon)) {
+        	return;
+        }
 
-        // Equipar en el componente del jugador real
-        this.EQUIPMENT.currentWeapon = selected;
-        this.GAMEPLAY_BUS.publish(new PlaySoundEvent(SoundType.SELECT_WEAPON));
+        Weapon weapon = null;
+        
+        FireArmComponent fireArmComponent = selected.getComponent(FireArmComponent.class);
+        
+        if(fireArmComponent == null) {
+        	MeleeWeaponComponent meleeComponent = selected.getComponent(MeleeWeaponComponent.class);
+        	
+        	if(meleeComponent == null) {
+        		System.out.println("Ha ocurrido un problema al seleccionar un arma... | EquipmentPopup");
+        	}
+        	
+        	weapon = meleeComponent.getWeapon();
+        	
+        } else {
+        	weapon = fireArmComponent.getWeapon();
+        }
+        
+        this.GAMEPLAY_BUS.publish(new ChangeWeaponEventOnline(this.playerType, weapon));
     }
 
     

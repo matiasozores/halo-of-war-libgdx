@@ -2,7 +2,6 @@ package com.haloofwar.game.components;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.haloofwar.engine.cameras.GameWorldCamera;
-import com.haloofwar.engine.components.Component;
 
 /*
  * Hubo discusiones mentales si tratar al crosshair como una entidad o componente, por simplicidad se decidio

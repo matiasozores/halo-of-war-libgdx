@@ -4,14 +4,13 @@ import java.util.Set;
 
 import com.badlogic.gdx.Screen;
 import com.haloofwar.common.context.GameContext;
-import com.haloofwar.common.enums.GameState;
-import com.haloofwar.common.enums.LevelSceneType;
-import com.haloofwar.common.enums.SceneType;
+import com.haloofwar.common.enumerators.GameState;
+import com.haloofwar.common.enumerators.LevelSceneType;
 import com.haloofwar.engine.events.ChangeSceneEvent;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.GameStateEvent;
-import com.haloofwar.game.cutscenes.LevelCompletedScene;
+import com.haloofwar.network.GameController;
 import com.haloofwar.ui.screens.GameOverScreen;
 import com.haloofwar.ui.screens.PauseMenuScreen;
 
@@ -22,29 +21,31 @@ public class GameManager implements Screen {
     private final PauseMenuScreen pauseMenu;
     private final GameOverScreen gameOver;
     private final EventListenerManager listenerManager = new EventListenerManager();
+    private final GameController controller;
     
     public GameManager(
 		final GameFlowManager flow,
-		final LevelCompletedScene completedScene,
 		final GameEventSubscriber subscriber,
 		final Set<LevelSceneType> completedLevels,
-		final GameContext context
+		final GameContext context,
+		final GameController controller
 	) {
         this.flow = flow;
         this.subscriber = subscriber;
         this.pauseMenu = new PauseMenuScreen(context, this);
         this.gameOver = new GameOverScreen(context, this);
     	
-        final EventBus gameplayBus = context.getGAMEPLAY().getBus();
+        final EventBus gameplayBus = context.getGameplay().getBus();
         this.initializeScene(gameplayBus, completedLevels);
         this.listenerManager.add(gameplayBus, GameStateEvent.class, this::onGameStateEvent);
+        this.controller = controller;
     }
     
     private void initializeScene(final EventBus gameplayBus, final Set<LevelSceneType> completedLevels) {
     	if(completedLevels == null || completedLevels.isEmpty()) {
         	gameplayBus.publish(new ChangeSceneEvent(LevelSceneType.TUTORIAL));
         } else {
-        	gameplayBus.publish(new ChangeSceneEvent(SceneType.MAIN));
+        	gameplayBus.publish(new ChangeSceneEvent(LevelSceneType.TUTORIAL));
         }
     }
 
@@ -96,5 +97,6 @@ public class GameManager implements Screen {
     	this.flow.dispose();
     	this.subscriber.dispose();
     	this.listenerManager.clear();
+    	this.controller.dispose();
     }
 }

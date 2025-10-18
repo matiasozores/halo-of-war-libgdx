@@ -4,8 +4,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.haloofwar.common.enums.GameState;
-import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enumerators.GameState;
+import com.haloofwar.common.enumerators.SoundType;
+import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.GameStateEvent;
 import com.haloofwar.engine.events.HideDialogueEvent;
@@ -13,7 +14,6 @@ import com.haloofwar.engine.events.NextEvent;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.ShowDialogueEvent;
 import com.haloofwar.engine.events.TalkEvent;
-import com.haloofwar.engine.systems.EventSystem;
 
 public class DialogueSystem extends EventSystem{
     private final EventBus bus;
@@ -22,11 +22,13 @@ public class DialogueSystem extends EventSystem{
     private Queue<String> lines = new LinkedList<>();
     private String currentLine = null;
     private Texture currentAvatar = null;
-
-    public DialogueSystem(EventBus bus) {
+    private TextureManager texture;
+    
+    public DialogueSystem(EventBus bus, TextureManager texture) {
         this.bus = bus;
         this.listenerManager.add(bus, TalkEvent.class, this::onTalk);
         this.listenerManager.add(bus, NextEvent.class, this::onNext);
+        this.texture = texture;
     }
 
     private void onTalk(TalkEvent event) {
@@ -39,7 +41,7 @@ public class DialogueSystem extends EventSystem{
 
         this.active = true;
         this.currentLine = this.lines.poll();
-        this.currentAvatar = event.avatar;
+        this.currentAvatar = this.texture.get(event.avatar);
 
         this.bus.publish(new GameStateEvent(GameState.WAITING)); 
         this.bus.publish(new ShowDialogueEvent(this.currentLine, this.currentAvatar));
