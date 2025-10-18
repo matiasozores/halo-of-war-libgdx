@@ -2,9 +2,7 @@ package com.haloofwar.game.components;
 
 import java.util.ArrayList;
 
-import com.haloofwar.engine.components.Component;
 import com.haloofwar.engine.entity.Entity;
-import com.haloofwar.game.data.EquipmentData;
 import com.haloofwar.interfaces.Weapon;
 
 public class EquipmentComponent implements Component {
@@ -59,31 +57,34 @@ public class EquipmentComponent implements Component {
 		}
 	}
 	
-	public EquipmentData toData() {
-	    EquipmentData data = new EquipmentData();
+	public Entity getEntityByWeapon(final Weapon weaponType) {
+	    if (weaponType == null) {
+	        System.out.println("Error: weaponType es null | EquipmentComponent");
+	        return null;
+	    }
 
-	    if(currentWeapon != null) {
-	        data.currentWeaponName = currentWeapon.getComponent(NameComponent.class).name;
-	        // aseguramos que el arma actual esté en el inventario
-	        boolean hasCurrent = false;
-	        for(Entity w : weaponInventory) {
-	            if(w.getComponent(NameComponent.class).name.equals(currentWeapon.getComponent(NameComponent.class).name)) {
-	                hasCurrent = true;
-	                break;
-	            }
+	    final String NAME = weaponType.getName();
+
+	    // primero, revisar el arma actual
+	    if (this.currentWeapon != null) {
+	        NameComponent currentName = this.currentWeapon.getComponent(NameComponent.class);
+	        if (currentName != null && currentName.name.equals(NAME)) {
+	            return this.currentWeapon;
 	        }
-	        if(!hasCurrent) weaponInventory.add(currentWeapon);
 	    }
 
-	    data.weaponInventoryNames = new ArrayList<>(); // NUEVA LISTA INDEPENDIENTE
-	    for(Entity w : weaponInventory) {
-	        data.weaponInventoryNames.add(w.getComponent(NameComponent.class).name);
+	    // luego revisar el inventario
+	    for (Entity weapon : this.weaponInventory) {
+	        NameComponent nameComp = weapon.getComponent(NameComponent.class);
+	        if (nameComp != null && nameComp.name.equals(NAME)) {
+	            return weapon;
+	        }
 	    }
 
-	    return data;
-	}
-
-
+	    // si no se encontró
+	    System.out.println("No se encontró el arma con nombre: " + NAME + " | EquipmentComponent");
+	    return null;
+	}	
 	
     public void setCurrentWeapon(Entity weapon) {
         this.currentWeapon = weapon;

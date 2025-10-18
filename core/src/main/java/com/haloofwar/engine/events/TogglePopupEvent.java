@@ -1,6 +1,6 @@
 package com.haloofwar.engine.events;
 
-import com.haloofwar.common.enums.UIState;
+import com.haloofwar.common.enumerators.UIState;
 
 public class TogglePopupEvent {
 	public final UIState state;

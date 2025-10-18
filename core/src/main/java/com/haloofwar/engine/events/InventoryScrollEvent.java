@@ -1,6 +1,6 @@
 package com.haloofwar.engine.events;
 
-import com.haloofwar.common.enums.Direction;
+import com.haloofwar.common.enumerators.Direction;
 
 public class InventoryScrollEvent {
     public final Direction direction;

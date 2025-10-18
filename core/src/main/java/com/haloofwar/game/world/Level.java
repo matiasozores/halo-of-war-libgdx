@@ -3,7 +3,7 @@ package com.haloofwar.game.world;
 import com.haloofwar.game.managers.LevelController;
 import com.haloofwar.game.scenes.GameScene;
 import com.haloofwar.interfaces.SceneDescriptor;
-import com.haloofwar.ui.hud.HUD;
+import com.haloofwar.ui.HUD;
 
 public class Level extends GameScene {
     private final LevelController CONTROLLER;
@@ -34,5 +34,11 @@ public class Level extends GameScene {
 	public void dispose() {
 		super.dispose();
 		this.CONTROLLER.dispose();
+	}
+	
+	@Override
+	public void reset() {
+		super.reset();
+		this.CONTROLLER.reset();
 	}
 }

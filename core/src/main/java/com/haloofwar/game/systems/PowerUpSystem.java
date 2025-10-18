@@ -3,7 +3,6 @@ package com.haloofwar.game.systems;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.PowerUpCollectedEvent;
-import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.HealthComponent;
 import com.haloofwar.game.components.PowerUpComponent;
 import com.haloofwar.game.components.VisibilityComponent;
@@ -11,6 +10,7 @@ import com.haloofwar.game.components.VisibilityComponent;
 public class PowerUpSystem extends EventSystem {
 	
     public PowerUpSystem(EventBus bus) {
+    	super(bus);
         this.listenerManager.add(bus, PowerUpCollectedEvent.class, this::onPowerUpCollected);
     }
 

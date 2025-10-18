@@ -3,10 +3,11 @@ package com.haloofwar.game.world;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.haloofwar.common.enums.NPCType;
+import com.haloofwar.common.enumerators.NPCType;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.NewEntityEvent;
+import com.haloofwar.engine.utils.RandomUtils;
 import com.haloofwar.game.factories.NPCFactory;
 import com.haloofwar.interfaces.Spawner;
 
@@ -31,7 +32,7 @@ public class NPCSpawner implements Spawner {
                 float x = rect.getRectangle().x;
                 float y = rect.getRectangle().y;
 
-                final Entity NPC =  this.NPC_FACTORY.create(NPCType.VILLAGER, x, y);
+                final Entity NPC =  this.NPC_FACTORY.create(RandomUtils.generateUniqueId(), NPCType.VILLAGER, x, y);
                 this.GAMEPLAY_BUS.publish(new NewEntityEvent(NPC));
             }
         }

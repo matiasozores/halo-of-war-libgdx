@@ -1,28 +1,29 @@
 package com.haloofwar.game.systems;
 
 import com.haloofwar.common.managers.TextureManager;
-import com.haloofwar.engine.components.RenderComponent;
-import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.NewEntityEvent;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.ShootBulletEvent;
-import com.haloofwar.engine.systems.EventSystem;
+import com.haloofwar.engine.events.online.ShootBulletEventOnline;
+import com.haloofwar.engine.interfaces.MovementController;
+import com.haloofwar.engine.utils.RandomUtils;
 import com.haloofwar.game.components.BulletComponent;
+import com.haloofwar.game.components.BulletMovementController;
 import com.haloofwar.game.components.CollisionComponent;
-import com.haloofwar.interfaces.Updatable;
+import com.haloofwar.game.components.MovementComponent;
+import com.haloofwar.game.components.RenderComponent;
+import com.haloofwar.game.components.TransformComponent;
 
-public class BulletSystem extends EventSystem implements Updatable {
+public class BulletSystem extends EventSystem {
 
     private static final int SPEED_MULTIPLIER = 10; // temporal
     private final TextureManager texture;
-    private final EventBus bus;
 
     public BulletSystem(TextureManager texture, EventBus bus) {
-        this.texture = texture;
-        this.bus = bus;
-
+        super(bus);
+    	this.texture = texture;
         this.listenerManager.add(bus, ShootBulletEvent.class, this::spawnBullet);
     }
 
@@ -46,33 +47,24 @@ public class BulletSystem extends EventSystem implements Updatable {
         );
         bullet.addComponent(bulletComp);
 
-        // --- Transform inicial ---
-        TransformComponent transform = new TransformComponent(event.x, event.y, 16, 16);
+        TransformComponent transform = new TransformComponent(RandomUtils.generateUniqueId(), event.x, event.y, 16, 16);
         bullet.addComponent(transform);
 
-        // --- Render con rotación ---
         float angle = (float) Math.toDegrees(Math.atan2(event.dirY, event.dirX)) - 90f;
 
         RenderComponent render = new RenderComponent(this.texture.get(event.type), angle);
         bullet.addComponent(render);
-
-        // --- Colisión ---
+        
+        MovementController controller = new BulletMovementController(transform, event.dirX, event.dirY, event.speed * SPEED_MULTIPLIER);
+        MovementComponent mc = new MovementComponent(controller, event.speed);
+        bullet.addComponent(mc);
+        
         bullet.addComponent(new CollisionComponent(transform.width, transform.height));
 
+        
         this.bus.publish(new NewEntityEvent(bullet));
         this.bus.publish(new PlaySoundEvent(event.type.getSound()));
-    }
-
-    @Override
-    public void update(float delta) {
-        for (Entity entity : this.ENTITIES) {
-            BulletComponent bullet = entity.getComponent(BulletComponent.class);
-            TransformComponent transform = entity.getComponent(TransformComponent.class);
-            if (!bullet.active) continue;
-
-            transform.x += bullet.dirX * bullet.speed * delta;
-            transform.y += bullet.dirY * bullet.speed * delta;
-        }
+        this.bus.publish(new ShootBulletEventOnline(transform.identifier, event.x, event.y, event.dirX, event.dirY, event.damage, event.speed, event.type));
     }
 
     public void destroy(Entity entity) {

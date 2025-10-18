@@ -29,7 +29,7 @@ public class World {
         this.context.getGameplay().render();
 
         this.batch.end();
-    }
+    }    
     
     public void reconfigureCamera() {
 		this.context.reconfigureCamera();

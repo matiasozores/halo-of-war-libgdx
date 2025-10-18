@@ -2,7 +2,7 @@ package com.haloofwar.game.cutscenes;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enumerators.SoundType;
 import com.haloofwar.engine.events.EventBus;
 
 public class CutSceneData {

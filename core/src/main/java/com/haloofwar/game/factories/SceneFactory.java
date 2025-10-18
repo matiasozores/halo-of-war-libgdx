@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.haloofwar.common.context.GameContext;
 import com.haloofwar.common.context.GameplayContext;
-import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.cameras.GameWorldCamera;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.game.managers.LevelController;
@@ -14,10 +13,9 @@ import com.haloofwar.game.world.Level;
 import com.haloofwar.game.world.MapRenderer;
 import com.haloofwar.game.world.NPCSpawner;
 import com.haloofwar.game.world.World;
-import com.haloofwar.game.world.WorldCollisionInitializer;
 import com.haloofwar.game.world.WorldContext;
 import com.haloofwar.interfaces.SceneDescriptor;
-import com.haloofwar.ui.hud.HUD;
+import com.haloofwar.ui.HUD;
 
 public final class SceneFactory {
 	private final HUDFactory HUD_FACTORY;
@@ -26,7 +24,6 @@ public final class SceneFactory {
 	private final CutSceneFactory CUTSCENE_FACTORY;
 	private final EventBus GAMEPLAY_BUS;
 	private final GameplayContext GAMEPLAY;
-	private final TextureManager TEXTURE;
 	private final SpriteBatch BATCH;
 	private final GameWorldCamera WORLD_CAMERA;
 	
@@ -37,7 +34,6 @@ public final class SceneFactory {
 		this.CUTSCENE_FACTORY = CUTSCENE_FACTORY;
 		this.GAMEPLAY_BUS = CONTEXT.getGAMEPLAY().getBus();
 		this.GAMEPLAY = CONTEXT.getGAMEPLAY();
-		this.TEXTURE = CONTEXT.getTEXTURE();
 		this.BATCH = CONTEXT.getRENDER().getBatch();
 		this.WORLD_CAMERA = CONTEXT.getWORLD_CAMERA();
 	}
@@ -73,8 +69,6 @@ public final class SceneFactory {
 	private World build(final SceneDescriptor DESCRIPTOR) {
 		final MapRenderer MAP = new MapRenderer(DESCRIPTOR);
 		WorldContext worldContext = new WorldContext(MAP, this.GAMEPLAY, this.BATCH, this.WORLD_CAMERA);
-		WorldCollisionInitializer.initializeMapColliders(MAP, this.TEXTURE, this.GAMEPLAY_BUS);
-		
 		return new World(MAP, worldContext);
 	}
 }

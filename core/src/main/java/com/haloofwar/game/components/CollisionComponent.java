@@ -1,8 +1,6 @@
 package com.haloofwar.game.components;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.haloofwar.engine.components.Component;
-import com.haloofwar.engine.components.TransformComponent;
 
 public class CollisionComponent implements Component {
     public final Rectangle bounds;

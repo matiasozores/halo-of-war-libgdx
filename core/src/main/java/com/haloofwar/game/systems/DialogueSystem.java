@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.haloofwar.common.enums.GameState;
-import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enumerators.GameState;
+import com.haloofwar.common.enumerators.SoundType;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.GameStateEvent;
 import com.haloofwar.engine.events.HideDialogueEvent;
@@ -13,18 +13,16 @@ import com.haloofwar.engine.events.NextEvent;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.ShowDialogueEvent;
 import com.haloofwar.engine.events.TalkEvent;
-import com.haloofwar.engine.systems.EventSystem;
 
 public class DialogueSystem extends EventSystem{
-    private final EventBus bus;
 
     private boolean active = false;
     private Queue<String> lines = new LinkedList<>();
     private String currentLine = null;
     private Texture currentAvatar = null;
-
+    
     public DialogueSystem(EventBus bus) {
-        this.bus = bus;
+        super(bus);
         this.listenerManager.add(bus, TalkEvent.class, this::onTalk);
         this.listenerManager.add(bus, NextEvent.class, this::onNext);
     }
@@ -41,9 +39,9 @@ public class DialogueSystem extends EventSystem{
         this.currentLine = this.lines.poll();
         this.currentAvatar = event.avatar;
 
-        this.bus.publish(new GameStateEvent(GameState.WAITING)); 
-        this.bus.publish(new ShowDialogueEvent(this.currentLine, this.currentAvatar));
         this.bus.publish(new PlaySoundEvent(SoundType.DIALOGUE));
+        this.bus.publish(new ShowDialogueEvent(this.currentLine, this.currentAvatar));
+        //this.bus.publish(new SetCanMoveEvent(event.playerType, false));
     }
 
     private void onNext(NextEvent event) {
@@ -56,6 +54,7 @@ public class DialogueSystem extends EventSystem{
 
             this.bus.publish(new GameStateEvent(GameState.PLAYING));
             this.bus.publish(new HideDialogueEvent()); 
+           // this.bus.publish(new SetCanMoveEvent(this.lastType, true));
         } else {
             this.currentLine = this.lines.poll();
             this.bus.publish(new ShowDialogueEvent(this.currentLine, this.currentAvatar)); 

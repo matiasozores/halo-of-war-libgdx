@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.haloofwar.common.enums.SpriteState;
+import com.haloofwar.common.enumerators.SpriteState;
 import com.haloofwar.engine.entity.AnimatedEntityDescriptor;
 
 public class AnimationSet {

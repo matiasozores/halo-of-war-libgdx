@@ -1,7 +1,6 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.common.enums.PlayerType;
-import com.haloofwar.engine.components.Component;
+import com.haloofwar.common.enumerators.PlayerType;
 
 public class PlayerComponent implements Component{
 	public PlayerType type;

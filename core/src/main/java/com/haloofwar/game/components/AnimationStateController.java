@@ -2,7 +2,7 @@ package com.haloofwar.game.components;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.haloofwar.common.enums.SpriteState;
+import com.haloofwar.common.enumerators.SpriteState;
 
 public class AnimationStateController {
     private final AnimationSet animationSet;

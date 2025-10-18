@@ -1,15 +1,12 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.engine.components.Component;
-import com.haloofwar.engine.entity.Entity;
-
 public class MeleeAttackComponent implements Component{
-	public Entity source;
 	public int damage;
+	public final int sourceIdentifier;
 
-	public MeleeAttackComponent(Entity source, int damage) {
+	public MeleeAttackComponent(final int sourceIdentifier, int damage) {
+		this.sourceIdentifier = sourceIdentifier;
 		this.damage = damage;
-		this.source = source;
 	}
 	
 	

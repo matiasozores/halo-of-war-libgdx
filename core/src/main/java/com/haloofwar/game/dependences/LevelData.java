@@ -1,6 +1,6 @@
 package com.haloofwar.game.dependences;
 
-import com.haloofwar.common.enums.LevelSceneType;
+import com.haloofwar.common.enumerators.LevelSceneType;
 
 public class LevelData {
 
@@ -58,6 +58,12 @@ public class LevelData {
     public boolean allEnemiesDefeated() {
         return enemiesDefeated >= enemiesToDefeat;
     }
+    
+    public void reset() {
+        this.enemiesDefeated = 0;
+        this.wavesPassed = 1;
+    }
+
 
     // --- Getters ---
     public LevelSceneType getType() { return type; }

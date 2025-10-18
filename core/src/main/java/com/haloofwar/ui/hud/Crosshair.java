@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.haloofwar.common.enums.CrosshairType;
+import com.haloofwar.common.enumerators.CrosshairType;
 import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.cameras.GameWorldCamera;
 

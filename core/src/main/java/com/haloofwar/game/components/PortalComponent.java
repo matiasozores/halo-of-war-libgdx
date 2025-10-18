@@ -1,7 +1,6 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.common.enums.LevelSceneType;
-import com.haloofwar.engine.components.Component;
+import com.haloofwar.common.enumerators.LevelSceneType;
 
 public class PortalComponent implements Component {
 	public LevelSceneType targetScene;

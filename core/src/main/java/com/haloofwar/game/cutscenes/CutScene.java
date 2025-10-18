@@ -2,9 +2,9 @@ package com.haloofwar.game.cutscenes;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.common.enums.GameState;
-import com.haloofwar.common.enums.MusicTrack;
-import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enumerators.GameState;
+import com.haloofwar.common.enumerators.MusicTrack;
+import com.haloofwar.common.enumerators.SoundType;
 import com.haloofwar.engine.cameras.GameStaticCamera;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.EventListenerManager;
@@ -15,6 +15,7 @@ import com.haloofwar.engine.events.PlayMusicEvent;
 import com.haloofwar.engine.events.PlaySoundEvent;
 import com.haloofwar.engine.events.StopMusicEvent;
 import com.haloofwar.engine.events.StopSoundsEvent;
+import com.haloofwar.engine.events.online.NextCutsceneEventOnline;
 
 public class CutScene {
 	private final Texture[] images;
@@ -59,6 +60,8 @@ public class CutScene {
 			this.bus.publish(new StopSoundsEvent());
 			this.bus.publish(new PlaySoundEvent(this.SOUNDS[this.currentIndex]));
 		}
+		
+		this.bus.publish(new NextCutsceneEventOnline());
 	}
 
 	public void render(float delta) {
@@ -83,7 +86,23 @@ public class CutScene {
 		return finished;
 	}
 	
+	public void reset() {
+	    this.currentIndex = 0;
+	    this.finished = false;
+	    this.started = false;
+
+	    // Re-suscribirse a los eventos si fueron limpiados
+	    this.listenerManager.clear();
+	    this.listenerManager.add(bus, NextEvent.class, this::onNext);
+
+	    // Volver a poner el juego en modo “cinemática”
+	    this.bus.publish(new PeacefulEvent(true));
+	    this.bus.publish(new GameStateEvent(GameState.WAITING));
+
+	    System.out.println("[CutScene] Reiniciada correctamente.");
+	}
+
+	
 	public void dispose() {
-		this.listenerManager.clear();
 	}
 }

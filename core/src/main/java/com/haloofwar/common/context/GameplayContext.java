@@ -1,23 +1,29 @@
 package com.haloofwar.common.context;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.common.enums.PlayerType;
+import com.haloofwar.common.enumerators.PlayerType;
 import com.haloofwar.common.managers.TextureManager;
-import com.haloofwar.engine.cameras.GameWorldCamera;
-import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.Entity;
-import com.haloofwar.engine.events.ChangeCurrentPlayerEvent;
+import com.haloofwar.engine.events.ChangeTargetEvent;
+import com.haloofwar.engine.events.CheckPlayersAliveEvent;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.NewEntityEvent;
-import com.haloofwar.engine.events.NewPlayerEvent;
+import com.haloofwar.engine.events.PlayerDiedEvent;
+import com.haloofwar.engine.events.RemoveEntitiesToChangeSceneEvent;
 import com.haloofwar.engine.events.RemoveEntityEvent;
+import com.haloofwar.engine.events.RespawnPlayerEventOnline;
+import com.haloofwar.engine.events.online.SwitchToSpectatorEventOnline;
 import com.haloofwar.engine.interfaces.Disposable;
 import com.haloofwar.engine.interfaces.Renderable;
-import com.haloofwar.engine.systems.SystemCollection;
+import com.haloofwar.game.components.CollectComponent;
+import com.haloofwar.game.components.EnemyComponent;
+import com.haloofwar.game.components.HealthComponent;
 import com.haloofwar.game.components.PlayerComponent;
+import com.haloofwar.game.components.PowerUpComponent;
+import com.haloofwar.game.components.WallComponent;
 import com.haloofwar.game.factories.SystemFactory;
-import com.haloofwar.game.systems.PlayerSystem;
+import com.haloofwar.game.systems.SystemCollection;
 import com.haloofwar.interfaces.Updatable;
 
 public class GameplayContext {
@@ -31,14 +37,12 @@ public class GameplayContext {
     private final EventBus gameplayBus;
     private final SpriteBatch batch;
     private final TextureManager texture;
-    private final GameWorldCamera camera;
     
-    public GameplayContext(final SpriteBatch batch, final TextureManager texture, final EventBus gameplayBus, final GameWorldCamera camera) {
+    public GameplayContext(final SpriteBatch batch, final TextureManager texture, final EventBus gameplayBus) {
         this.gameplayBus = gameplayBus;
         this.batch = batch;
         this.texture = texture;
-        this.camera = camera;
-        this.systems = SystemFactory.createGameplaySystems(this.batch, this.texture, this.gameplayBus);
+        this.systems = SystemFactory.createGameplaySystems(this.batch, this.texture, this.gameplayBus, this);
         this.initializeEvents();
     }
 
@@ -46,49 +50,56 @@ public class GameplayContext {
         if (this.gameplayBus != null) {
             this.listenerManager.add(this.gameplayBus, NewEntityEvent.class, this::addEntity);
             this.listenerManager.add(this.gameplayBus, RemoveEntityEvent.class, this::removeEntity);
-            this.listenerManager.add(this.gameplayBus, ChangeCurrentPlayerEvent.class, this::onChangeCurrentPlayer);
+            this.listenerManager.add(this.gameplayBus, RemoveEntitiesToChangeSceneEvent.class, this::removeEntitiesForChangeScene);
+            this.listenerManager.add(this.gameplayBus, CheckPlayersAliveEvent.class, this::checkPlayers);
+            this.listenerManager.add(this.gameplayBus, SwitchToSpectatorEventOnline.class, this::switchTarget);
+            
         } else {
             System.out.println("No se pueden inicializar los eventos porque el GameplayBus es nulo... | GameplayContext");
         }
     }
-
-    private void onChangeCurrentPlayer(ChangeCurrentPlayerEvent event) {
-        if (this.masterchief == null || this.kratos == null) {
-            System.out.println("No se puede cambiar de jugador porque Kratos o Master Chief es nulo... | GameplayContext");
-            return;
-        }
-
-        final PlayerComponent playerComp = this.currentPlayer.getComponent(PlayerComponent.class);
-
-        this.gameplayBus.publish(new RemoveEntityEvent(this.currentPlayer));
-
-        Entity nextPlayer;
-        switch (playerComp.type) {
-            case KRATOS -> nextPlayer = this.masterchief;
-            case MASTER_CHIEF -> nextPlayer = this.kratos;
-            default -> {
-                System.out.println("Ha ocurrido un problema al intentar cambiar de personaje... | GameplayContext");
-                nextPlayer = this.kratos;
-            }
-        }
-
-        this.repositionPlayer(nextPlayer);
-        this.currentPlayer = nextPlayer;
-
-        this.gameplayBus.publish(new NewPlayerEvent(this.currentPlayer));
-        this.gameplayBus.publish(new NewEntityEvent(this.currentPlayer));
-        this.camera.changeTarget(this.currentPlayer);
+    
+    private void switchTarget(SwitchToSpectatorEventOnline event) { // no deberia manejarlo desde este evento pero bueno
+    	Entity newTarget;
+    	
+    	if(event.type.equals(PlayerType.KRATOS)) {
+    		newTarget = this.masterchief;
+    	} else {
+    		newTarget = this.kratos;
+    	}
+    	
+    	this.gameplayBus.publish(new ChangeTargetEvent(newTarget));
+    }
+    
+    
+    private void checkPlayers(CheckPlayersAliveEvent event) {
+    	this.checkPlayer(this.kratos);
+    	this.checkPlayer(this.masterchief);
+    }
+    
+    private void checkPlayer(Entity entity) {
+    	if(!entity.hasComponent(PlayerComponent.class)) {
+    		System.out.println("No es un jugador, no se puede validar la existencia... | GameplayContext");
+    		return;
+    	}
+    	
+    	HealthComponent hc = entity.getComponent(HealthComponent.class);
+    	
+    	if(hc.reset()) {
+    		PlayerComponent pc = entity.getComponent(PlayerComponent.class);
+    		this.gameplayBus.publish(new NewEntityEvent(entity));
+    		this.gameplayBus.publish(new RespawnPlayerEventOnline(pc.type));
+    	}
+    }
+    
+    private void removeEntitiesForChangeScene(RemoveEntitiesToChangeSceneEvent event) {
+    	this.systems.removeEntityByComponent(EnemyComponent.class);
+    	this.systems.removeEntityByComponent(WallComponent.class);
+    	this.systems.removeEntityByComponent(CollectComponent.class);
+    	this.systems.removeEntityByComponent(PowerUpComponent.class);
     }
 
-
-    private void repositionPlayer(final Entity TARGET) {
-    	final TransformComponent TRANSFORM_TARGET = TARGET.getComponent(TransformComponent.class);
-    	final TransformComponent TRANSFORM_CURRENT = this.currentPlayer.getComponent(TransformComponent.class);
-    	TRANSFORM_TARGET.x = TRANSFORM_CURRENT.x;
-    	TRANSFORM_TARGET.y = TRANSFORM_CURRENT.y;
-    }
-
-    public void initializePlayer(Entity player) {
+    public void initializePlayer(final Entity player) {
     	if(player == null) {
     		System.out.println("No se ha podido inicializar al jugador porque es nulo... | GameplayContext");
     		return;
@@ -97,8 +108,9 @@ public class GameplayContext {
         if (player.hasComponent(PlayerComponent.class)) {
         	if(this.currentPlayer == null) {
         		this.currentPlayer = player;
-        		this.addEntity(new NewEntityEvent(player));
         	}
+        	
+        	this.addEntity(new NewEntityEvent(player));
         	
         	final PlayerType TYPE = player.getComponent(PlayerComponent.class).type;
         	
@@ -107,34 +119,56 @@ public class GameplayContext {
         	} else {
         		this.masterchief = player;
         	}
-        	
-        	SystemFactory.registerSystem(this.systems, new PlayerSystem(player, this.gameplayBus));
         }
     }
     
-//    public void printPlayers() {
-//    	EquipmentComponent eM = this.masterchief.getComponent(EquipmentComponent.class);
-//    	EquipmentComponent eK = this.kratos.getComponent(EquipmentComponent.class);
-//       	EquipmentComponent current = this.currentPlayer.getComponent(EquipmentComponent.class);
-//    	
-//    	System.out.println();
-//    	System.out.println("---------------------------------------------");
-//    	System.out.println("------- Masterchief -------");
-//    	System.out.println("Current Weapon: " + eM.currentWeapon.getComponent(NameComponent.class).name);
-//    	System.out.print("Inventario armas: ");
-//    	eM.printInventory();
-//    	System.out.println("------- Kratos -------");
-//    	System.out.println("Current Weapon: " + eK.currentWeapon.getComponent(NameComponent.class).name);
-//    	System.out.print("Inventario armas: ");
-//    	eK.printInventory();
-//    	System.out.println("------- Current (" + this.currentPlayer.getComponent(NameComponent.class).name + ")"  +" -------");
-//    	System.out.println("Current Weapon: " + current.currentWeapon.getComponent(NameComponent.class).name);
-//    	System.out.print("Inventario armas: ");
-//    	current.printInventory();
-//    	System.out.println("---------------------------------------------");
-//    }
+    public Entity getPlayerByType(final PlayerType TYPE) {
+    	Entity entityFound = null;
+    	
+		if(TYPE == null) {
+			System.out.println("No se ha podido obtener al jugador porque el tipo es nulo... | GameplayContext");
+			return entityFound;
+		}
+		
+		if(TYPE.equals(PlayerType.KRATOS)) {
+			if(this.kratos == null) {
+				System.out.println("No se ha podido obtener a Kratos porque es nulo... | GameplayContext");
+			} else {
+				entityFound = this.kratos;
+			}
+		} else if(TYPE.equals(PlayerType.MASTER_CHIEF)) {
+			if(this.masterchief == null) {
+				System.out.println("No se ha podido obtener a Master Chief porque es nulo... | GameplayContext");
+			} else {
+				entityFound = this.masterchief;
+			}
+		} else {
+			System.out.println("No se ha podido obtener al jugador porque el tipo es inválido... | GameplayContext");
+		}
+    	
+		return entityFound;
+    }
     
-    public void initializePlayers(Entity player1, Entity player2) {
+    public Entity generateTarget() {
+    	if(!this.playerIsAlive(PlayerType.KRATOS) && !this.playerIsAlive(PlayerType.MASTER_CHIEF)) {
+    		return null;
+    	} else if(this.playerIsAlive(PlayerType.KRATOS) && !this.playerIsAlive(PlayerType.MASTER_CHIEF)) {
+    		return this.kratos;
+    	} else if(!this.playerIsAlive(PlayerType.KRATOS) && this.playerIsAlive(PlayerType.MASTER_CHIEF)) {
+    		return this.masterchief;
+    	} else {
+    		return this.getPlayerByType(PlayerType.generate());
+    	}
+    }
+    
+    private boolean playerIsAlive(PlayerType type) {
+    	Entity entity = this.getPlayerByType(type);
+    	HealthComponent hc = entity.getComponent(HealthComponent.class);
+    	
+    	return hc.alive;
+    }
+    
+    public void initializePlayers(final Entity player1, final Entity player2) {
     	this.initializePlayer(player1);
     	this.initializePlayer(player2);
     }
@@ -151,11 +185,15 @@ public class GameplayContext {
         }
     }
 
-    public void addEntity(NewEntityEvent event) {
+    public void addEntity(final NewEntityEvent event) {
         this.systems.addEntity(event.entity);
     }
 
-    public void removeEntity(RemoveEntityEvent event) {
+    public void removeEntity(final RemoveEntityEvent event) {
+    	if(event.entity.hasComponent(PlayerComponent.class)) {
+    		this.gameplayBus.publish(new PlayerDiedEvent(event.entity));
+    	}
+    	
         this.systems.removeEntity(event.entity);
     }
 
@@ -187,7 +225,7 @@ public class GameplayContext {
         
         if (this.gameplayBus != null) {
             this.gameplayBus.clear();
-            this.systems = SystemFactory.createGameplaySystems(this.batch, this.texture, this.gameplayBus);
+            this.systems = SystemFactory.createGameplaySystems(this.batch, this.texture, this.gameplayBus, this);
             this.initializeEvents();
         }
     }

@@ -1,7 +1,6 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.common.enums.ObjectType;
-import com.haloofwar.engine.components.Component;
+import com.haloofwar.common.enumerators.ObjectType;
 
 public class StockComponent implements Component{
 	private int stock = 1;
@@ -15,7 +14,7 @@ public class StockComponent implements Component{
 		if(this.stock + MOUNT_AFFECT < 0) {
 			System.out.println("Error, no se puede restar el stock porque da negativo...");
 		} else {
-			this.stock += MOUNT_AFFECT;
+			this.stock += MOUNT_AFFECT;	
 		}
 	}
 	

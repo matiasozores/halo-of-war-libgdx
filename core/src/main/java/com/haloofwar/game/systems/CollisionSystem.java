@@ -2,22 +2,20 @@ package com.haloofwar.game.systems;
 
 import java.util.ArrayList;
 
-import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.CollisionEvent;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.RemoveEntityEvent;
-import com.haloofwar.engine.systems.BaseSystem;
+import com.haloofwar.engine.events.online.RemoveEntityEventOnline;
 import com.haloofwar.game.components.CollisionComponent;
 import com.haloofwar.game.components.MeleeAttackComponent;
+import com.haloofwar.game.components.TransformComponent;
 import com.haloofwar.interfaces.Updatable;
 
 public class CollisionSystem extends BaseSystem implements Updatable {
 
-	private final EventBus bus;
-
 	public CollisionSystem(EventBus bus) {
-		this.bus = bus;
+		super(bus);
 	}
 
 	@Override
@@ -64,6 +62,11 @@ public class CollisionSystem extends BaseSystem implements Updatable {
 	    }
 	    for (Entity entity : toRemove) {
 	        this.bus.publish(new RemoveEntityEvent(entity));
+	        
+	        if(entity.hasComponent(TransformComponent.class)) {
+	        	TransformComponent tc = entity.getComponent(TransformComponent.class);
+	        	this.bus.publish(new RemoveEntityEventOnline(tc.identifier));
+	        }
 	    }
 	}
 

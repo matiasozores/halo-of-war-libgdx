@@ -2,9 +2,9 @@ package com.haloofwar.game.cutscenes;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.common.enums.GameState;
-import com.haloofwar.common.enums.MusicTrack;
-import com.haloofwar.common.enums.SceneType;
+import com.haloofwar.common.enumerators.GameState;
+import com.haloofwar.common.enumerators.MusicTrack;
+import com.haloofwar.common.enumerators.SceneType;
 import com.haloofwar.engine.cameras.GameStaticCamera;
 import com.haloofwar.engine.events.ChangeSceneEvent;
 import com.haloofwar.engine.events.EventBus;
@@ -20,7 +20,7 @@ public class LevelCompletedScene implements Scene {
 
     private boolean finished = false;
     private float timer = 0f;
-    private final float DISPLAY_TIME = 10f; // segundos antes de pasar automáticamente
+    private final float DISPLAY_TIME = 3f;
 
     private GameStaticCamera camera;
     

@@ -3,8 +3,8 @@ package com.haloofwar.game.factories;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.haloofwar.common.context.GameContext;
-import com.haloofwar.common.enums.MusicTrack;
-import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enumerators.MusicTrack;
+import com.haloofwar.common.enumerators.SoundType;
 import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.cameras.GameStaticCamera;
 import com.haloofwar.engine.events.EventBus;
@@ -26,6 +26,10 @@ public final class CutSceneFactory {
 	}
 	
 	public CutScene create(final CutSceneDataType TYPE, final MusicTrack previousTrack) {
+		if(TYPE == null) {
+			return null;
+		}
+		
 		final Texture[] IMAGES = new Texture[TYPE.getImages().length];
 		final SoundType[] SOUNDS = new SoundType[TYPE.getImages().length];
 		

@@ -1,7 +1,7 @@
 package com.haloofwar.game.factories;
 
-import com.haloofwar.common.enums.FireArmType;
-import com.haloofwar.common.enums.MeleeWeaponType;
+import com.haloofwar.common.enumerators.FireArmType;
+import com.haloofwar.common.enumerators.MeleeWeaponType;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.game.config.ComponentPresets;
 import com.haloofwar.interfaces.Weapon;

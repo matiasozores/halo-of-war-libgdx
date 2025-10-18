@@ -1,7 +1,5 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.engine.components.Component;
-
 public class HealthComponent implements Component{
     private int maxHealth;
     private int currentHealth;
@@ -15,24 +13,36 @@ public class HealthComponent implements Component{
     }
 
     public void affectHealth(int amount) {
-        if(amount > 0) { 
-            amount = -amount;
-        }
+        if (amount == 0) return;
 
-        if(this.shield > 0) {
-            this.shield -= amount; 
-            if(this.shield < 0) {
-                this.currentHealth += this.shield;
-                this.shield = 0;
+        if (amount > 0) {
+            if (this.shield > 0) {
+                if (amount <= this.shield) {
+                    this.shield -= amount;
+                    amount = 0;
+                } else {
+                    amount -= this.shield;
+                    this.shield = 0;
+                }
             }
-        } else {
-            this.currentHealth += amount;
+
+            if (amount > 0) {
+                this.currentHealth -= amount;
+            }
+        } 
+
+        else {
+            this.currentHealth -= amount; 
         }
 
-        if(this.currentHealth <= 0) {
+        if (this.currentHealth <= 0) {
+            this.currentHealth = 0;
             this.alive = false;
+        } else if (this.currentHealth > this.maxHealth) {
+            this.currentHealth = this.maxHealth;
         }
     }
+
 
     public int getCurrentHealth() {
         return this.currentHealth;
@@ -56,5 +66,14 @@ public class HealthComponent implements Component{
     
     public boolean isAlive() {
         return this.alive;
+    }
+    
+    public boolean reset() {
+    	boolean respawn = !this.alive;
+    	
+    	this.currentHealth = this.maxHealth;
+    	this.alive = true;
+    	
+    	return respawn;
     }
 }

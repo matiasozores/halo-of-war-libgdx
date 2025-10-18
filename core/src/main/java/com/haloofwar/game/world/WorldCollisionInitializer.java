@@ -6,14 +6,17 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
-import com.haloofwar.common.enums.LayerType;
-import com.haloofwar.common.enums.ObjectType;
+import com.haloofwar.common.enumerators.LayerType;
+import com.haloofwar.common.enumerators.ObjectType;
 import com.haloofwar.common.managers.TextureManager;
-import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.NewEntityEvent;
+import com.haloofwar.engine.events.online.SpawnItemEventOnline;
+import com.haloofwar.engine.utils.RandomUtils;
 import com.haloofwar.game.components.CollisionComponent;
+import com.haloofwar.game.components.StockComponent;
+import com.haloofwar.game.components.TransformComponent;
 import com.haloofwar.game.factories.ObjectFactory;
 import com.haloofwar.game.factories.ObstacleFactory;
 import com.haloofwar.game.factories.PortalFactory;
@@ -29,7 +32,7 @@ import com.haloofwar.game.factories.PortalFactory;
 	    }
 	
 	    private static void initializeLayerEntities(final MapRenderer MAP, final TextureManager TEXTURE, final EventBus GAMEPLAY_BUS, final LayerType TYPE) {
-	        MapLayer layer = MAP.getMetaData().getTiledMap().getLayers().get(TYPE.getName());
+	    	MapLayer layer = MAP.getMetaData().getTiledMap().getLayers().get(TYPE.getName());
 	        if (layer == null) {
 	        	return;
 	        }
@@ -46,17 +49,22 @@ import com.haloofwar.game.factories.PortalFactory;
 	                        break;
 	                    case ITEM:
 	                    	entity = ObjectFactory.createItem(rect, ObjectType.generate(), TEXTURE);
-	                    
+	                    	
+	                    	StockComponent stock = entity.getComponent(StockComponent.class);
+	                    	TransformComponent transform = entity.getComponent(TransformComponent.class);
+	                    	GAMEPLAY_BUS.publish(new SpawnItemEventOnline(transform.identifier, stock.getType(), transform.x, transform.y));
+	                    	
 	                        break;
 	                    case PORTAL:
 	                    	String teleportationTarget = object.getProperties().get("teleportation", String.class);
+	                    	
 	                    	entity = PortalFactory.create(rect, TEXTURE, teleportationTarget);
 							break;
 	                        
 	                        
 	                    default:
 	                        entity = new Entity();
-	                        entity.addComponent(new TransformComponent(rect.x, rect.y, rect.width, rect.height));
+	                        entity.addComponent(new TransformComponent(RandomUtils.generateUniqueId(), rect.x, rect.y, rect.width, rect.height));
 	                        entity.addComponent(new CollisionComponent(rect.width, rect.height));
 	                        break;
 	                }

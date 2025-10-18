@@ -1,6 +1,6 @@
 package com.haloofwar.engine.events;
 
-import com.haloofwar.common.enums.GameState;
+import com.haloofwar.common.enumerators.GameState;
 
 public class GameStateEvent {
     private final GameState state;

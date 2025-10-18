@@ -1,16 +1,13 @@
 package com.haloofwar.game.config;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.Texture;
-import com.haloofwar.common.enums.ObjectType;
-import com.haloofwar.common.enums.PlayerType;
-import com.haloofwar.common.enums.PowerUpType;
+import com.haloofwar.common.enumerators.EnemyType;
+import com.haloofwar.common.enumerators.NPCType;
+import com.haloofwar.common.enumerators.ObjectType;
+import com.haloofwar.common.enumerators.PlayerType;
+import com.haloofwar.common.enumerators.PowerUpType;
 import com.haloofwar.common.managers.TextureManager;
 import com.haloofwar.engine.cameras.GameWorldCamera;
-import com.haloofwar.engine.components.Component;
-import com.haloofwar.engine.components.RenderComponent;
-import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.AnimatedEntityDescriptor;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.entity.EntityDescriptor;
@@ -19,6 +16,7 @@ import com.haloofwar.engine.interfaces.MovementController;
 import com.haloofwar.game.components.AnimationComponent;
 import com.haloofwar.game.components.CollectComponent;
 import com.haloofwar.game.components.CollisionComponent;
+import com.haloofwar.game.components.Component;
 import com.haloofwar.game.components.CrosshairComponent;
 import com.haloofwar.game.components.DialogueComponent;
 import com.haloofwar.game.components.EnemyComponent;
@@ -35,13 +33,13 @@ import com.haloofwar.game.components.PlayerMovementController;
 import com.haloofwar.game.components.PortalComponent;
 import com.haloofwar.game.components.PowerUpComponent;
 import com.haloofwar.game.components.PromptComponent;
+import com.haloofwar.game.components.RenderComponent;
 import com.haloofwar.game.components.ShieldComponent;
 import com.haloofwar.game.components.StockComponent;
+import com.haloofwar.game.components.TransformComponent;
 import com.haloofwar.game.components.VillagerComponent;
 import com.haloofwar.game.components.VisibilityComponent;
-import com.haloofwar.game.data.EquipmentData;
-import com.haloofwar.game.data.InventoryData;
-import com.haloofwar.game.factories.ObjectFactory;
+import com.haloofwar.game.components.WallComponent;
 import com.haloofwar.game.factories.WeaponFactory;
 import com.haloofwar.interfaces.Talkable;
 import com.haloofwar.interfaces.Weapon;
@@ -52,12 +50,12 @@ public class ComponentPresets {
 	private static final float WIDTH = 32, HEIGHT = 32;
 	private static final float DEFAULT_VELOCITY = 150;
 	
-	public static TransformComponent defaultTransform(float x, float y) {
-		return new TransformComponent(x, y, WIDTH, HEIGHT);
+	public static TransformComponent defaultTransform(final int identifier, float x, float y) {
+		return new TransformComponent(identifier, x, y, WIDTH, HEIGHT);
 	}
 	
-	public static TransformComponent defaultTransform(float x, float y, float width, float height) {
-		return new TransformComponent(x, y, width, height);
+	public static TransformComponent defaultTransform(final int identifier, float x, float y, float width, float height) {
+		return new TransformComponent(identifier, x, y, width, height);
 	}
 	
     public static AnimationComponent defaultAnimation(AnimatedEntityDescriptor descriptor, TextureManager textureManager) {
@@ -120,8 +118,8 @@ public class ComponentPresets {
     	return new PromptComponent(offset);
     }
     
-    public static VillagerComponent defaultVillager() {
-    	return new VillagerComponent();
+    public static VillagerComponent defaultVillager(NPCType type) {
+    	return new VillagerComponent(type);
     }
     
     public static DialogueComponent defualtDialogue(Talkable type, Texture avatar) {
@@ -132,12 +130,12 @@ public class ComponentPresets {
 		return new PortalComponent(targetScene);
 	}
     
-    public static EnemyComponent defaultEnemy() {
-		return new EnemyComponent();
+    public static EnemyComponent defaultEnemy(EnemyType type) {
+		return new EnemyComponent(type);
 	}
     
-    public static EnemyWeaponAIComponent enemyWeaponAI() {
-    	return new EnemyWeaponAIComponent();
+    public static EnemyWeaponAIComponent enemyWeaponAI(float minShootTimer, float maxShootTimer) {
+    	return new EnemyWeaponAIComponent(minShootTimer, maxShootTimer);
     }
     
     public static CollectComponent defaultCollectible() {
@@ -174,76 +172,8 @@ public class ComponentPresets {
         return equipment;
     }
     
-    public static InventoryComponent inventoryFromData(InventoryData data, final TextureManager TEXTURE) {
-        InventoryComponent inventory = new InventoryComponent();
-
-        if (data == null || data.items == null) return inventory;
-
-        ArrayList<Entity> entities = new ArrayList<>();
-
-        for (InventoryData.ItemData itemData : data.items) {
-            Entity entity = ObjectFactory.createItemFromName(itemData.name, TEXTURE);
-            
-            StockComponent stock = entity.getComponent(StockComponent.class);
-            if (stock != null) stock.setStock(itemData.stock);
-
-            entities.add(entity);
-        }
-
-        inventory.setObjects(entities);
-
-        return inventory;
+    public static WallComponent defaultWall() {
+    	return new WallComponent();
     }
-    
-    public static EquipmentComponent equipmentFromData(EquipmentData data) {
-        EquipmentComponent equipment = new EquipmentComponent();
-
-        if (data == null) {
-            System.out.println("Ha ocurrido un problema al cargar el equipamiento... | ComponentPresets");
-            return equipment;
-        }
-
-        ArrayList<Entity> weapons = new ArrayList<>();
-
-        // 1. Cargar todas las armas del inventario
-        for (String weaponName : data.weaponInventoryNames) {
-            Entity weaponEntity = WeaponFactory.createWeaponFromName(weaponName);
-            if (weaponEntity != null) {
-                weapons.add(weaponEntity);
-            } else {
-                System.out.println("No se pudo crear arma del inventario: " + weaponName);
-            }
-        }
-
-        // 2. Intentar asignar el arma actual
-        if (data.currentWeaponName != null) {
-            Entity currentWeapon = weapons.stream()
-                .filter(w -> w.getComponent(NameComponent.class).name.equals(data.currentWeaponName))
-                .findFirst()
-                .orElse(null);
-
-            if (currentWeapon == null) {
-                // No estaba en inventario: creamos el arma y la agregamos
-                currentWeapon = WeaponFactory.createWeaponFromName(data.currentWeaponName);
-                if (currentWeapon != null) {
-                    weapons.add(currentWeapon);
-                }
-            }
-
-            equipment.setCurrentWeapon(currentWeapon);
-        }
-        equipment.setWeaponInventory(weapons);
-
-
-        // 3. Asignar inventario y currentWeapon
-        equipment.setWeaponInventory(weapons);
-
-        return equipment;
-    }
-
-
-
-
-    
 }
 

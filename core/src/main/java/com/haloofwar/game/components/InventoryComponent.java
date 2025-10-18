@@ -2,44 +2,43 @@ package com.haloofwar.game.components;
 
 import java.util.ArrayList;
 
-import com.haloofwar.common.enums.ObjectType;
-import com.haloofwar.engine.components.Component;
+import com.haloofwar.common.enumerators.ObjectType;
 import com.haloofwar.engine.entity.Entity;
-import com.haloofwar.game.data.InventoryData;
 
 public class InventoryComponent implements Component {
     private ArrayList<Entity> objects = new ArrayList<Entity>();
 
-    public void add(Entity entity) {
+    public void add(Entity entity, int amount) {
         if (!entity.hasComponent(NameComponent.class) || !entity.hasComponent(StockComponent.class)) {
             return;
+        }
+        
+        if(amount < 0) {
+        	amount = - amount;
         }
 
         final String NAME_NEW_ENTITY = entity.getComponent(NameComponent.class).name;
 
-        if (this.objects.size() == 0) {
-            this.objects.add(entity);
-        } else {
-            int i = 0;
-            boolean found = false;
-            int index = -1;
+        int i = 0;
+        boolean found = false;
+        int index = -1;
 
-            while (i < this.objects.size() && !found) {
-                final String NAME = this.objects.get(i).getComponent(NameComponent.class).name;
+        while (i < this.objects.size() && !found) {
+            final String NAME = this.objects.get(i).getComponent(NameComponent.class).name;
 
-                if (NAME.equals(NAME_NEW_ENTITY)) {
-                    found = true;
-                    index = i;
-                } else {
-                    i++;
-                }
-            }
-
-            if (found) {
-                this.objects.get(index).getComponent(StockComponent.class).affectStock(1);
+            if (NAME.equals(NAME_NEW_ENTITY)) {
+                found = true;
+                index = i;
             } else {
-                this.objects.add(entity);
+                i++;
             }
+        }
+
+        if (found) {
+            this.objects.get(index).getComponent(StockComponent.class).affectStock(amount);
+        } else {
+            this.objects.add(entity);
+            this.objects.get(this.objects.size() - 1).getComponent(StockComponent.class).setStock(amount);
         }
     }
 
@@ -80,7 +79,9 @@ public class InventoryComponent implements Component {
      * @return true si se removió la cantidad solicitada, false si no había suficientes.
      */
     public boolean remove(ObjectType type, int amount) {
-        if (amount <= 0) return true;
+        if(amount < 0) {
+        	amount = - amount;
+        }
 
         int remaining = amount;
 
@@ -147,25 +148,6 @@ public class InventoryComponent implements Component {
 
     public ArrayList<Entity> getObjects() {
         return this.objects;
-    }
-    
-    public InventoryData toData() {
-        InventoryData data = new InventoryData();
-
-        for (Entity e : this.objects) {
-            StockComponent stock = e.getComponent(StockComponent.class);
-            NameComponent name = e.getComponent(NameComponent.class);
-
-            if (stock != null && name != null) {
-                InventoryData.ItemData item = new InventoryData.ItemData();
-                item.name = name.name;
-                item.stock = stock.getStock();
-                item.type = stock.getType().name();
-                data.items.add(item);
-            }
-        }
-
-        return data;
     }
     
     public void setObjects(ArrayList<Entity> entities) {

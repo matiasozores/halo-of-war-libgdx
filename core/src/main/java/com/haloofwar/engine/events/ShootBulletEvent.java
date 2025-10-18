@@ -1,6 +1,6 @@
 package com.haloofwar.engine.events;
 
-import com.haloofwar.common.enums.BulletType;
+import com.haloofwar.common.enumerators.BulletType;
 
 public class ShootBulletEvent {
     public final float x;

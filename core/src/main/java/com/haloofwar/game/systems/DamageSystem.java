@@ -1,26 +1,23 @@
 package com.haloofwar.game.systems;
 
-import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enumerators.SoundType;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.DamageEvent;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.PlaySoundEvent;
-import com.haloofwar.engine.events.PlayerDiedEvent;
 import com.haloofwar.engine.events.RemoveEntityEvent;
-import com.haloofwar.engine.systems.EventSystem;
+import com.haloofwar.engine.events.online.RemoveEntityEventOnline;
 import com.haloofwar.game.components.HealthComponent;
-import com.haloofwar.game.components.PlayerComponent;
+import com.haloofwar.game.components.TransformComponent;
 
 public class DamageSystem extends EventSystem {
-	private final EventBus bus;
 
     public DamageSystem(EventBus bus) {
-        this.bus = bus;
+        super(bus);
         this.listenerManager.add(bus, DamageEvent.class, this::onDamage);
     }
 
     private void onDamage(DamageEvent event) {
-    	
         Entity target = event.target;
 
         if (!target.hasComponent(HealthComponent.class)) {
@@ -28,15 +25,19 @@ public class DamageSystem extends EventSystem {
         }
 
         HealthComponent health = target.getComponent(HealthComponent.class);
+        System.out.print("Ha llegado un daño de: " + event.amount + " | ");
+        System.out.print("Se ha causado daño a una entidad: DE " + health.getCurrentHealth() + " A ");
         health.affectHealth(event.amount);
+        System.out.println(health.getCurrentHealth() + " de vida");
         this.bus.publish(new PlaySoundEvent(SoundType.HIT));
         
+        
+
         if (!health.isAlive()) {
         	this.bus.publish(new RemoveEntityEvent(target));
         	
-            if (target.hasComponent(PlayerComponent.class)) {
-                this.bus.publish(new PlayerDiedEvent(target));
-            } 
+        	TransformComponent tc = target.getComponent(TransformComponent.class);
+        	this.bus.publish(new RemoveEntityEventOnline(tc.identifier));
         }
     }
 }

@@ -1,16 +1,16 @@
 package com.haloofwar.ui.hud;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.haloofwar.common.enums.GameState;
-import com.haloofwar.common.enums.UIState;
+import com.haloofwar.common.enumerators.GameState;
+import com.haloofwar.common.enumerators.UIState;
 import com.haloofwar.engine.cameras.GameStaticCamera;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.EventListenerManager;
 import com.haloofwar.engine.events.GameStateEvent;
 import com.haloofwar.engine.events.NavigationEvent;
-import com.haloofwar.engine.events.NewPlayerEvent;
 import com.haloofwar.engine.events.SelectOptionEvent;
 import com.haloofwar.engine.events.TogglePopupEvent;
+import com.haloofwar.ui.HUD;
 import com.haloofwar.ui.components.HUDComponent;
 import com.haloofwar.ui.components.Popup;
 
@@ -38,7 +38,6 @@ public class LobbyHUD extends HUD{
     	this.listenerManager.add(gameplayBus, TogglePopupEvent.class, this::onTogglePopup);
     	this.listenerManager.add(gameplayBus, NavigationEvent.class, this::onNavigate);
     	this.listenerManager.add(gameplayBus, SelectOptionEvent.class, this::onSelectOption);
-    	this.listenerManager.add(gameplayBus, NewPlayerEvent.class, this::onNewPlayer);
     }
 
     @Override
@@ -55,16 +54,7 @@ public class LobbyHUD extends HUD{
 	public void update(float delta) {
 		this.navigateTimer += delta;
 	}
-	
-	@Override
-	protected void onNewPlayer(NewPlayerEvent event) {
-		super.onNewPlayer(event);
-		
-		for (Popup popup : this.popups) {
-			popup.refresh(event.player);
-		}
-	}
-	
+
 	private void onTogglePopup(TogglePopupEvent event) {
 		final Popup target = this.getPopup(event.state);
 		

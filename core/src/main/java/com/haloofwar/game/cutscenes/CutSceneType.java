@@ -1,6 +1,6 @@
 package com.haloofwar.game.cutscenes;
 
-import com.haloofwar.common.enums.SoundType;
+import com.haloofwar.common.enumerators.SoundType;
 import com.haloofwar.engine.entity.EntityDescriptor;
 
 public enum CutSceneType implements EntityDescriptor {

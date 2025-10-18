@@ -1,6 +1,6 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.engine.components.TransformComponent;
+import com.haloofwar.common.enumerators.Direction;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.interfaces.MovementController;
 
@@ -50,6 +50,18 @@ public class EnemyMovementController implements MovementController {
             System.out.println("El nuevo target no tiene TransformComponent o es nulo.");
         }
     }
+
+	@Override
+	public void onUpdatePosition(Direction direction, boolean isPressed) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setMove(boolean canMove) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
 

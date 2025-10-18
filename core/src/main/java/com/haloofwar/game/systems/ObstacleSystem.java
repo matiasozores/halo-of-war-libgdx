@@ -1,17 +1,17 @@
 package com.haloofwar.game.systems;
 
-import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.CollisionEvent;
 import com.haloofwar.engine.events.EventBus;
-import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.MovementComponent;
 import com.haloofwar.game.components.ObstacleComponent;
 import com.haloofwar.game.components.PlayerComponent;
+import com.haloofwar.game.components.TransformComponent;
 
 public class ObstacleSystem extends EventSystem {
 
     public ObstacleSystem(EventBus bus) {
+    	super(bus);
     	this.listenerManager.add(bus, CollisionEvent.class, this::onCollision);
     }
 

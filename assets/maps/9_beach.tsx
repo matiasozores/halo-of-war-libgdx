@@ -91,6 +91,26 @@
    <object id="1" type="collision" x="6" y="0" width="12" height="6"/>
   </objectgroup>
  </tile>
+ <tile id="30">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="collision" x="6" y="8" width="20" height="20"/>
+  </objectgroup>
+ </tile>
+ <tile id="31">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="collision" x="6" y="9" width="20" height="20"/>
+  </objectgroup>
+ </tile>
+ <tile id="32">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="collision" x="6" y="9" width="20" height="20"/>
+  </objectgroup>
+ </tile>
+ <tile id="33">
+  <objectgroup draworder="index" id="3">
+   <object id="3" type="collision" x="6" y="8" width="20" height="20"/>
+  </objectgroup>
+ </tile>
  <tile id="40">
   <objectgroup draworder="index" id="2">
    <object id="1" type="collision" x="16" y="14" width="16" height="18"/>

@@ -1,10 +1,9 @@
 package com.haloofwar.game.systems;
 
-import com.haloofwar.common.enums.GameState;
+import com.haloofwar.common.enumerators.GameState;
 import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.events.EventBus;
 import com.haloofwar.engine.events.GameStateEvent;
-import com.haloofwar.engine.systems.EventSystem;
 import com.haloofwar.game.components.AnimationComponent;
 import com.haloofwar.game.components.MovementComponent;
 import com.haloofwar.interfaces.Updatable;
@@ -14,6 +13,7 @@ public class AnimationSystem extends EventSystem implements Updatable {
 	private boolean canMove = true;
 	
 	public AnimationSystem(EventBus bus) {
+		super(bus);
 		this.listenerManager.add(bus, GameStateEvent.class, this::onGameState);
 	}
 	

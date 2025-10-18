@@ -1,34 +1,31 @@
 package com.haloofwar.game.systems;
 
-import com.haloofwar.engine.components.TransformComponent;
 import com.haloofwar.engine.entity.Entity;
+import com.haloofwar.engine.events.ChangeTargetEvent;
 import com.haloofwar.engine.events.EventBus;
-import com.haloofwar.engine.events.NewPlayerEvent;
-import com.haloofwar.engine.interfaces.MovementController;
-import com.haloofwar.engine.systems.EventSystem;
+import com.haloofwar.engine.events.ShootBulletEvent;
+import com.haloofwar.game.components.EnemyComponent;
 import com.haloofwar.game.components.EnemyWeaponAIComponent;
 import com.haloofwar.game.components.EquipmentComponent;
 import com.haloofwar.game.components.FireArmComponent;
-import com.haloofwar.game.components.MeleeWeaponComponent;
-import com.haloofwar.game.components.MovementComponent;
 import com.haloofwar.game.components.TargetComponent;
+import com.haloofwar.game.components.TransformComponent;
 import com.haloofwar.interfaces.Updatable;
 
 public class EnemyWeaponAISystem extends EventSystem implements Updatable {
 
-    private float shootInterval = 0.2f;
-
+	
     public EnemyWeaponAISystem(final EventBus gameplayBus) {
-    	this.listenerManager.add(gameplayBus, NewPlayerEvent.class, this::onNewPlayer);
+    	super(gameplayBus);
+    	this.listenerManager.add(gameplayBus, ChangeTargetEvent.class, this::onChangeTarget);
     }
     
-    private void onNewPlayer(NewPlayerEvent event) {
+    private void onChangeTarget(ChangeTargetEvent event) {
     	for (Entity entity : this.ENTITIES) {
-    		
-			final MovementController CONTROLLER = entity.getComponent(MovementComponent.class).controller;
-			final TargetComponent TARGET = entity.getComponent(TargetComponent.class);
-			TARGET.targetTransform = event.player.getComponent(TransformComponent.class);
-			CONTROLLER.changeTarget(event.player);
+			if(entity.hasComponent(EnemyComponent.class)) {
+				TargetComponent target = entity.getComponent(TargetComponent.class);
+				target.targetTransform = event.newTarget.getComponent(TransformComponent.class);
+			}
 		}
     }
     
@@ -67,26 +64,19 @@ public class EnemyWeaponAISystem extends EventSystem implements Updatable {
                     weapon.dirY = dy / length;
                 }
 
-                if (weapon.cooldownTimer <= 0f && weaponAI.shootTimer >= shootInterval) {
-                    weapon.wantsToFire = true;
-                    weaponAI.shootTimer = 0f;
+                if (weapon.cooldownTimer <= 0f && weaponAI.shootTimer >= weaponAI.shootInterval) {
+                	
+                    float bulletX = transform.x + transform.width / 2 + weapon.dirX * weapon.bulletOffset;
+                    float bulletY = transform.y + transform.height / 2 + weapon.dirY * weapon.bulletOffset;
+                	
+                    this.bus.publish(new ShootBulletEvent(bulletX, bulletY, weapon.dirX, weapon.dirY, weapon.damage, weapon.bulletSpeed, weapon.type.getBulletType()));
+                	weapon.wantsToFire = true;
+                	 weaponAI.shootTimer = 0f;
                     weapon.cooldownTimer = weapon.fireCooldown;
+                } else {
+                	weapon.cooldownTimer -= delta;
                 }
-
-            // --- ARMA CUERPO A CUERPO ---
-            } else if (weaponEntity.hasComponent(MeleeWeaponComponent.class)) {
-                MeleeWeaponComponent weapon = weaponEntity.getComponent(MeleeWeaponComponent.class);
-
-                float dx = target.targetTransform.x - (transform.x + transform.width / 2);
-                float dy = target.targetTransform.y - (transform.y + transform.height / 2);
-                float distance = (float) Math.sqrt(dx*dx + dy*dy);
-
-                if (distance <= weapon.range && weapon.cooldownTimer <= 0f && weaponAI.shootTimer >= shootInterval) {
-                    weapon.wantsToSwing = true;
-                    weaponAI.shootTimer = 0f;
-                    weapon.cooldownTimer = weapon.fireCooldown;
-                }
-            }
+            }	
         }
     }
 }

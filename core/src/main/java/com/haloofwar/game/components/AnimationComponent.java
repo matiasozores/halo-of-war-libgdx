@@ -3,7 +3,6 @@ package com.haloofwar.game.components;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.haloofwar.common.managers.TextureManager;
-import com.haloofwar.engine.components.Component;
 import com.haloofwar.engine.entity.AnimatedEntityDescriptor;
 
 public class AnimationComponent implements Component {

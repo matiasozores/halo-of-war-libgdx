@@ -1,6 +1,6 @@
 package com.haloofwar.game.components;
 
-import com.haloofwar.engine.components.Component;
+import com.haloofwar.engine.entity.Entity;
 import com.haloofwar.engine.interfaces.MovementController;
 
 public class MovementComponent implements Component {
@@ -12,5 +12,9 @@ public class MovementComponent implements Component {
         this.lastX = 0;
         this.lastY = 0;
         this.speed = speed;
+    }
+    
+    public void changeTarget(Entity entity) {
+    	this.controller.changeTarget(entity);
     }
 }
