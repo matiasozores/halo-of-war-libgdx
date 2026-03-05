@@ -46,6 +46,8 @@ Video demostrativo del proyecto: https://youtu.be/3H6tPp3iHIA?si=LJklA14ZfT9iPoq
 
 ## Estado Actual del Proyecto
 El proyecto se encuentra terminado, podrás encontrar la parte de red aquí abajo.
+
 Cliente: [Halo of War Cliente](https://github.com/matiasozores/halo-of-war-libgdx-cliente)
+
 Servidor: [Halo of War Servidor](https://github.com/matiasozores/halo-of-war-libgdx-servidor)
 
